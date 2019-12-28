@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes","url":"allclasses-index.html"},{"p":"comp1406a2","l":"BuildDatabase"},{"p":"comp1406a2","l":"Compare"},{"p":"comp1406a2","l":"Scale"},{"p":"comp1406a2","l":"Temperature"},{"p":"comp1406a2","l":"TimeStamp"},{"p":"comp1406a2","l":"WeatherDatabase"},{"p":"comp1406a2","l":"WeatherReport"},{"p":"comp1406a2","l":"WeatherStation"}]
