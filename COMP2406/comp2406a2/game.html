@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <title>Trivia</title>
+        <style>
+            #leaderboard { width:40%; height:200px; float:right; }
+            #chat { background: rgb(0, 136, 248); padding: 5px; position: fixed; bottom: 0; width: 90%; }
+            #message { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+            #send { width: 9%; background: rgb(30, 255, 0); border: none; padding: 10px; }
+            #messages { list-style-type: none; margin-bottom: 50px; }
+            #messages li { padding: 5px 10px;  background: rgb(231, 231, 231); }
+            #messages li:nth-child(odd) { background: rgb(204, 204, 204); }
+        </style>
+    </head>
+
+    <body onload = 'initGame()'>
+        <div>
+            <h1>Trivia</h1>
+        </div>
+
+        <div id = "enterName">
+            <text>Enter a Name to Begin!</text><br>
+
+            <input type = "text" id = "name">
+
+            <button type = "button" id = "load">
+                Join
+            </button><br>
+        </div>
+
+        <div id = "leaderboard">
+            
+        </div>
+
+        <div id = "test">
+            <form>
+
+            </form>
+
+        </div><br>
+        
+        <ul id="messages"></ul>
+        <div id = "chat">
+            <input id = "message" autocomplete="off" />
+            <button id = "send" onclick = "sendMessage()">Send</button>
+        </div>
+    </body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src = "client.js"></script>
+</html>

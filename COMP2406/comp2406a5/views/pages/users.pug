@@ -1,0 +1,12 @@
+html
+    head
+        title Users
+
+    body
+        include ../partials/header
+
+        h1 All Users
+
+        each u in users
+            a(href=`/users/${u._id}`) #{u.username}
+            br

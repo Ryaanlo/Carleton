@@ -1,0 +1,12 @@
+html
+    head
+        title= name	
+    
+    body
+        #main
+            h1 Matching Questions
+            ul
+                each q in questions
+                    a(href=`/questions/${q._id}`) #{q.question}
+                    br
+                    br

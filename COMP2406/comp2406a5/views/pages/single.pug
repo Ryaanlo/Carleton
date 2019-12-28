@@ -1,0 +1,44 @@
+html
+    head
+        title Users
+        
+    body
+        include ../partials/header
+        
+        h1 User
+
+        if session.loggedin && (session.username == user.username)
+            form(action="/savePrivacy" method="POST")
+                | Privacy Mode: 
+                br
+                if user.privacy
+                    input(type='radio' value="true" name='privacy' checked='true')
+                else
+                    input(type='radio' value="true" name='privacy')
+                | On
+                br
+                if !user.privacy
+                    input(type='radio' value="false" name='privacy' checked='true')
+                else
+                    input(type='radio' value="false" name='privacy')
+                | Off
+                br
+                br     
+                button(type='submit' name='save') Save   
+        br
+        br
+        | Total Quizzes: #{user.total_quizzes}
+        br
+        | Total Score: #{user.total_score}
+        br
+        if user.total_quizzes == 0
+            | Average Score: #{user.total_quizzes}
+            br
+        else 
+            | Average Score: #{user.total_score / user.total_quizzes}
+            br
+        br
+        if session.loggedin && (session.username == user.username)
+            form(action="/logout" method="POST")
+                button(type='submit' name='logout') Log Out
+

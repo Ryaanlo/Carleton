@@ -1,0 +1,16 @@
+div#header
+	a(href="/") Home
+	| 
+	a(href="/quiz") New Quiz
+	| 
+	a(href="/users") Users
+	| 
+	if session.loggedin
+		a(href=`/users/${session.userid}`) Profile 
+		| 
+	if !session.loggedin
+		form(method='POST' action='/login')
+			p
+				input(type='text' name='username' required)
+				input(type='password' name='password' required)
+			input(type='submit' value='Login')

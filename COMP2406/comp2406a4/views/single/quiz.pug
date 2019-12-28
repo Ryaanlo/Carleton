@@ -1,0 +1,17 @@
+html
+    head
+        title= name
+    
+    body
+        | Creator: #{quiz[0].creator}
+        br
+        br
+        | Quiz Tags: 
+        each tag in quiz[0].tags
+            | #{tag}, 
+        br
+        br
+        | Questions: 
+        each q in quiz[0].questions
+            br
+            a(href=`/questions/${q._id}`) #{q.question} 

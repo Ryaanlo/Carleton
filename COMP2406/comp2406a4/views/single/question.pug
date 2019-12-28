@@ -1,0 +1,20 @@
+html
+	head
+		title= name
+		
+	body
+		| Question: #{question[0].question}
+		br
+		br
+		| Category: #{question[0].category}
+		br
+		br
+		| Difficulty: #{question[0].difficulty}
+		br
+		br
+		| Correct Answer: #{question[0].correct_answer}
+		br
+		br
+		| Incorrect Answers: 
+		each q in question[0].incorrect_answers
+			| #{q}, 

@@ -1,0 +1,19 @@
+{
+  "name": "comp2406a4",
+  "version": "1.0.0",
+  "description": "Mongo Questions and Quizzes",
+  "main": "database-initializer.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "^3.3.3",
+    "pug": "^2.0.4",
+    "mongo": "^0.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Ryan Lo",
+  "license": "ISC"
+}

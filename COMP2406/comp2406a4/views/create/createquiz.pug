@@ -1,0 +1,45 @@
+html
+    head
+        title= name	
+    
+    body
+        #main
+        
+        h1 Create a Quiz
+        p Enter data into the form below and hit save to save a quiz.
+
+        p Quiz Creator's Name: 
+            input#creator(type="textbox")
+        p Quiz Tags: 
+            input#tags(type="textbox")
+            
+        button#save(type="button") Save Quiz
+        br
+        br
+        div#questions
+            | Questions: 
+            br
+        br
+        br
+        div#search
+            | Search/Add Questions
+            br
+            br
+            | Category: 
+            select#category
+                each c in category
+                    option(value = c) #{c}  
+            br
+            br
+            | Difficulty: 
+            select#difficulty
+                each d in difficulty
+                    option(value = d) #{d}
+            
+            br
+            br
+            | Results:
+            div#results
+
+
+            script(src='client.js')
