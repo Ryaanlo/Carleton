@@ -1,0 +1,72 @@
+\documentclass{article}
+
+
+\title{Assignment 1}
+\author{COMP2804 Winter 2020}
+
+\begin{document}
+\maketitle
+
+\section{ID}
+
+Name: Ryan Lo \\
+Student ID: 101117765
+
+\section{Non-Local Strings}
+
+\begin{enumerate}
+  \item What is the number of dec-strings of length n?
+  
+  by the Product Rule, the number of blocks is
+  \[
+      10^{n}
+  \]
+
+  \item What is the number of dec-strings $d_1,\ldots,d_n$ of length n such that $d1d2\neq00$. In other words, what is the number of dec-strings of length n that don't begin with 00?
+ 
+  Therefore, by the Product Rule, then number of squarefree blocks is 
+  \[
+      10^{n} - 10^{n-2} when n > 1
+      when n = 0, 10
+  \]
+  
+  \item What is the number of dec-strings $d_1,\ldots,d_n$ of length n such that $d_1d_2\neq00$ and $d_2d_3\neq11$?
+  
+  Therefore, by the Product Rule, then number of non-local blocks is 
+  \[
+     26\times 25\times 24^{18} = 4\,536\,445\,601\,729\,847\,895\,680\,614\,400
+     \enspace .
+  \]
+  
+   \item What is the number of dec-strings $d_1,\ldots,d_n$ of length $n$ such that $d_1d_2\neq00$ and $d_2d_3\neq01$?
+   
+   \item What is the number of dec-strings $d_1,\ldots,d_n$ of lenght $n$ such that $d_1d_2\neq00$ or $d_1d_2d_3=111$?
+   
+   \item What is the number of dec-strings $d_1,\ldots,d_n$ of length $n\geq4$ such that $d_1d_2\neq00$ or $d_3d_4\neq11$.
+   
+   \item A dec-string $d_1,\ldots,d_n$ is $bad$ if $d_i=d_i+1$ or $d_i+d_i+1=9$ for at least one $i\in\{1,\ldots,n-1\}$ and it is good otherwise. What is the number of good dec-strings of length $n$?
+   
+   \item A dec-string $d_1,\ldots,d_n$ is $2-bad$ if, $d_i=d_j$ or $d_i+d_j=9$ for some $i<j \leq i+2$ and it is $2-good$ otherwise. What is the number of $2-good$ dec-strings?
+   
+   \item A dec-string $d_1,\ldots,d_n$ is $k-bad$ if $d_i=d_j$ or $di+dj=9$ for some $i<j \leq i+k$ and is $k-good$ otherwise. What is the number of $k-good$ dec-strings of length $n$?
+
+  \item By now the pattern should become clear.  
+  
+  For a $k$-non-local block $s_0,s_1,\ldots,s_{19}$ we have $26-i$ choices for $s_i$ for each $i\in\{0,\ldots,k-1\}$ and we have $26-k$ choices for $s_i$ for each $i\in\{k,\ldots,19\}$.
+  Therefore, by the Product Rule, then number of $k$-non-local blocks is 
+  \[
+     \left(\prod_{i=0}^{k-1}(26-i)\right)\times (26-k)^{20-k} =
+     \left(26\times 25\times\cdots\times (26-k+1)\right)\times(26-k)^{20-k}
+     \enspace
+  \]
+\end{enumerate}
+
+\section{Collective Arts}
+
+\begin{enumerate}
+
+   \item
+
+\end{enumerate}
+
+\end{document}
