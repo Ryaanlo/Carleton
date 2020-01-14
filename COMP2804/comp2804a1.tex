@@ -44,16 +44,24 @@ Student ID: 101117765
    \item What is the number of dec-strings $d_1,\ldots,d_n$ of length $n$ such that $d_1d_2\neq00$ and $d_2d_3\neq01$?
    
    \[
-      10^{n} - 10^{n-2} - 10^{n-2} - 2
+      10^{n} - 10^{n-2} - 10^{n-2} - 1
    \]
    \[
-      (10^3 - (2 \times 10)) \times 10^{n-3}
+      (10^3 - (2 \times 10) - 1) \times 10^{n-3}
    \] 
 
    \item What is the number of dec-strings $d_1,\ldots,d_n$ of lenght $n$ such that $d_1d_2\neq00$ or $d_1d_2d_3=111$?
+ 
+   \[
+      (10^3 - (10 + 1)) \times 10^{n-3}
+   \] 
    
    \item What is the number of dec-strings $d_1,\ldots,d_n$ of length $n\geq4$ such that $d_1d_2\neq00$ or $d_3d_4\neq11$.
-   
+
+   \[
+      (10^4 - ((4 \times 10) - 1)) \times 10^{n-4}
+   \] 
+
    \item A dec-string $d_1,\ldots,d_n$ is $bad$ if $d_i=d_i+1$ or $d_i+d_i+1=9$ for at least one $i\in\{1,\ldots,n-1\}$ and it is good otherwise. What is the number of good dec-strings of length $n$?
    
    \item A dec-string $d_1,\ldots,d_n$ is $2-bad$ if, $d_i=d_j$ or $d_i+d_j=9$ for some $i<j \leq i+2$ and it is $2-good$ otherwise. What is the number of $2-good$ dec-strings?
