@@ -15,31 +15,38 @@ Student ID: 101117765
 \section{Non-Local Strings}
 
 \begin{enumerate}
-  \item What is the number of dec-strings of length n?
+   \item What is the number of dec-strings of length n?
   
-  by the Product Rule, the number of blocks is
-  \[
+   by the Product Rule, the number of blocks is
+   \[
       10^{n}
-  \]
+   \]
 
-  \item What is the number of dec-strings $d_1,\ldots,d_n$ of length n such that $d1d2\neq00$. In other words, what is the number of dec-strings of length n that don't begin with 00?
+   \item What is the number of dec-strings $d_1,\ldots,d_n$ of length n such that $d1d2\neq00$. In other words, what is the number of dec-strings of length n that don't begin with 00?
  
-  Therefore, by the Product Rule, then number of squarefree blocks is 
-  \[
-      10^{n} - 10^{n-2} when n > 1
-      when n = 0, 10
-  \]
+   Therefore, by the Product Rule, then number of squarefree blocks is 
+   \[
+      (10^{2}-1) \times 10^{n-2}
+   \]
+   \[
+      10^{n} - 10^{n-2}
+   \]
   
-  \item What is the number of dec-strings $d_1,\ldots,d_n$ of length n such that $d_1d_2\neq00$ and $d_2d_3\neq11$?
+   \item What is the number of dec-strings $d_1,\ldots,d_n$ of length n such that $d_1d_2\neq00$ and $d_2d_3\neq11$?
   
-  Therefore, by the Product Rule, then number of non-local blocks is 
-  \[
-     26\times 25\times 24^{18} = 4\,536\,445\,601\,729\,847\,895\,680\,614\,400
-     \enspace .
-  \]
-  
+   Therefore, by the Product Rule, then number of non-local blocks is 
+   \[
+      10^{n} - 10^{n-2} - 10^{n-2}
+   \]
+   \[
+      (10^3 - (2 \times 10)) \times 10^{n-3}
+   \]  
    \item What is the number of dec-strings $d_1,\ldots,d_n$ of length $n$ such that $d_1d_2\neq00$ and $d_2d_3\neq01$?
    
+   \[
+      10^{n} - 10^{n-2} - 10^{n-2} - 2
+   \]
+
    \item What is the number of dec-strings $d_1,\ldots,d_n$ of lenght $n$ such that $d_1d_2\neq00$ or $d_1d_2d_3=111$?
    
    \item What is the number of dec-strings $d_1,\ldots,d_n$ of length $n\geq4$ such that $d_1d_2\neq00$ or $d_3d_4\neq11$.
@@ -63,9 +70,17 @@ Student ID: 101117765
 
 \section{Collective Arts}
 
+Collective Arts Brewing currently makes 30 types of IPA and 6 types of Lager.
+
 \begin{enumerate}
 
-   \item
+   \item The manager at Mike's Place needs to choose 4 types of IPA and 4 types of Lager. How many options does the manager have?
+
+   \[
+     30\times 29\times 28\times 27\times 
+     6\times 5\times 4\times 3
+   \]
+   
 
 \end{enumerate}
 
