@@ -1,5 +1,6 @@
 \documentclass{article}
-
+\usepackage{amsmath}
+\usepackage{xcolor}
 
 \title{Assignment 1}
 \author{COMP2804 Winter 2020}
@@ -68,15 +69,6 @@ Student ID: 101117765
    
    \item A dec-string $d_1,\ldots,d_n$ is $k-bad$ if $d_i=d_j$ or $di+dj=9$ for some $i<j \leq i+k$ and is $k-good$ otherwise. What is the number of $k-good$ dec-strings of length $n$?
 
-  \item By now the pattern should become clear.  
-  
-  For a $k$-non-local block $s_0,s_1,\ldots,s_{19}$ we have $26-i$ choices for $s_i$ for each $i\in\{0,\ldots,k-1\}$ and we have $26-k$ choices for $s_i$ for each $i\in\{k,\ldots,19\}$.
-  Therefore, by the Product Rule, then number of $k$-non-local blocks is 
-  \[
-     \left(\prod_{i=0}^{k-1}(26-i)\right)\times (26-k)^{20-k} =
-     \left(26\times 25\times\cdots\times (26-k+1)\right)\times(26-k)^{20-k}
-     \enspace
-  \]
 \end{enumerate}
 
 \section{Collective Arts}
@@ -91,7 +83,9 @@ Collective Arts Brewing currently makes 30 types of IPA and 6 types of Lager.
      30\times 29\times 28\times 27\times 
      6\times 5\times 4\times 3
    \]
-   
+   \[
+      \binom{30}{4}\times \binom{6}{4} = 4\,637\,274\,824
+   \]
    \item The 8 beers (4 IPA and 4 Lager) selected in the previous question must be placed in a line on a display shelf so that no two IPA are adjacent and no two Lager are adjacent. How many ways are there to do this?
 
    \item Continuing from the previous question, suppose that two of the beers selected were All Together Now (an IPA) and Hot Pink (a Lager). Since both cans are pink, the manager doesn't want to place them adjacent to each other. How many ways are there to do this (while still alternating between IPA and Lager)?
