@@ -63,7 +63,7 @@ Student ID: 101117765
       (10^4 - ((4 \times 10) - 1)) \times 10^{n-4}
    \] 
 
-   \item A dec-string $d_1,\ldots,d_n$ is $bad$ if $d_i=d_i+1$ or $d_i+d_i+1=9$ for at least one $i\in\{1,\ldots,n-1\}$ and it is good otherwise. What is the number of good dec-strings of length $n$?
+   \item A dec-string $d_1,\ldots,d_n$ is $bad$ if $d_i=d_{i+1}$ or $d_i+d_{i+1}=9$ for at least one $i\in\{1,\ldots,n-1\}$ and it is good otherwise. What is the number of good dec-strings of length $n$?
    
    \item A dec-string $d_1,\ldots,d_n$ is $2-bad$ if, $d_i=d_j$ or $d_i+d_j=9$ for some $i<j \leq i+2$ and it is $2-good$ otherwise. What is the number of $2-good$ dec-strings?
    
@@ -87,7 +87,9 @@ Collective Arts Brewing currently makes 30 types of IPA and 6 types of Lager.
       \binom{30}{4}\times \binom{6}{4} = 4\,637\,274\,824
    \]
    \item The 8 beers (4 IPA and 4 Lager) selected in the previous question must be placed in a line on a display shelf so that no two IPA are adjacent and no two Lager are adjacent. How many ways are there to do this?
-
+   \[
+      2 \times 4 \times 4 \times 3 \times 3 \times 2 \times 2 \times 1 \times 1 = 2 \times 4! \times 4!
+   \]
    \item Continuing from the previous question, suppose that two of the beers selected were All Together Now (an IPA) and Hot Pink (a Lager). Since both cans are pink, the manager doesn't want to place them adjacent to each other. How many ways are there to do this (while still alternating between IPA and Lager)?
    
    \item How many of the arrangements from the previous question have the All Together Now among from the 4 leftmost bottles and the bottle of Hot Pink among the 4 rightmost bottles?
