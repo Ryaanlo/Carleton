@@ -104,10 +104,18 @@ Consider all permutations of the integers 1,…,1000.
 
    \item In how many of these permutations do 1,2,3,4 appear consecutively and in this order?
    
+   \[
+      997 \times 996! 
+   \]
+
    \item In how many of these permutations do 1,2,3,4 appear consecutively, but not necessarily in order? (For example, they may appear as 1,2,3,4, or 4,2,3,1, or 3,1,2,4, or so on.)
 
    \item In how many of these permutations does 1 appear before 2, 2 appear before 3, and 3 appear before 4? (In other words, 1,2,3,4 appear in order, but not necessarily consecutively.)
    
+   \[
+      \binom{1000}{4} \times 996!
+   \]
+
    \item In how many of these permutations do 1,2,3,4 appear in order but no two are adjacent?
    
 \end{enumerate}
@@ -121,11 +129,23 @@ A certain friend of mine has spent the better part of a lifetime testing recreat
 
    \item Assuming my friend determined this entirely by testing, how many experiments did my friend have to perform?
 
+   \[
+      \binom{20}{3}
+   \]
+
    \item A new designer drug called $D_{21}$ has just hit the streets and my friend wants to know if $D_{21}$ can be added to their list. That is, can any triple of $D_1,\ldots,D_{21}$ be safely taken together? How many additional experiments does my friend need to determine this?
    
+   \[
+      \binom{21}{3} - \binom{20}{3} 
+   \]
+
    \item Suppose my friend survives the experience and $D_{21}$ makes it onto the list. My friend takes scrupulous notes about all experiments and notices something peculiar about the answers to the preceding two questions. What combinatorial identity did my friend just discover?
    
    \item Suppose that an impatient novice wants to repeat my friends discovery using fewer experiments. This novice is willing to take 5 drugs at a time. What is the fewest number of experiments this novice can perform so that for any triple $D_i,D_j,D_k\in\{D_1,\ldots,D_{21}\}$, at least one of this novice's experiments includes $D_i$, $D_j$, and $D_k$?
+
+   \[
+      \binom{21}{5}   
+   \]
 
 \end{enumerate}
 
