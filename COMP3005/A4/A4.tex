@@ -1,0 +1,356 @@
+\documentclass[a4 paper]{article}
+% Set target color model to RGB
+\usepackage[inner=2.0cm,outer=2.0cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{setspace}
+\usepackage[rgb]{xcolor}
+\usepackage{verbatim}
+\usepackage{subcaption}
+\usepackage{amsgen,amsmath,amstext,amsbsy,amsopn,tikz,amssymb,tkz-linknodes}
+\usepackage{fancyhdr}
+\usepackage[colorlinks=true, urlcolor=blue,  linkcolor=blue, citecolor=blue]{hyperref}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{rotating}
+%\usetikzlibrary{through,backgrounds}
+\hypersetup{%
+pdfauthor={Ashudeep Singh},%
+pdftitle={Assignment 4},%
+pdfkeywords={Tikz,latex,bootstrap,uncertaintes},%
+pdfcreator={PDFLaTeX},%
+pdfproducer={PDFLaTeX},%
+}
+%\usetikzlibrary{shadows}
+% \usepackage[francais]{babel}
+\usepackage{booktabs}
+\input{macros.tex}
+
+
+\begin{document}
+\homework{Assignment \#4}{Due: Friday November 19, 2021 (11:59 PM)}{Ahmed El-Roby}{}{Ryan Lo}{101117765}
+\textbf{Instructions}: Read all the instructions below carefully before you start working on the assignment, and before you make a submission.
+\begin{itemize}
+    \item The accepted format for your submission is pdf only.
+    \item If you use the tex file, make sure you edit line 28 to add your name and ID. Only write your solution and do not change anything else in the tex file. If you do, you will be penalized.
+    \item \item Late submissions are allowed for 24 hours after the deadline above with a penalty of 10\% of the total grade of the assignment. Submissions after more than 24 are not allowed.
+\end{itemize}
+
+\problem{1:}{3}
+In class, we showed that functional dependencies are transitive. That is, if $X \rightarrow Y$ and $Y \rightarrow Z$, then $X \rightarrow Z$. Assume a new proposed rule: If $X \rightarrow Y$ and $Z \rightarrow Y$, then $X \rightarrow Z$. Prove that this rule is incorrect.
+
+Functional dependency $X \rightarrow Y$ means that every X is mapped to a unique value in Y.
+
+For example :
+
+You have a table 
+
+\begin{tabular}{c c c}
+    X & Y & Z \\
+    x1 & y1 & z1 \\
+    x1 & y1 & z2 \\
+    x2 & y2 & z3 \\
+    x3 & y3 & z4 \\
+\end{tabular}
+
+We can see that $X \rightarrow Y$ is true and $Z \rightarrow Y$ is true, but when we look at $X \rightarrow Z$, we can see that this is false.
+
+\problem{2:}{3}
+How can you use functional dependencies to represent the constraint that a relationship between two entity sets $X$ and $Y$ is one-to-many from $X$ to $Y$.
+
+If you have the functional dependency $Y \rightarrow X$ this makes X and Y a one-to-many from X to Y.
+
+For example :
+
+You have a table 
+
+\begin{tabular}{c c}
+    X & Y \\
+    x1 & y1 \\
+    x1 & y1 \\
+    x2 & y2 \\
+    x2 & y2 \\
+    x2 & y3 \\
+\end{tabular}
+
+We can see that Y uniquely maps to a value in X but the relationship in X to Y can have one to many from X to Y.
+
+\problem{3:}{8}
+Consider the following relation $R = \{A, B, C, D, E\}$ and the following set of functional dependencies \\$F = \{
+\\A \rightarrow BC\\
+CD \rightarrow E\\
+B \rightarrow D\\
+E \rightarrow A\}$\\
+Compute $B^{+}$. Is $R$ in BCNF? If not, give a lossless decomposition of $R$ into BCNF. Show your work for all previous questions.
+
+The trivial functional dependency, B is in $B^{+}$.
+In the function dependency F, we have $B \rightarrow D$, so D is in $B^{+}$. 
+That gets us $B^{+} = \{B,D\}$.
+
+$A^{+} = \{A,B,C,D,E\}$
+
+$B^{+} = \{B,D\}$
+
+$C^{+} = \{C\}$
+
+$D^{+} = \{D\}$
+
+$E^{+} = \{A,B,C,D,E\}$
+
+$(BC)^{+} = \{ABCDE\}$
+
+$(CD)^{+} = \{ABCDE\}$
+
+The candidate keys are A, BC, CD, E because their closure is equal to R.
+
+A relation is in BCNF if all functional dependencies F $\alpha \rightarrow \beta$ where $\alpha$ is a superkey.
+From our set of functional dependencies we can see that A, CD, E are all superkeys but B is not a super key.
+Therefore because of the functional dependency $B \rightarrow D$, this relation is not in BCNF.
+
+If $\alpha \rightarrow \beta$ is the functional dependency that causes the violation of BCNF conditions then we want to decompose R into:
+$(\alpha \cup \beta)$ and $(R - (\beta - \alpha))$.
+
+We have $B \rightarrow D$ as the functional dependency that causes the violation of BCNF for R.
+
+Let R1 = $(\alpha \cup \beta)$ and R2 = $(R - (\beta - \alpha))$
+
+R2 = $(R - (D - B)) = (R - D) = (ABCDE - D) = (ABCE)$
+
+We take $R = \{A, B, C, D, E\}$ and decompose it to:
+
+R1 = $\{BD\}$ and R2 = $\{ABCE\}$
+
+This is a lossless decomposition because $R_1 \cap R_2 \rightarrow R_1$, so B is in $R_1$ and is common in $R_1$ and $R_2$.
+
+\problem{4:}{4}
+Give a lossless, dependency-preserving decomposition into 3NF of schema $R$ in Q3.
+
+$R = \{A, B, C, D, E\}$ \\$F = \{
+\\A \rightarrow BC\\
+CD \rightarrow E\\
+B \rightarrow D\\
+E \rightarrow A\}$\\
+
+No extraneous attributes in F.
+
+$F_c = \{A \rightarrow BC, CD \rightarrow E, B \rightarrow D, E \rightarrow A\}$
+
+$R_1 = \{A,B,C\}$, $R_2 = \{C,D,E\}$, $R_3 = \{B,D\}$, $R_4 = \{E,A\}$
+
+\problem{5:}{4}
+Assume the following decomposition of $R$ in Q3: $R_{1}(A, B, E)$ and $R_{2}(C, D, E)$. Is this decomposition lossy or lossless? Why? Show your work in detail.
+
+$R = \{A, B, C, D, E\}$ \\$F = \{
+\\A \rightarrow BC\\
+CD \rightarrow E\\
+B \rightarrow D\\
+E \rightarrow A\}$\\
+
+To figure out whether a decomposition is lossy or lossless. 
+
+If $R_1 \cap R_2 \rightarrow R_1$ or $R_1 \cap R_2 \rightarrow R_2$
+
+$R_1 \cap R_2 \rightarrow R_1 = \{E\}$
+
+Does $E \rightarrow ABE$ or $E \rightarrow CDE$?
+
+$E \rightarrow E$, trivial, $E \rightarrow A$, and $A \rightarrow BC$
+
+So, $E \rightarrow ABE$.
+
+Another way is if $\pi_{R_1} (R) \bowtie \pi_{R_2} (R) = R$ if it is lossless.
+
+$R \subset \pi_{R_1} (R) \bowtie \pi_{R_2} (R)$ if it is lossy.
+
+$\pi_{R_1} (R) \bowtie \pi_{R_2} (R) = \{A,B,C,D,E\} = R$
+
+Therefore it is a lossless decomposition.
+
+\problem{6:}{22}
+Consider the following relation $R(A, B, C, D, E, G)$ and the set of functional dependencies \\$F = \{
+\\A \rightarrow BCD\\
+BC \rightarrow DE\\
+B \rightarrow D\\
+D \rightarrow A\}$\\
+
+\noindent Note: Show the steps for each answer.
+
+\subproblem{a} Compute $B^{+}$. \indent (4 points)\\
+
+The the trivial FD of B gives us,
+
+$B^{+} = \{B\}$
+
+$B^{+} = \{B,D\}$ from $B \rightarrow D$
+
+$B^{+} = \{A,B,D\}$ from $D \rightarrow A$
+
+$B^{+} = \{A,B,C,D\}$ from $A \rightarrow BCD$
+
+$B^{+} = \{A,B,C,D,E\}$ from $BC \rightarrow DE$
+
+\subproblem{b} Prove (using Armstrong's axioms) that $AG$ is superkey. \indent (4 points)\\
+
+By augmenting $A \rightarrow BCD$ with G we get $AG \rightarrow BCDG$,
+
+By applying the decomposition rule to $AG \rightarrow BCDG$ we get $AG \rightarrow BC$,
+and by the transitive rule with $BC \rightarrow DE$ we get $AG \rightarrow DE$.
+
+By applying the decomposition again to $AG \rightarrow BCDG$ we get $AG \rightarrow D$,
+and with the transitive rule to $D \rightarrow A$ we get $AG \rightarrow A$.
+
+And with all of that we get $AG \rightarrow ABCDEG$. And since it equals to the relation R, AG is a superkey.
+
+\subproblem{c} Compute $F_{c}$. \indent (6 points)\\
+
+$R(A, B, C, D, E, G)$
+\\$F = \{
+\\A \rightarrow BCD\\
+BC \rightarrow DE\\
+B \rightarrow D\\
+D \rightarrow A\}$\\
+
+D is extraneous in $A \rightarrow BCD$
+
+$F_c = \{A \rightarrow BC, BC \rightarrow DE, B \rightarrow D, D \rightarrow A\}$
+
+D is extraneous in $BC \rightarrow DE$
+
+$F_c' = \{A \rightarrow BC, BC \rightarrow E, B \rightarrow D, D \rightarrow A\}$
+
+$(BC)^{+} = \{A,B,C,D,E\}$ which includes D
+
+$F_c = \{A \rightarrow BC, BC \rightarrow E, B \rightarrow D, D \rightarrow A\}$
+
+C is extraneous in $BC \rightarrow E$
+
+$F_c = \{A \rightarrow BC, B \rightarrow E, B \rightarrow D, D \rightarrow A\}$
+
+
+\subproblem{d} Give a 3NF decomposition of the given schema based on a canonical cover. \indent (4 points)
+
+$F_c = \{A \rightarrow BC, B \rightarrow E, B \rightarrow D, D \rightarrow A\}$
+
+No deletion needed cause non of the schemas are subsets of another schema.
+
+$R_1 = \{A,B,C\}$, $R_2 = \{B,E\}$, $R_3 = \{B,D\}$, $R_4 = \{A,D\}$
+
+
+
+\subproblem{e} Give a BCNF decomposition of the given schema based on $F$. Use the first functional dependency as the violator of the BCNF condition. \indent (4 points)\\
+
+$R(A, B, C, D, E, G)$
+\\$F = \{
+\\A \rightarrow BCD\\
+BC \rightarrow DE\\
+B \rightarrow D\\
+D \rightarrow A\}$\\
+
+In $A \rightarrow BCD$, A is not a superkey
+
+We will decomposite this into $R_1 = \{A,B,C,D\}$ which is $\alpha \cup \beta$ 
+
+and $R_2 = \{A,E,G\}$ which is $R - \beta$
+
+In $BC \rightarrow DE$, BC is not a superkey
+
+We will decomposite this into $R_3 = \{B,C,D,E\}$ which is $\alpha \cup \beta$ 
+
+and $R_4 = \{A,B,C,G\}$ which is $R - \beta$
+
+In $B \rightarrow D$, B is not a superkey
+
+We will decomposite this into $R_5 = \{B,D\}$ which is $\alpha \cup \beta$ 
+
+and $R_6 = \{A,B,C,E,G\}$ which is $R - \beta$
+
+In $D \rightarrow A$, D is not a superkey
+
+We will decomposite this into $R_7 = \{D,A\}$ which is $\alpha \cup \beta$ 
+
+and $R_8 = \{B,C,D,E,G\}$ which is $R - \beta$
+
+The final relation in BCNF is 
+$R_1 = \{A,B,C,D\}$, $R_2 = \{A,E,G\}$, $R_3 = \{B,C,D,E\}$, $R_4 = \{A,B,C,G\}$, 
+$R_5 = \{B,D\}$, $R_6 = \{A,B,C,E,G\}$, $R_7 = \{A,D\}$, $R_8 = \{B,C,D,E,G\}$
+
+
+\problem{7:}{6}
+Given the following set of functional dependencies:\\
+$A \rightarrow BC$\\
+$B \rightarrow AC$\\
+$C \rightarrow AB$\\
+Show that it is possible to find more than one unique canonical cover for this set.
+
+\textbf{First cannonical cover:}
+
+$F = \{A \rightarrow BC, B \rightarrow AC, C \rightarrow AB\}$
+
+C is extraneous in $A \rightarrow BC$, on transitivity on $A \rightarrow B, B \rightarrow AC$
+
+$F_c = \{A \rightarrow B, B \rightarrow AC, C \rightarrow AB\}$
+
+A is extraneous in $B \rightarrow AC$
+
+$F_c = \{A \rightarrow B, B \rightarrow C, C \rightarrow AB\}$
+
+B is extraneous in $C \rightarrow AB$
+
+$F_c = \{A \rightarrow B, B \rightarrow C, C \rightarrow A\}$
+
+\textbf{Second cannonical cover:}
+
+$F = \{A \rightarrow BC, B \rightarrow AC, C \rightarrow AB\}$
+
+B is extraneous in $A \rightarrow BC$
+
+$F_c = \{A \rightarrow C, B \rightarrow AC, C \rightarrow AB\}$
+
+C is extraneous in $B \rightarrow AC$
+
+$F_c = \{A \rightarrow C, B \rightarrow A, C \rightarrow AB\}$
+
+B is extraneous in $C \rightarrow AB$
+
+$F_c = \{A \rightarrow C, B \rightarrow A, C \rightarrow A\}$
+
+
+\problem{8}{7}
+Consider the schema $R = (A, B, C, D, E, G)$ and the set $F$ of functional dependencies:\\
+$A \rightarrow BC$\\
+$BD \rightarrow E$\\
+$CD \rightarrow AB$\\
+Use the BCNF decomposition algorithm to find a BCNF decomposition
+of $R$. Start with $A \rightarrow BC$. Explain your steps. Is this decomposition lossy or lossless? Is it dependency-preserving?
+
+In $A \rightarrow BC$, A is not a superkey
+
+We will decomposite this into $R_1 = \{A,B,C\}$ which is $\alpha \cup \beta$ 
+
+and $R_2 = \{A,D,E,G\}$ which is $R - \beta$
+
+Next, $BD \rightarrow E$, BD is not a superkey for $R_2$
+
+We will decomposite this into $R_3 = \{B,D,E\}$ which is $\alpha \cup \beta$ 
+
+and $R_4 = \{A,D,G\}$ which is $R_2 - \beta$
+
+Lastly, $CD \rightarrow AB$, CD is not a superkey
+
+We will decomposite this into $R_5 = \{A,B,C,D\}$ which is $\alpha \cup \beta$ 
+
+and $R_6 = \{D,G\}$ which is $R_4 - \beta$
+
+
+So, the relations are $\{A,B,C\}$, $\{B,D,E\}$, $\{A,B,C,D\}$, and $\{D,G\}$
+
+It is dependency preserving and it is lossless.
+
+\problem{9:}{3}
+As discussed in class, SQL does not support functional dependency constraints. But it supports materialized views. Assume that the DBMS maintains the materialized view immediately. Given a relation $R(W, X, Y, Z)$, how would you use materialized views to enforce the functional dependency $W \rightarrow Z$?
+
+The materialized view would be such that W must only have one relation of Z. Using the unique keyword in the materialized view between the two relations W and Z,
+should create a functional dependency between them. 
+
+\end{document}
+
+
+\end{document}
+

@@ -1,0 +1,133 @@
+\documentclass[a4 paper]{article}
+% Set target color model to RGB
+\usepackage[inner=2.0cm,outer=2.0cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{setspace}
+\usepackage[rgb]{xcolor}
+\usepackage{verbatim}
+\usepackage{subcaption}
+\usepackage{amsgen,amsmath,amstext,amsbsy,amsopn,tikz,amssymb,tkz-linknodes}
+\usepackage{fancyhdr}
+\usepackage[colorlinks=true, urlcolor=blue,  linkcolor=blue, citecolor=blue]{hyperref}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{rotating}
+%\usetikzlibrary{through,backgrounds}
+\hypersetup{%
+pdfauthor={Ahmed El-Roby},%
+pdftitle={Assignment 1},%
+pdfkeywords={Tikz,latex,bootstrap,uncertaintes},%
+pdfcreator={PDFLaTeX},%
+pdfproducer={PDFLaTeX},%
+}
+%\usetikzlibrary{shadows}
+% \usepackage[francais]{babel}
+\usepackage{booktabs}
+\input{macros.tex}
+
+
+\begin{document}
+\homework{Assignment \#1}{Due: October 1, 2021 (11:59 PM)}{Ahmed El-Roby}{}{Ryan Lo}{101117765}
+\textbf{Instructions}: Read all the instructions below carefully before you start working on the assignment, and before you make a submission.
+\begin{itemize}
+    \item The accepted format for your submission is \textbf{pdf} only. More details below. 
+    \item You can either write your solutions in the tex file (then build to pdf) or by writing your solution by hand or using your preferred editor (then convert to pdf). However, you are encouraged to write your solutions in the tex file. If you decide not to write your answer in tex, it is your responsibility to make sure you write your name and ID on the submission file.
+    \item If you use the tex file, make sure you edit line 28 to add your name and ID. Only write your solution and do not change anything else in the tex file. If you do, you will be penalized.
+    \item All questions in this assignment use the university schema discussed in class (available on Brightspace under Resources $\rightarrow$ University\_Toy\_Database), unless otherwise stated.
+    \item For SQL questions, upload a text file with your queries in the format shown in the file ``template.txt'' uploaded on culearn. An example submission is in the file ``sample.txt''. \textbf{You will be penalized (50\% of the question) if the format is incorrect or there is no text file submission}. 
+\end{itemize}
+
+
+\problem{1:}{7}
+Answer the following questions using the university schema discussed in class: 
+\subproblem{a} The primary key for the \emph{advisor} relation is \emph{s\_id}. Suppose a student can have more than one suprvisors. Would \emph{s\_id} still be a primary key in \emph{advisor}? If yes, why? If not, what would be a suitable primary key?\indent (3 marks)
+
+If a student could have more than one supervisor then s\_id would not be a primary key in advisor.
+It wouldn't be enough to uniquely identify an advisor, in this case a more suitable primary id would be both s\_id and i\_id.
+
+\subproblem{b} The primary key for \emph{prereq} is both attributes \emph{course\_id} and \emph{prereq\_id}. Why wouldn't only \emph{course\_id} work as primary key?\indent (2 marks)\\
+
+If only course\_id was the primary key, and a course requires you to have multiple courses as a prerequisite,
+course\_id would not be unique anymore and there would be multiple instances of course\_id. Therefore, having just course\_id as a primary would not work.
+
+\subproblem{c} Given the existing schema of \emph{teaches}, two or more instructors can teach the same section. How can the primary key be changed to restrict a section to one instructor only?\indent (2 marks)\\
+
+Currently we have the instructor ID as the primary key which allows for multiple sections per instructor, 
+changing the primary key in the teaches table to the section id, sec\_id instead would make the section unique and will only allow one section. 
+
+\problem{2:}{12}
+Consider the following bank database schema:\\
+\emph{branch(\underline{branch\_name}, branch\_city, assets)}\\
+\emph{customer(\underline{ID}, customer\_name, customer\_street, customer\_city)}\\
+\emph{loan(\underline{loan\_number}, branch\_name, amount)}\\
+\emph{borrower(\underline{ID}, \underline{loan\_number})}\\
+\emph{account(\underline{account\_number}, branch\_name, balance)}\\
+\emph{depositor(\underline{ID}, \underline{account\_number})}
+
+\noindent Write an expression in relational algebra to find the following:
+
+\subproblem{a} Find the cities that host branches that have a loan that is greater than \$50000.\indent (3 marks)\\
+\begin{comment}
+$\pi$branch\_city($\sigma$amount$>$50000(loan$\bowtie$loan.branch\_name=branch.branch\_name(branch))
+\end{comment}
+
+$\pi_{branch\_city}(\sigma_{amount>50000}(loan\bowtie _{loan.branch\_name=branch.branch\_name}(branch))$
+
+\subproblem{b} Find the ID of each depositor who has an account with a balance greater than \$50000 at the ``Ottawa'' branch.\indent (3 marks)\\
+
+$\pi_{ID}(\sigma _{branch\_name="Ottawa"\land balance>50000}(depositor\bowtie _{depositor.account\_number=account.account\_number}(account)))$
+
+\begin{comment}
+$\pi_{ID}$($\sigma$branch\_name="Ottawa"$\land$ balance$>$50000(branch))
+$\pi_{ID}(\sigma _{branch\_name="Ottawa"\land balance>50000}(depositor\bowtie _{depositor.account\_number=account.account\_number}(account)\bowtie(account\bowtie _{account.branch\_name=branch.branch\_name}(branch)))$
+\end{comment}
+
+\subproblem{c} Find the names of customers who have at least one loan amount that is greater than at least one of their account balance.\indent (6 marks)\\
+
+\begin{comment}
+$\pi$name($\sigma$branch\_name="Ottawa"$\land$ loan$>$50000(customers))
+\end{comment}
+
+$\pi _{customer\_name}(\pi _{loan.amount>account.balance}(borrower\bowtie _{loan.loan\_number = borrower.loan\_number}\bowtie _{depositor.ID = borrower.ID} depositor\bowtie _{account\_number = depositor.account\_number} account \bowtie _{customer.ID = borrower.ID} customer))$
+
+
+\problem{3:}{33}
+Using the university database schema discussed in class, write the SQL statements that do:
+\subproblem{a} Create a new course (``Aces of Databases'') with ID (``COMP5118'') in the Computer Science department (``Comp. Sci.'') with 0 credit hours.\indent (3 marks)\\
+
+
+\subproblem{b} Create a section 'A' for this course in the Winter of 2020 with no known location or time, yet.\indent (4 marks)\\
+
+
+\subproblem{c} Enroll all students in the department into this course.\indent(5 marks)\\
+
+
+\subproblem{d} One student with ID 12345 cannot take this course because of violating the prerequisite requirements (didn't pass COMP3005). Unregister this student from the new section.\indent (3 marks)\\
+
+
+\subproblem{e} For each student who took a course at least twice, show the course\_ID and the student ID.\indent (5 marks)\\
+
+
+\subproblem{f} Find the ID and name of instructors who never gave a grade 'A' in the courses they taught (note that instructors who never taught a course satisfy this condition).\indent (5 marks)\\
+
+
+
+\subproblem{g} Rewrite the previous query so that you make sure that the instructor taught at least one course.\indent (5 marks)\\
+
+
+\subproblem{h} Find the lowest, across all departments, of the per-department maximum salary.\indent (3 marks)
+
+
+\problem{4}{5}
+Consider the following car insurance schema:\\
+\emph{person(\underline{driver\_id}, name, address)}\\
+\emph{car(\underline{licence}, model, year)}\\
+\emph{accident(\underline{report\_number}, date, location)}\\
+\emph{owns(\underline{driver\_id}, \underline{licence\_plate})}\\
+\emph{participated(\underline{report\_number}, \underline{licence\_plate}, driver\_id, damage\_amount)}\\
+Write SQL queries to:\\
+\subproblem{a} Find the number of accidents involving a car belonging to a person named ``Ahmed El-Roby''.\indent (3 marks)
+
+
+\subproblem{b} Update the damage amount for the car with licence plate ``DB007'' in the accident with report number ``AR2020'' to \$3000. \indent (2 marks)
+
+\end{document}
+

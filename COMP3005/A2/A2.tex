@@ -1,0 +1,148 @@
+\documentclass[a4 paper]{article}
+% Set target color model to RGB
+\usepackage[inner=2.0cm,outer=2.0cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{setspace}
+\usepackage[rgb]{xcolor}
+\usepackage{verbatim}
+\usepackage{subcaption}
+\usepackage{amsgen,amsmath,amstext,amsbsy,amsopn,tikz,amssymb,tkz-linknodes}
+\usepackage{fancyhdr}
+\usepackage[colorlinks=true, urlcolor=blue,  linkcolor=blue, citecolor=blue]{hyperref}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{rotating}
+%\usetikzlibrary{through,backgrounds}
+\hypersetup{%
+pdfauthor={Ashudeep Singh},%
+pdftitle={Assignment 2},%
+pdfkeywords={Tikz,latex,bootstrap,uncertaintes},%
+pdfcreator={PDFLaTeX},%
+pdfproducer={PDFLaTeX},%
+}
+%\usetikzlibrary{shadows}
+% \usepackage[francais]{babel}
+\usepackage{booktabs}
+\input{macros.tex}
+
+
+\begin{document}
+\homework{Assignment \#2}{Due: Friday Oct. 15, 2021 (11:59 PM)}{Ahmed El-Roby}{}{Ryan Lo}{101117765}
+\textbf{Instructions}: Read all the instructions below carefully before you start working on the assignment, and before you make a submission.
+\begin{itemize}
+    \item The accepted formats for your submission are: pdf, txt, and java. More details below. 
+    \item You can either write your solutions in the tex file (then build to pdf) or by writing your solution by hand or using your preferred editor (then convert to pdf). However, you are encouraged to write your solutions in the tex file. If you decide not to write your answer in tex, it is your responsibility to make sure you write your name and ID on the submission file.
+    \item If you use the tex file, make sure you edit line 28 to add your name and ID. Only write your solution and do not change anything else in the tex file. If you do, you will be penalized.
+    \item All questions in this assignment use the university schema discussed in class (available on Brightspace under Resources $\rightarrow$ University\_Toy\_Database), unless otherwise stated.
+    \item For SQL questions, upload a text file with your queries in the format shown in the file ``template.txt'' uploaded on culearn. An example submission is in the file ``sample.txt''. You will be penalized if the format is incorrect or there is no text file submission. 
+    \item For programming questions, upload your .java file.
+    \item Late submissions are allowed for 24 hours after the deadline above with a penalty of 10\% of the total grade of the assignment. Submissions after more than 24 are not allowed.
+\end{itemize}
+
+\problem{1:}{3}
+Consider the following DDL statements:
+\begin{verbatim}
+ create table takes
+    (ID             varchar(5), 
+    course_id       varchar(8),
+    sec_id          varchar(8), 
+    semester        varchar(6),
+    year            numeric(4,0),
+    grade           varchar(2),
+    primary key (ID, course_id, sec_id, semester, year),
+    foreign key (course_id,sec_id, semester, year) references section
+        on delete cascade,
+    foreign key (ID) references student
+        on delete cascade
+    );
+\end{verbatim}
+\begin{verbatim}
+ create table section
+    (course_id          varchar(8), 
+         sec_id         varchar(8),
+    semester            varchar(6)
+        check (semester in ('Fall', 'Winter', 'Spring', 'Summer')), 
+    year                numeric(4,0) 
+        check (year > 1701 and year < 2100), 
+    building            varchar(15),
+    room_number         varchar(7),
+    time_slot_id        varchar(4),
+    primary key (course_id, sec_id, semester, year),
+    foreign key (course_id) references course
+        on delete cascade,
+    foreign key (building, room_number) references classroom
+        on delete set null
+    );
+\end{verbatim}
+
+\noindent Now, consider the following SQL query:
+\begin{verbatim}
+select course_id, semester, year, sec_id, avg (tot_cred)
+from takes natural join student
+where year = 2017
+group by course_id, semester, year, sec_id
+having count (ID) >= 2;
+\end{verbatim}
+
+\noindent Will appending \textbf{natural join} \emph{section} in the \textbf{from} clause change the returned result? Explain why?
+
+Appending natural join section in the from clause will not change the returned result because all the tuples that are being select are apparent in both the queried table and the section table.
+It also doesn't concatenate like the cartesian product. It does a join on the tuples that are in both the tables and since they both have the same tuples that are being selected, it won't change the result.
+
+\problem{2:}{2}
+Write an SQL query using the university schema to find the names of each instructor who has never taught a course at the university. Do this using no subqueries and no set operations.
+
+
+\problem{3:}{2}
+Rewrite the following query to replace the natural join with an inner join with \textbf{using} condition:
+\begin{verbatim}
+select *
+from section natural join classroom;
+\end{verbatim}
+
+
+
+\color{black}
+
+\problem{4:}{2}
+Consider the following relation definition:
+\begin{verbatim}
+ create table manager(
+ emp_id         char(20),
+ manager_id     char(20),
+ primary key emp_id,
+ foreign key (manager_id) references manager(emp_id) on delete cascade)
+\end{verbatim}
+The foreign key constraint means that every manager has to be an employee.
+Explain what is going to happen when a manager is deleted.
+
+With a foreign key that on delete cascades, everytime a manager is deleted, all other records with that manager\_id or emp\_id in it will also be deleted.
+So, this manager table acts moreso like a pair. Since the manager\_id references the emp\_id, any deletion of manager\_id and emp\_id would cause other managers with the same manager\_id or emp\_id to be deleted also.
+Say for example emp\_id 1 has manager\_id 4 but emp\_id 2 also has manager\_id 4, the deletion of either emp\_id 1 or emp\_id 2 or manager\_id 4 will cause all emp\_id 1, emp\_id 2, manager\_id 4 and every other emp\_id or manager\_id with those same values to also be deleted.
+
+\problem{5:}{5}
+Using the university schema, define a view \emph{tot\_credits} (\emph{year}, \emph{num\_credits}), giving the total number of credits taken in each year. Then, explain why insertions would not be possible into this view.
+
+Insertions would not be possible into this view because of the sum aggregation as well as the group by aggregation.
+Any type of aggregation does not with with view and group by because it's not able to update it since it already calculated the sum.
+When trying to perform an insertion into this view, "Views containing GROUP BY are not automatically updatable".
+
+
+\problem{6:}{10}
+Write a Java program that finds all prerequisites for a given course using JDBC. The program should:
+\begin{itemize}
+ \item Takes a course id value as input using keyboard.
+ \item Finds the prerequisites of this course through a SQL query.
+ \item For each course returned, repeats the previous step until no new prerequisites can be found.
+ \item Prints the results.
+\end{itemize}
+Don't forget to handle the case for cyclic prerequisites. For example, if course A is prerequisite to course B, course B is prerequisite to course C, and course C is prerequisite to course A, do not infinite loop.
+
+
+\problem{7:}{5}
+Consider the following schema:\\
+\emph{employee(\underline{emp\_name}, street, city)}\\
+\emph{works(\underline{emp\_name}, company\_name, salary)}\\
+Write a function \emph{avg\_sal} that takes a company name as input and finds the average salary of employees in the company. Then, write a SQL query that uses this function to find companies whose employees earn (on average) higher salary than the company ``Losers Inc.''.
+
+
+\end{document}
+

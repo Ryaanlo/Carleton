@@ -1,0 +1,56 @@
+Q3.a:
+insert into course (title, course_id, dept_name, credits)
+	values("Aces of Databases", "COMP5118", "Comp. Sci.", 0);
+----------
+Q3.b:
+insert into section (course_id, sec_id, semester, year)
+	values("COMP5118", "A", "Winter", 2020);
+----------
+Q3.c:
+insert into takes
+select * from students
+where dept_name = "Comp. Sci.";
+	
+----------
+Q3.d:
+delete from takes
+where ID = "12345" and course_id = "COMP5118" and semester = "Winter" and year = 2020;
+----------
+Q3.e:
+select course_id, ID, count(*)
+from takes
+group by course_id, ID
+having count(*) > 1; 
+----------
+Q3.f:
+select ID, name
+from instructor
+where ID not in (select ID
+		 from teaches, section
+		 where teaches.course_id = section.course_id and teaches.sec_id = section.sec_id and teaches.semester = section.semester and teaches.year = section.year and grade = 'A');
+----------
+Q3.g:
+select instructor.ID, name
+from instructor, teaches
+where instructor.ID = teaches.ID
+group by ID, name
+having count(*) > 0;
+----------
+Q3.h:
+select dept_name, avg(salary) as avg_salary
+from instructor
+group by dept_name
+where avg_salary > all (select avg(salary)
+			from instructor
+			group by dept_name);
+----------
+Q4.a:
+select name, sum(report_number) as sum_accident
+from person natural join participated, accident
+where participated.report_number = accident.report_number and name = "Ahmed El-Roby";
+----------
+Q4.b:
+update participated
+set damage_amount = 3000
+where licence_plate = "DB007" and report_number = "AR2020";
+----------

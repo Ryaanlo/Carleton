@@ -1,0 +1,375 @@
+Lecture 1:
+
+Database - Organized collection of inter-related data
+
+ACID Properties - Atomicity, Consistency, Isolation, Durability
+
+Relation = Table
+Relation Instance - Specific instance of a relation
+Database schema - The overall design of the database
+Database instance - The information stored in the database at a particular moment
+Tuple - Row in a table
+Attribute - Column of a table
+
+Superkey - One or more attributes that uniquely identify a tuple in a relation
+Candidate Key - Minimal set of attributes in a superkey that preserves the uniqueness of a tuple
+Primary key - A candidate key chosen by the data base designer
+Foreign key - An attribute that is a primary key in another relation, linking
+
+Lecture 2:
+
+Relational Algebra - Set of operations that take one or two relations as input and produce a new relation as output
+Unary operations - Operate on a single relation
+Binary operations - Operate of two relations
+No duplicates in relational algebra
+
+Select operation
+- Selects tuples that satisfy a given predicate
+
+Ex. Select tuples from the relation instructor such that they have "Physics" as thier department
+
+σ dept_name="Physics"(instructor)
+
+Ex. Find instructors with salary greater than $90,000
+
+σ salary>90000(instructor)
+
+Coonnectives
+And -> ∧
+Or -> v
+not -> ¬
+
+σ dept_name="Physics"∧salary>90000(instructor)
+
+Project Operator (get)
+- Select specific attributes in a relation
+
+Ex. Find the name and salary of all instructors
+
+π name,salary(instructor)
+
+Multiple Operations
+
+Ex. Find the names of instructors in Physics department
+
+π name(σ dept_name="Physics"(instructor))
+
+Cartesian Product Operation
+
+Ex. Find all instructors and the courses they are teaching
+
+σ instructor.ID=teaches.ID(instructor X teaches)
+
+Join Operation:
+instructor⋈instructor.ID=teaches.ID(teaches)
+
+Set Operations
+course_id | sec_id | semester | year | building | room_number | time_slot_id
+
+Ex. Find courses taught in the fall of 2017
+π course_id(σ semester="Fall"∧year=2017(section))
+
+Ex. Find courses taught in the spring of 2018
+π course_id(σ semester="Spring"∧year=2018(section))
+
+Ex. Find courses taught in fall 2017, spring 2018 or both
+π course_id(σ semester="Fall"∧year=2017(section)) U π course_id(σ semester="Spring"∧year=2018(section))
+
+- Must have same number of attributes of using set operations
+
+DDL - Data Definition Language
+	- Defining relation schemas, deleting relations, modifying
+	- create, alter, drop, rename
+DML - Data Manipulation Language
+	- Insert, update, delete data in relations
+DQL - Data Query Language
+	- Query Data
+
+Defining Schemas Using SQL
+Relation: course(course_id, title, dept_name, credits)
+SQL:
+create table course
+(course_id	varchar(8),
+ title 		varchar(50),
+ dept_name	varchar(20),
+ credits	numeric(2,0),
+ primary key (course_id),
+ foreign key (dept_name) references department
+);
+
+Removing a relation - drop table course;
+Keeping relation, but removing all tuples - delete from course;
+
+Making changes to schema after creation
+- Adding a new attribute
+alter table course add capacity numeric(3,0);
+- Adding constraint
+alter column/table <column_name> set not null;
+
+Removing an attribute from a relation
+alter table course drop capacity;
+
+Queries on single relation
+Relational algebra:
+π name(instructor)
+
+SQL:
+select name
+from instructor;
+
+Selection σ -> where
+Projection π -> select
+
+Removing Dups
+select distinct dept_name
+from instructor;
+
+Adding conditions
+Ex. Find the names of all instructors in the Computer Science department who have salary greater than $70,000
+
+select name
+from instructor
+where dept_name = 'Comp. Sci' and salary > 70000;
+
+Queries on multiple relations
+Ex. Find the names of all instructors along with their department names and department building name
+
+select name, instructor.dept_name, building
+from instructor, department
+where instructor.dept_name = department.dept_name;
+
+Rename Operation
+Ex. Find all instructors whose salary is greater than at least one instructor in the Biology department
+
+select distinct T.name
+from instructor as T, instructor as S
+where T.salary > S.salary and S.dept_name = 'Biology';
+
+Lecture 3:
+
+Set Operations
+
+Ex. Find courses taught in the Fall of 2017 or Spring of 2018
+
+(select course_id
+from section
+where semester = 'Fall' and year = 2017)
+union
+(select course_id
+from section
+where semester = 'Spring' and year = 2018);
+
+*Set operations auto removes dups
+If you want to keep dubs use all - union all
+
+intersect - and
+except - in x but not in y
+Ex. Find courses taught in the Fall of 2017 but not in the Spring of 2018
+
+Check for null and unknown
+select name
+from instructor
+where salary is null;
+
+select name
+from instructor
+where salary > 10000 is unknown;
+
+Aggregate functions
+Ex. Find the average salary of instructors in the CS department
+select avg (salary) as avg_salary
+from instructor
+where dept_name = 'Comp. Sci.';
+
+Duplicates
+Ex. Find the total number of instrructors who teach a course in the Spring of 2018
+select count (distinct ID)
+from teaches
+where semester = 'Spring' and year = 2018;
+
+- Count all tuples in relation
+select count (*)
+from course;
+
+Aggregation with grouping
+Ex.
+select dept_name, avg(salary) as avg_salary
+from instructor 
+group by dept_name
+
+Having
+select dept_name, avg(salary) as avg_salary
+from instructor 
+group by dept_name
+having avg(salary) > 42000;
+
+Lecture 4:
+
+With Clause - defining temp relation
+
+Ex. Find the departments with the maximum budget
+
+with max_budget (value) as 
+	(select max(budget)
+	 from department)
+select budget
+from department, max_budget
+where department.budget = max_budget.value;
+
+Deletion
+Ex. Delete instructors whose departments are in the Watson Building
+delete from instructor 
+where dept_name in (select dept_name
+		    from department
+		    where building = 'Watson');
+
+Ex. Delete instructors with salary below the average at the university
+delete from instructor
+where salary < (select avg (salary)
+		from instructor);
+
+Insertions
+insert into course
+	values('CS-432', 'Database Systems', 'Comp. Sci.', 4);
+
+insert into course (course_id, title, dept_name, credits)
+	values('CS-432', 'Database Systems', 'Comp. Sci.', 4);
+
+Insertion with queries
+Ex. Make each student in the Music department who earned more than 144 credit hours instructors with a salary of 18,000
+insert into instructor
+	select ID, name, dept_name, 18000
+	from student
+	where dept_name = 'Music' and tot_cred > 144;
+
+Updates
+
+update instructor
+set salary = salary * 1.05;
+
+update instructor
+set salary = salary * 1.05;
+where salary < 70000;
+
+5% raise to instructors with less than average salary
+update instructor
+set salary = salary * 1.05;
+where salary < (select avg (salary)
+		from instructor);
+
+Case Construct
+update instructor
+set salary = case
+		when salary <= 10000 then salary * 1.05
+		else salary * 1.03
+	     end
+
+Outer joins
+select *
+from student natural left outer join takes;
+
+*Does a join on student and takes and even if student doesn't take a course it still shows
+
+Lecture 5:
+Views
+A secretary needs to know an instructor's ID, name and department name but should not be able to view their salary
+
+create view faculty as
+select ID, name, dept_name
+from instructor;
+
+Views will remain available until dropped unlike with
+
+Materialized View
+- Makes sure the view is up to date
+
+Not null
+name varchar(20) not null
+- name should not be null
+
+unique
+- no two tuple could have the same values
+
+check(P)
+P must be satisfied
+tot_cred numeric(3,0) check (tot_cred >= 0)
+
+on delete cascade - deletes corresponding row in child table
+on update cascade - updates corresponding row in child table
+
+Create table extensions
+- create a table similar to existing one
+
+create table instructor_2 as
+(select * from instructor)
+with data
+
+Prepared Statements
+PreparedStatement pStmt = conn.prepareStatement(
+"insert in to instructor values(?,?,?,?,?)");
+pStmt.setString(1,"123");
+pStmt.executeUpdate();
+
+Why use it?
+- Efficiency, if it runs many times
+- Protects from mistakes in input
+- SQL Injection
+
+Procedures and Functions
+- Procedures allows insert and update
+- Functions return values
+
+create procedure dept_count_proc(in dept_name varchar(20),
+					out d_count integer)
+	begin
+		select count(*) into d_count
+		from instructor
+		where instructor.dept_name=dept_count_proc.dept_name
+	end
+
+	declare d_count integer
+	call dept_count_proc('Comp. Sci.', d_count);
+
+Given the name of a department, return the count of the number of instructors in that department
+
+create function dept_count(dept_name varchar(20))
+	returns integer
+	begin
+	declare d_count integer;
+		select count(*) into d_count
+		from instructor
+		where instructor.dept_name = dept_name
+	return d_count
+	end
+
+select dept_name, budget
+from department
+where dept_count(dept_name) > 12;
+
+Lecture 6:
+
+Triggers - Statements that execute auto after modification to database
+
+Why need triggers?
+- Keep total credits up to date as grades are out
+- Warehouse orders more stock if it falls below certain value
+
+create trigger timeslot_check1 after insert on section
+referencing new row as nrow
+for each row
+when (nrow.time_slot_id not in (
+	select time_slot_id
+	from time_slot))
+begin
+	rollback
+end;
+
+Lecture 7:
+
+Entity
+An entity is a "thing" or "object"
+- Has a set of properties
+- Can be concrete of abstract
+
+Entity Sets
+- Set of entities of same type and shares same properties

@@ -1,0 +1,8 @@
+Q1.b:
+select *
+from instructor;
+----------
+Q4.c:
+select count(*)
+from instructor
+where salary > 100000;
