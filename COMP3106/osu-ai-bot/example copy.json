@@ -1,0 +1,18 @@
+{
+	"acc": 100,
+	"c100": 0,
+	"c300": 227,
+	"c50": 0,
+	"combo": 393,
+	"miss": 0,
+	"playerHp": 196.9403820391743,
+	"score": 2233864,
+	"simulatedPp": 52.086,
+	"sliderBreaks": 0,
+	"time": 79.839,
+	"unstableRate": 0
+}
+
+
+// when playerHp reaches 0, retry
+// comboLeft is not 0 and time is not 0, then the bot can start playing the game 

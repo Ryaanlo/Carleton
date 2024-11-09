@@ -1,0 +1,116 @@
+import os
+import csv
+import random
+from collections import defaultdict
+
+class td_qlearning:
+    def __init__(self, trials_directory, alpha=0.1, gamma=0.9, car_appearance_probability=0.5):
+        self.alpha = alpha
+        self.gamma = gamma
+        self.car_appearance_probability = car_appearance_probability
+        self.q_values = defaultdict(float)  # Initialize Q-values to 0.0
+        self.actions = ['N', 'U', 'D']
+        self.load_trials(trials_directory)
+
+    def load_trials(self, trials_directory):
+        for filename in os.listdir(trials_directory):
+            if filename.endswith('.csv'):
+                file_path = os.path.join(trials_directory, filename)
+                with open(file_path, 'r') as file:
+                    csv_reader = csv.reader(file)
+                    for row in csv_reader:
+                        state, action = row[:2]
+                        self.q_values[(state, action)] = 0.0
+
+    def update_qvalue(self, state, action, reward, next_state):
+        old_value = self.q_values[(state, action)]
+        future_rewards = [self.q_values[(next_state, a)] for a in self.actions]
+        self.q_values[(state, action)] = old_value + self.alpha * (reward + self.gamma * max(future_rewards) - old_value)
+
+    def learn_from_trials(self):
+        has_converged = False
+        while not has_converged:
+            biggest_change = 0
+            for (state, action) in list(self.q_values.keys()):
+                reward, next_state = self.get_reward_and_next_state(state, action)
+                old_value = self.q_values[(state, action)]
+                self.update_qvalue(state, action, reward, next_state)
+                change = abs(old_value - self.q_values[(state, action)])
+                biggest_change = max(biggest_change, change)
+                print(f'Updated Q-value for {state}, {action}: {self.q_values[(state, action)]}')
+            has_converged = biggest_change < 0.01
+            print(f'Iteration completed with biggest change: {biggest_change}')
+
+    def get_reward_and_next_state(self, state, action):
+        print(f'Getting reward and next state for {state}, {action}')
+        # Initialize rewards and penalties
+        goal_reward = 100
+        collision_penalty = -100
+        step_penalty = -1
+
+        # Calculate the new position of the frog based on the action
+        if action == 'U' and state[0] > 'A':
+            new_frog_pos = chr(ord(state[0]) - 1)
+        elif action == 'D' and state[0] < 'G':
+            new_frog_pos = chr(ord(state[0]) + 1)
+        else:
+            new_frog_pos = state[0]  # No move or invalid move
+
+        # Compute the next state of cars randomly
+        new_car_states = ''.join(
+            '1' if car == '0' and random.random() < self.car_appearance_probability else 
+            '0' if car == '1' and random.random() < self.car_appearance_probability else 
+            car for car in state[1:]
+        )
+
+        # Construct the new state string
+        next_state = new_frog_pos + new_car_states
+        print(f'New state constructed: {next_state}')
+
+        # Check for cars in the new position of the frog, if the position is not 'S' or 'G'
+        car_index = ord(new_frog_pos) - ord('A')
+        if new_frog_pos not in ['S', 'G'] and next_state[car_index] == '1':
+            print(f'Collision at {next_state}')
+            return collision_penalty, state  # The frog is on the same square as a car
+
+        # Check if the frog has reached the goal
+        if new_frog_pos == 'G':
+            print(f'Reached goal at {next_state}')
+            return goal_reward, next_state
+
+        print(f'Step penalty applied at {next_state}')
+        return step_penalty, next_state
+
+    def policy(self, state):
+        return max(self.actions, key=lambda a: self.q_values[(state, a)])
+
+    def qvalue(self, state, action):
+        return self.q_values[(state, action)]
+
+def main():
+    examples_directory = './Examples'
+    for example_name in os.listdir(examples_directory):
+        example_path = os.path.join(examples_directory, example_name)
+        if os.path.isdir(example_path):
+            trials_directory = os.path.join(example_path, 'Trials')
+            agent = td_qlearning(trials_directory)
+            agent.learn_from_trials()
+
+            policy_test_file = os.path.join(example_path, 'policy_tests.csv')
+            if os.path.isfile(policy_test_file):
+                with open(policy_test_file, 'r') as file:
+                    csv_reader = csv.reader(file)
+                    for state, expected_action in csv_reader:
+                        actual_action = agent.policy(state)
+                        print(f"Policy Test - State: {state}, Expected: {expected_action}, Actual: {actual_action}")
+
+            qvalue_test_file = os.path.join(example_path, 'qvalue_tests.csv')
+            if os.path.isfile(qvalue_test_file):
+                with open(qvalue_test_file, 'r') as file:
+                    csv_reader = csv.reader(file)
+                    for state, action, expected_qvalue in csv_reader:
+                        actual_qvalue = agent.qvalue(state, action)
+                        print(f"Q-value Test - State: {state}, Action: {action}, Expected: {expected_qvalue}, Actual: {actual_qvalue:.2f}")
+
+if __name__ == "__main__":
+    main()

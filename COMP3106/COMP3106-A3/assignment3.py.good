@@ -1,0 +1,167 @@
+import numpy as np
+import os
+import csv
+from collections import defaultdict
+
+class td_qlearning:
+    def __init__(self, trials_directory, alpha=0.1, gamma=0.9):
+        self.alpha = alpha
+        self.gamma = gamma
+        self.q_table = defaultdict(lambda: -1.0)  # Initialize Q-values to -1.0
+        self.states = ['S', 'A', 'B', 'C', 'D', 'E', 'F', 'G']
+        self.actions = ['N', 'U', 'D']
+        self.read_trials(trials_directory)
+
+    def read_trials(self, trials_directory):
+        for trial_file in os.listdir(trials_directory):
+            trial_path = os.path.join(trials_directory, trial_file)
+            if os.path.isfile(trial_path) and trial_file.endswith('.csv'):
+                with open(trial_path, 'r') as file:
+                    csv_reader = csv.reader(file)
+                    previous_state_action = None
+                    for row in csv_reader:
+                        # Check if the row contains a reward
+                        if len(row) == 3:
+                            state, action, reward_str = row
+                            reward = float(reward_str) if reward_str.replace('.','',1).isdigit() else -1.0
+                            if previous_state_action:
+                                # Update the Q-table with the reward from the last action
+                                self.update_q_value(previous_state_action[0], previous_state_action[1], reward, state)
+                            previous_state_action = (state, action)
+                        elif len(row) == 2:
+                            # Handle rows with state and action only (no reward)
+                            state, action = row
+                            if previous_state_action:
+                                # Assume the default reward for non-terminal states
+                                self.update_q_value(previous_state_action[0], previous_state_action[1], -1.0, state)
+                            previous_state_action = (state, action)
+
+    def process_trial(self, state, action):
+        # Decode the state to get the position of the frog and cars
+        frog_pos = state[0]
+        car_positions = state[1:]
+
+        # Assign rewards based on the game's rules
+        reward = -1  # default reward
+        if frog_pos == 'G':
+            reward = 100  # Goal reached
+        elif (frog_pos == 'B' and car_positions[1] == '1') or (frog_pos == 'E' and car_positions[4] == '1'):
+            reward = -100  # Hit by a car
+
+        # Update the Q-value for the state-action pair
+        next_state = self.get_next_state(state, action)
+        self.update_q_value(state, action, reward, next_state)
+
+    def update_q_value(self, state, action, reward, next_state):
+        # Find the max Q-value among actions in the next state
+        max_next_q = max([self.q_table.get((next_state, a), 0) for a in ['N', 'U', 'D']])
+        # Compute Q-value using the Q-learning update rule
+        current_q_value = self.q_table.get((state, action), 0)
+        new_q_value = current_q_value + self.alpha * (reward + self.gamma * max_next_q - current_q_value)
+        self.q_table[(state, action)] = new_q_value
+
+    def qvalue(self, state, action):
+        return self.q_table.get((state, action), 0)
+
+    def policy(self, state):
+        # Find the action with the highest Q-value for the given state
+        possible_actions = ['N', 'U', 'D']
+        best_action = max(possible_actions, key=lambda a: self.q_table.get((state, a), -np.inf))
+        return best_action
+
+    def get_next_state(self, state, action):
+        # Compute the next state based on the current state and action
+        frog_pos = self.states.index(state[0])  # Convert the position to an index
+        if action == 'U':
+            next_pos = max(0, frog_pos - 1)  # Move up (towards 'S')
+        elif action == 'D':
+            next_pos = min(len(self.states) - 1, frog_pos + 1)  # Move down (towards 'G')
+        else:
+            next_pos = frog_pos  # Stay in place for 'N'
+
+        next_state = self.states[next_pos] + state[1:]  # Combine the next position with the car positions
+        return next_state
+
+def main():
+    examples_path = "./Examples"  # Base path for all examples
+
+    # Iterate over each Example directory
+    for example_folder in os.listdir(examples_path):
+        example_path = os.path.join(examples_path, example_folder)
+        trials_path = os.path.join(example_path, 'Trials')
+
+        # Check if the trials path is a directory before proceeding
+        if os.path.isdir(trials_path):
+            print(f"Processing trials in {trials_path}")
+            
+            # Initialize the Q-learning class with the directory containing the trial CSV files
+            q_learner = td_qlearning(trials_path)
+
+            # Run policy tests if 'policy_tests.csv' exists in the example folder
+            policy_test_file = os.path.join(example_path, 'policy_tests.csv')
+            if os.path.isfile(policy_test_file):
+                with open(policy_test_file, mode='r') as file:
+                    csv_reader = csv.reader(file)
+                    for row in csv_reader:
+                        state, expected_action = row
+                        actual_action = q_learner.policy(state)
+                        print(f"Policy Test: State = {state}, Expected = {expected_action}, Actual = {actual_action}")
+
+            # Run Q-value tests if 'qvalue_tests.csv' exists in the example folder
+            qvalue_test_file = os.path.join(example_path, 'qvalue_tests.csv')
+            if os.path.isfile(qvalue_test_file):
+                with open(qvalue_test_file, mode='r') as file:
+                    csv_reader = csv.reader(file)
+                    for row in csv_reader:
+                        state, action, expected_qvalue_str = row
+                        expected_qvalue = float(expected_qvalue_str)
+                        actual_qvalue = q_learner.qvalue(state, action)
+                        print(f"Q-value Test: State = {state}, Action = {action}, Expected = {expected_qvalue:.2f}, Actual = {actual_qvalue:.2f}")
+
+if __name__ == "__main__":
+    main()
+
+# my-assignment/
+# ├─ Examples/
+# │  ├─ Example0/
+# │  │  ├─ Trials/
+# │  │  │  ├─ trial0.csv
+# │  │  ├─ policy_tests.csv
+# │  │  ├─ qvalue_tests.csv
+# │  ├─ Example1/
+# │  │  ├─ Trials/
+# │  │  │  ├─ trial0.csv
+# │  │  │  ├─ trial1.csv
+# │  │  │  ├─ trial2.csv
+# │  │  │  ├─ trial3.csv
+# │  │  │  ├─ trial4.csv
+# │  │  │  ├─ trial5.csv
+# │  │  │  ├─ trial6.csv
+# │  │  │  ├─ trial7.csv
+# │  │  │  ├─ trial8.csv
+# │  │  │  ├─ trial9.csv
+# │  │  ├─ policy_tests.csv
+# │  │  ├─ qvalue_tests.csv
+# │  ├─ Example2/
+# │  │  ├─ Trials/
+# │  │  │  ├─ trial0.csv
+# │  │  │  ├─ trial1.csv
+# │  │  │  ├─ trial2.csv
+# │  │  │  ├─ trial3.csv
+# │  │  │  ├─ trial4.csv
+# │  │  │  ├─ trial5.csv
+# │  │  │  ├─ trial6.csv
+# │  │  │  ├─ trial7.csv
+# │  │  │  ├─ trial8.csv
+# │  │  │  ├─ trial9.csv
+# │  │  │  ├─ trial10.csv
+# │  │  │  ├─ trial11.csv
+# │  │  │  ├─ trial12.csv
+# │  │  │  ├─ trial13.csv
+# │  │  │  ├─ trial14.csv
+# │  │  │  ├─ trial15.csv
+# │  │  │  ├─ trial16.csv
+# │  │  │  ├─ trial17.csv
+# │  │  │  ├─ trial18.csv
+# │  │  ├─ policy_tests.csv
+# │  │  ├─ qvalue_tests.csv

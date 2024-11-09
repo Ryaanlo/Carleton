@@ -1,0 +1,211 @@
+import os
+import random
+import itertools
+import numpy as np
+import pandas as pd
+
+class td_qlearning:
+    def __init__(self, trials_directory, alpha=0.1, gamma=0.9):
+        self.alpha = alpha
+        self.gamma = gamma
+        self.q_values = self.initialize_q_table()
+        self.actions = ['N', 'U', 'D']
+        self.trials_data = []
+        self.car_appearance_probability = 0.1
+        self.load_trials(trials_directory)
+        print("Initialization complete. Q-values initialized.")
+
+    def initialize_q_table(self):
+        q_table = {}
+        # Assuming 'P' represents the frog's position and '0' or '1' represent absence/presence of cars
+        positions = ['A', 'B', 'C', 'D', 'E', 'F', 'S', 'G']
+        for pos in positions:
+            for car_config in itertools.product('01', repeat=6):
+                state = pos + ''.join(car_config)
+                for action in self.actions:
+                    q_table[(state, action)] = 0.0
+        return q_table
+
+    def load_trials(self, trials_directory):
+        print(f"Loading trials from directory: {trials_directory}")
+        for filename in os.listdir(trials_directory):
+            if filename.startswith('trial') and filename.endswith('.csv'):
+                file_path = os.path.join(trials_directory, filename)
+                print(f"Processing trial file: {file_path}")
+                df = pd.read_csv(file_path, header=None, names=['state', 'action'])
+                for index, row in df.iterrows():
+                    state, action = row['state'], row['action']
+                    self.states.add(state)
+                    # Initialize state-action pair in Q-table with a default value if not already present
+                    self.q_values[(state, action)] = self.q_values.get((state, action), 0.0)
+                print(f"Processed trial file: {file_path}")
+        print(f"Loaded trials: {self.states}")
+    
+    def process_trial(self, file_path):
+        print(f"Processing trial file: {file_path}")
+        df = pd.read_csv(file_path, header=None, names=['state', 'action'])
+        # No need to check for NaN values in two columns format
+        self.trials_data.extend(df.itertuples(index=False))  # Add tuple of row data to the trials_data list
+        for index, row in df.iterrows():
+            state, action = row['state'], row['action']
+            # Initialize state-action pair in Q-table with a default value
+            self.q_values[(state, action)] = self.q_values.get((state, action), 0.0)
+            self.states.add(state)
+            self.actions.add(action)
+        print(f"Processed trial file: {file_path}")
+
+    def qvalue(self, state, action):
+        return self.q_values.get((state, action), 0.0)
+
+    def update_qvalue(self, state, action, reward, next_state):
+        # Ensure all inputs are valid
+        if state is not None and action is not None and reward is not None and next_state is not None:
+            try:
+                # Convert reward to float for calculation
+                reward = float(reward)
+            except ValueError:
+                print(f"Invalid reward value '{reward}' for state-action pair ({state}, {action}). Skipping update.")
+                return
+
+            # Initialize Q-values for the next state if not present
+            if next_state not in self.states:
+                for a in self.actions:
+                    self.q_values[(next_state, a)] = 0.0
+                self.states.add(next_state)
+
+            # Compute the maximum Q-value for the next state
+            next_max = max(self.q_values.get((next_state, a), 0.0) for a in self.actions)
+
+            # Update the Q-value for the current state-action pair
+            self.q_values[(state, action)] = (
+                (1 - self.alpha) * self.q_values.get((state, action), 0.0) +
+                self.alpha * (reward + self.gamma * next_max)
+            )
+        else:
+            print(f"Encountered None for reward or next_state for state-action pair ({state}, {action}). Skipping update.")
+
+
+    def learn_from_trials(self):
+        print("Learning from trials...")
+        for trial in self.trials_data:
+            state, action = trial.state, trial.action
+            
+            # Calculate the reward and next state
+            reward, next_state = self.get_reward_and_next_state(state, action)
+            
+            # Update Q-value
+            self.update_qvalue(state, action, reward, next_state)
+        print("Learning complete.")
+
+
+
+    def get_reward_and_next_state(self, state, action):
+        position_to_index = {'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5, 'F': 6, 'S': 7, 'G': 7}
+        
+        if len(state) != 7:
+            raise ValueError(f"State string has incorrect length: {state}")
+        
+        frog_pos = state[0]
+        
+        # Calculate new position based on action
+        if action == 'U' and frog_pos > 'A':
+            next_pos = chr(ord(frog_pos) - 1)
+        elif action == 'D' and frog_pos < 'G':
+            next_pos = chr(ord(frog_pos) + 1)
+        else:
+            next_pos = frog_pos
+        
+        # Randomly update the presence of cars
+        new_car_state = ''
+        for i in range(1, len(state)):
+            if random.random() < self.car_appearance_probability:
+                new_car_state += '1' if state[i] == '0' else '0'
+            else:
+                new_car_state += state[i]
+        
+        next_state = next_pos + new_car_state
+        
+        # Check for cars in the new position
+        car_index = position_to_index[next_pos]
+        car_present = (car_index < 7) and (new_car_state[car_index - 1] == '1')
+        
+        # Assign rewards
+        if next_pos == 'G':
+            reward = 100
+        elif car_present:
+            reward = -100
+        else:
+            reward = -1
+        
+        return reward, next_state
+
+    
+    def infer_next_state(self, state, frog_position, action):
+        # Create a list from the state string for easier manipulation
+        state_list = list(state)
+
+        # Determine the new position of the frog based on the action
+        if action == 'U':
+            new_frog_position = max(0, frog_position - 1)
+        elif action == 'D':
+            new_frog_position = min(len(state) - 1, frog_position + 1)
+        else:  # 'N' action or any other action means no move
+            new_frog_position = frog_position
+
+        # Update the state list with the new frog position
+        state_list[frog_position] = '0'  # Mark the old position as empty
+        state_list[new_frog_position] = 'F'  # Place the frog in the new position
+
+        # Convert the state list back to a string
+        next_state = ''.join(state_list)
+
+        return next_state
+
+q
+
+
+def load_csv(path):
+    return pd.read_csv(path, header=None)
+
+def main():
+    examples_directory = './Examples'
+
+    for example_name in os.listdir(examples_directory):
+        example_path = os.path.join(examples_directory, example_name)
+        if os.path.isdir(example_path):
+            trials_directory = os.path.join(example_path, 'Trials')
+            if os.path.isdir(trials_directory):
+                # Initialize the Q-learning agent with the trials directory path
+                agent = td_qlearning(trials_directory)
+
+                # Learn from the trials
+                agent.learn_from_trials()
+
+                # Print Q-values for inspection
+                print(f"Q-values for {example_name}:")
+                # for state_action, q_value in agent.q_values.items():
+                    # print(f"State: {state_action[0]}, Action: {state_action[1]}, Q-value: {q_value}")
+
+                # Load policy tests and compare with agent's policy
+                policy_test_path = os.path.join(example_path, 'policy_tests.csv')
+                if os.path.isfile(policy_test_path):
+                    policy_tests = pd.read_csv(policy_test_path, header=None)
+                    policy_tests.columns = ['state', 'action']  # Assign column names manually
+                    for index, row in policy_tests.iterrows():
+                        state, expected_action = row['state'], row['action']
+                        actual_action = agent.policy(state)
+                        print(f"Policy Test - State: {state}, Expected: {expected_action}, Actual: {actual_action}")
+
+                # Load qvalue tests and compare with agent's qvalue
+                qvalue_test_path = os.path.join(example_path, 'qvalue_tests.csv')
+                if os.path.isfile(qvalue_test_path):
+                    qvalue_tests = pd.read_csv(qvalue_test_path, header=None)
+                    qvalue_tests.columns = ['state', 'action', 'qvalue']  # Assign column names manually
+                    for index, row in qvalue_tests.iterrows():
+                        state, action, expected_qvalue = row['state'], row['action'], row['qvalue']
+                        actual_qvalue = agent.qvalue(state, action)
+                        print(f"Q-value Test - State: {state}, Action: {action}, Expected: {expected_qvalue}, Actual: {actual_qvalue}")
+
+
+if __name__ == "__main__":
+    main()
