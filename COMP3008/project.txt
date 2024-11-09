@@ -1,0 +1,10 @@
+Hello guys, my name is Ryan and im joined with yilong and parisha and this is our presentation Ling's Reimagined, Recreating Ling's website. The website that we picked was Ling's cars. Ling’s cars is a UK-based car leasing website where customers can pick a car of their choosing, request a quote for the period of time they plan on leasing it, and do all the necessary paperwork before being delivered their new ride. 
+ 
+The motivation for choosing this website is very evident when looking at the interface of lingscars.com. The website is extremely busy, way too colorful and a very poorly designed format. Because of this, it can be a challenge to find whatever the customers may be looking for.
+ 
+We believe that we will be able to take this website, and update the interface in a way that makes it more modern and user-friendly while reducing the time taken for users to do their desired task on this website.
+
+
+
+
+Navigating through the interface ourselves, we had a really hard timing trying to figure how what is happening throughout the whole screen, so with that comes our motivation of redesigning this website so that users may have a good user experience with it and helping them to reduce the time taken for users to do their desired task.
