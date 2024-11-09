@@ -1,0 +1,10 @@
+(define (palindrome? s)
+  ()
+
+)
+
+
+(define (k-palindrome? s n)
+  ()
+
+)

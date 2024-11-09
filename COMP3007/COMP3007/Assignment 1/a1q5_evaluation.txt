@@ -1,0 +1,26 @@
+(define (test x y)
+  (if (= x 0)
+      x
+      y))
+
+(test 0 (/ 4 0))
+
+(define (foo a b)
+  ((cond ((> b 0) +)((= b 0) *)(else /)) a b))
+
+a) If the interpreter uses applicative-order evaluation, the expression is evaluated before it's passed which means (/4 0) is evaluated first. This will cause an error because 4/0 is undefined.
+
+b) If the interpreter uses normal-order evaluation, the expression being passed is evaluated after it is passed which means the test procedure will be able to run and the expression y passed would not be evaluated.
+
+c) 
+If b > 0 -> (+ a b)
+	If a < -(b) then (foo a b) is negavtive
+	If a > -(b) then (foo a b) is positive
+	If a = -(b) then (foo a b) = 0
+If b < 0 -> (/ a b)
+	If a < b then (foo a b) is positive
+	If a > b then (foo a b) is negative
+	if a = b then (foo a b) = 1
+If b = 0 -> (a * b)
+	(foo a b) = 0
+	
