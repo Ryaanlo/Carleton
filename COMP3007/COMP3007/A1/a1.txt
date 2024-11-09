@@ -1,0 +1,62 @@
+COMP 3007 A1
+Ryan Lo (101117765)
+
+Q1)
+
+λf. (λx. f(xx))) (λx.f(xx))
+ 1    2  1 22      3 1 33
+
+λx. (λy. xz(λx. xy)) (w (λs. syx))
+ 1    2  1*  3  32    *   4  4*1
+
+(λy.λx. xyz)(λy.λx. xyz)
+
+Q2)
+
+a) Suppose S and T are the sets of free variables of terms M and N, respectively. What is the set of free variables of the term MN?
+
+If S and T are the sets of free variables of terms M and N then the set of free variables of the term MN are S and T.
+
+b) Suppose S is the set of free variables of M. What is the set of variables of λx.M?
+
+If S is the set of free variables of M then the set of variables of λx.M are S.
+
+c) Give an example of a term with no free variables.
+
+λx.x
+
+d) Give an example of a term with one free variable that becomes a term with no free variables after one step of reduction.
+
+(λy.xy)x
+
+e) Give an example of a term with one free variable where the number of free variable occurrences doubles after one step of reduction. (Note: λx.xyy has one free variable, y, but two occurrences of it.)
+
+   (λx.xx)(λx.xy)
+   (λx.xy)(λx.xy)
+   (λx.xy)y
+   yy
+
+Q3)
+
+a) Show a sequence of one-step reductions that normalizes the following term.
+   (λfgx.fx(gx))(λxy.x)(λxy.x)
+   (λgx.(λxy.x)x(gx))(λxy.x)
+   (λgx.(λy.x)(gx))(λxy.x)
+   (λx.(λy.x)((λxy.x)x))
+   (λx.(λy.x)(λy.x))
+   λx.x
+
+b) Describe what happens if we try to normalize the term
+   ( λf. (λx. f(xx)) (λx.f(xx)) )  (λx.x)
+   (λx. ((λx.x)(xx))) (λx.((λx.x)(xx))) 
+   (λx.(xx) (λx.(xx))
+   (λx.(xx) (λx.(xx))
+
+   The same step of reduction repeats forever.
+
+c) Give an example of a term that is normalizing (some sequence of one-step reductions take it to a normal form) but where it is possible to repeat one-step reductions forever.
+
+   (λx.xx)(λx.xx)
+   (xx)[(λx.xx)/x]
+   (λx.xx)(λx.xx)
+   ...
