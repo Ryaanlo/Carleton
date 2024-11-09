@@ -1,0 +1,44 @@
+Computer security - combined art, science and engineering practice of protecting computer-related assets from unauthorized actions
+
+Six high-level computer security goals
+1) confidentiality - only you can see your files no one else
+	- access control, user has permission?
+	- data encryption -> scramble data, need to decrypt
+2) integrity - data transmitted successfully, unaltered data
+3) authorization - only is authorized to access
+4) availability - server stays online
+	- bugs, network attacks, power cords
+5) authentication - verify who someone claims to be
+	- passwords
+6) accountability - logs what has happened
+	- digital evidence
+
+Chapter 2, 2.5
+Cryptographic hash functions
+
+input m - arbitrary-length string
+output h - fixed-length string
+
+easy to compute, hard to invert
+
+Properties that need to be satisfied for cryptographic hash functions
+H1) One-way property
+	- for any possible hash value h, given h it should be infeasible to find any m such that H(m) = h
+	- if you have output, should be hard to figure out what input it had
+H2) Second-preimage resistance
+	- for any input m1, it should be difficult to find a different input m2 that gives same hash as another input
+	- given m1 find an m2 with same hash
+H3) Collision resistance
+	- difficult to any pair of inputs such that H(m1) = H(m2)
+	- just find same hash for m1 and m2, see if any 2 match
+
+Sha256 file integrity hash
+Verify files
+
+
+Random number generation
+	- randomness (entropy)
+	- random/unpredicatable numbers
+pseudorandom number generator (PRNG)
+	- start from some initial entropy (seed)
+CSPRNG (Cryptography Secure Random Number Generators)

@@ -1,0 +1,51 @@
+Diffie Hellman Key Agreement
+- 2 parties with no prior contact to establish a shared secret by exchanging numbers over a readable channel
+- both parties agree on prime number key p
+- generator g for multiplicative group of integers modulo p
+A selects private b
+B selects private a
+
+take generator and raises to a g^a
+take generator and raises to b g^b
+
+A -> g^a B
+A g^b <- B
+
+compute K = (g^a)^b mod p
+compute K = (g^b)^a mod p
+
+If attacker tries to intercept y = g^a & g^b
+knows y and g but doesn't know a & b
+they need to know what a and b is
+
+g^? = y mod p
+
+discrete logarithm problem
+- can take very long time to solve
+
+Postprocessing by KDF
+- K is used as input to key derivation function(KDF) to create session key
+
+ElGamal Encryption
+- key transport
+- one party provides key a
+
+computes g^a mod p
+
+Example
+B provides key b
+computes g^b mod p
+B sends g^b to A
+
+A picks key m
+d = m*(g^b)^k mod p
+y = g^k mod p
+A sends d, y to B
+
+B computes
+t = y^-b = (g^k)^-b = g^-bk mod p
+m = d*t mod p
+m = m*(g^b)^k * g^-bk
+m = m*g^bk * g^-bk
+
+KDF(m) = session key

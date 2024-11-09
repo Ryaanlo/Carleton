@@ -1,0 +1,28 @@
+Modes of operation - what to do with extra blocks of encryption
+
+ECB Mode (Electronic Code Book)
+- take block of msg with key k
+- encrypt block
+- use key k to decrypt block
+
+Issues: letter correspond to bit, not very strong
+
+CBC Mode (cipher-block chaining)
+- msg block is XOR'd with initialization vector (random set of bits)
+- take the cipher text and XOR with next set of msg block
+- decrypt from the end of the message
+
+Counter (CTR) Mode
+- msg block is XOR'd with a number (initialization value) that is being encrypted with the key k
+- to decrypt -> init value encrypt with k and XOR with ciphertext
+
+What modes of operation to use?
+know length of plaintext? block 
+dynamic length? keystream
+
+Authenticated Encryption - protect info, integrity verify
+
+Dangers of AES-CBC
+- Bit flipping attacks
+if we switch one bit from the previous block of ciphertext, 
+it will be switched in the next deciphered block too

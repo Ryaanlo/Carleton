@@ -1,0 +1,93 @@
+Public-key encryption
+---------------------
+Big challenge with symmetric key crypto is to get the secret to the other party without anyone else intercepting it.
+
+So, what can we do differently to make this problem easier (key distribution problem)
+
+We introduce two keys (encryption key and decryption key)
+  - mathematically related keys (encryption key is derived from the decryption key, but cannot do the other way around)
+  
+You can encrypt with the encryption key and still decrypt the original plaintext with the decryption key
+
+We refer to encryption key as public key (i.e. not a secret), and decryption key as private key (never share this!)
+
+To encrypt, you use the recipient's public key (it's not a secret, so they can just send this over a call or email)
+  - after the encryption, no one other than the recipient can decrypt the message (including the sender)
+
+For communication among n users, you need O(n^2) keys for symmetric, but you only need O(n) for public key crypto
+
+Why don't we just we public key crypto then?
+  - it's slow (in terms of processing and block size) and also the ciphertext is larger than the plaintext
+  - hashing/symmetric algorithms typically involve just bit shifting, so it's possible to optimize in the CPU
+  - but public key algorithms involve math operations (e.g., raising a large number by a factor), so it's very slow
+  
+In practice, we do hybrid encryption (Fig. 2.8)
+  - Alice wants to send a large message to Bob
+  - A generates a symmetric key k on her own
+  - A encrypts the k with B's public key using public key encryption
+  - A encrypts the plaintext message with the k using symmetric encryption
+  - A concats the encrypted message and the encrypted k, and send it to B
+  
+  To decrypt:
+  - B first decrypts the symmetric key k using his private key
+  - B then uses this decrypted k to decrypt the plaintext message
+  
+  Because symmetric keys are not costly to generate, A can use a new key each time she wants to send a message
+
+
+What can an attacker do to this system?
+  - attacker can see B's public key, encrypted payload, and the algorithms used
+  - option 1: brute force the symmetric key
+  - option 2: brute force the plaintext message
+
+  To attack RSA public key scheme,
+    - recall the public part is n = P.Q
+    - attacker needs to factor this value to get the private bits
+    - factoring integers is a difficult problem (NP - non-polynomial)
+    - there are quantum algorithms that can easily factor integers
+      - when they become practical, we should stop using RSA
+      - note that quantum computers cannot break AES keys (because they're just randomly chosen)
+    - RSA factoring challenge (https://en.wikipedia.org/wiki/RSA_Factoring_Challenge)
+      - the RSA mitigation to the quantum problem is to just use longer and longer keys
+    - we'll talk about an alternative public key scheme which is not vulnerable to these problems (after 2 weeks)
+    - as a useful exercise, you can play with the RSA algorithm with small numbers (e.g., 5 and 7)
+
+Digital Signatures
+------------------
+for checking data integrity, an approach might be to use hashing: hash the input independently and check if you get the same hash. But this is not always ideal.
+
+digital signature algorithm
+- based on public key crypto
+- you send the file (data) along with a tag/signature
+- the receiver can verify the tag using a public key to check the integrity of the file
+- the correct tag can only be created using a private signing key
+
+- the verification function outputs a boolean value to tell if the signature tag is valid or not
+
+Q: In what situations would the validation fail
+- if the input data was missing some bits (e.g., lost in transmission)
+- if the wrong public key was used to verify
+
+Integrity of the public key is important, and using the correct up-to-date key is also important. This is a disadvantage with public keys in general
+- you might need a directory service
+
+See Fig. 2.11 for a neat diagram about the digital signature algorithm
+
+You can use timestamps in the message body to mitigate replay attacks (i.e. re-sending the same valid tag in the future)
+- this is done at the application level
+
+
+Message Authentication Codes
+----------------------------
+If you don't have public keys, you can use symmetric keys with MACs to verify data integrity
+
+you both use the same symmetric key and hash the message and see if the output tag matches
+
+Q: Could you just use SHA256 using a secret key appended to the message
+- that'll be building your own crypto which might not achieve the properties you want
+
+The table posted on brightspace shows the three data integrity mechanisms and the security properties each gives (important to study this for final)
+
+Why don't MACs give the non-repudiation property? --> because at least two people have the same key
+
+In some cases (e.g., for anonymity), you might want repudiation property. One approach to achieve this is to use keys that are later revealed (allows for plausible deniability).

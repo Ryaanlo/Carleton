@@ -1,0 +1,65 @@
+Cryptography - collection of tools to help protect
+- do not design your own cryptographic protocols or algorithms
+
+Encryption and Decryption
+- taking plain text and transforming it into something not readable
+
+Cryptographic key
+- bytes that is shared by encrypter and decrypter
+
+Decryption key - recovery of plaintext
+
+plaintext + key -> E -> ciphertext -> D -> key + text
+
+Caesar cypher - shifting the alphabet
+
+Exhaustive Key Search
+- go through all keys k from the key space
+
+DES Key Space
+key length of 56 bits yields 2^56 possible keys
+
+Cipher Attack Models
+- In a ciphertext-only attack an adversary tries to recover plaintext (or key), given access to ciphertext alone
+
+Known-plaintext Attack - given access to some ciphertext and its corresponding plaintext, adversary try to recover unknown plaintext or key from further ciphertext
+
+Chosen-plaintext allows adversaries to choose some amount of plaintext and see the resulting ciphertext
+- access to decryption dictionary
+
+Chosen-ciphertext attack
+
+
+2.2 
+Symmetric Cryptography
+key k and k' are same keys
+
+Vernam cipher
+- encrypts plaintext one bit at a time
+
+message bits m_i
+m = m_1 m_2 ...
+
+shared keystream
+k = k_1 k_2 ...
+
+one bit for one key
+
+take bits from cyphertext and bits from keystream and XOR = original message
+
+XOR - has inverse property
+
+  A| 	0 0 1 1
+  B| 	0 1 0 1
+XOR|	0 1 1 0
+
+Pros - if keystream is sequence of truly random, independent bits that is never reused, then this is an unbreakable one-time pad
+Cons - the key could get really large
+
+One-time pad has no integrity
+- 
+
+Keys should only be used to encrypt one plaintext msg
+
+AES Interface (block cipher)
+- plaintext gets broken up into blocks

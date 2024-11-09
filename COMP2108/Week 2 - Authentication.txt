@@ -1,0 +1,69 @@
+Authentication - Matching who they say they are
+Identification - Prove to the system who they are
+Authorization - Has permission
+
+Password authentication
+	- text check if it matches what is stored 
+	- get plain text, hash then compare the hashes
+
+Pre-computed dictionary attack
+	- guess passwords
+	- store pairs of plaintext and hash results
+	- see if there's a match
+
+Password composition policies and "strength"
+	- require password chatacters from LUDS
+	- Lowercase
+	- Undercase
+	- Digits
+	- Special characters
+
+Disadvantages of passwords
+- not to write passwords down
+- follow complex composition policies
+- not to reuse passwords
+- to choose each password easy to remember but difficult for others to guess
+- change passwords every 30-90 days
+
+Advantages of passwords
+- simple
+- free
+- require no extra physical device to carry
+- quick login
+- easy to recover
+- well-understood failure
+- require no trust in a new third party
+- easily delegated to others
+
+3.2 - Password-guessing strategies and defences
+online guessing - password protected server
+throttle - limit amount of guesses
+if maximum number of tries is too few, attackers can lock people out of account
+
+offline password guessing - attacker acquired system password hash file
+iterated hashing - keep hashing the hashes
+
+password salting - generate random value and mix with the password then hash the result
+pepper (secret salt) - not stored in authentication database
+	- when use selects new password, choose random value, stores the secret salted hash then erases the random value
+	- to verify, system tries all random values in order and compares
+
+Specialized password-hashing functions
+bcrypt - uses lots of memory when running
+PBKDF2 (password-based KDF number 2) (pi, si, d, L) takes a password, salt, iteration count, desired bitlength
+
+System-assigned passwords - users don't like and forget easily
+
+proactive password checking - notify if using weak password
+denylist - passwords that are not allowed
+
+Probabilty of guessing success
+G - the number of guesses the attack can make per unit time
+T - the number of units of time per guessing period under consideration
+R = b^n - the size of the password space (b is number of characters in pssword alphabet, n is password length)
+q - probability of being guessed
+
+assume equal probable password
+
+formula
+q = GT/R

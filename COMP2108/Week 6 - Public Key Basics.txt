@@ -1,0 +1,27 @@
+Public-key encryption and decryption
+
+- two different keys 
+- encryption public key
+- decryption private key
+- encrypting with a key specific to the recipient
+
+keys e & d are related
+
+Integrity of public key - needs to be correct, did it get modified?
+	- everyone should be agreeing that the public key is good
+
+Symmetric encryption - every key pair should be different n^2 keys
+Public key encryption - each party only needs one set of keys
+
+public key encryption really slow compared to symmetric encryption
+
+Hybrid encryption 
+- Start with plaintext
+- Generate random encryption key
+- Encrypt symmetric key with public key
+- Encrypt msg with symmetric key -> encrypted payload
+- Concat payload and encrypted symmetric key
+
+RSA and integer factorization
+RSA uses two prime numbers to encrypt and decrypt message
+integer factorization - decomposition of positive int into a product of ints

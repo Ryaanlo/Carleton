@@ -1,0 +1,29 @@
+Certificate revocation
+- certificates have expiration date but can be revoked ahead of time
+
+Revocation reason
+- subject's private key compromised
+- key is superseded prior to expiry
+- changed job titles
+
+Methods for revoking certificates
+Method 1: Certificate Revocation Lists (CRLs)
+- periodically check list for certificates verifications
+- lists can get really long
+
+Method 2: CRL Fragments - Partitions and Deltas
+- split up lists into different partitions
+- instead of sending full lists you can send deltas with the changes
+
+Method 3: Online status checking
+online certificate status protocol (OCSP) 
+- can consult 3rd party server to confirm validity of certificates
+- privacy issues
+- can get overwhelmed with requests
+
+Method 4: Short-lived certificates
+- 1-4 days short valid certificates
+
+Method 5: Serving trusted public keys directly
+- server send public key
+- only works with closed systems

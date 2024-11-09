@@ -1,0 +1,31 @@
+Digital Signatures
+- public-key algorithm
+- tags are bitstrings
+
+Signature Properties
+1. Data origin authentication: whoever created the signature is the creator of the file
+2. Data integrity: hash or fingerprint of file to make sure content is not tampered
+3. Non-repudiation: difficult to create digital signatures and say it wasn't you, keys can get lost or stolen so property isn't as strong
+
+Public-key signatures
+- msg goes into signing algorithm with private signing key
+- tag comes out
+- msg + tag is sent
+- msg and tag is then verified using public verification key
+- valid or invalid msg + tag comes out
+
+Public-key encryption
+- take msg and encrypt with key only for the recipient, decryption with private key 
+
+Message Authentication Codes (MAC)
+- assuring integrity of data
+
+shared key + message goes into MAC algorithm -> outputs a tag
+message + tag is sent to recipient
+shared key + message into MAC algorithm
+if tag is the same and the recieved tag then it is valid
+
+Mechanism	Key		Authentication	Integrity	Non-repudiation
+Hash Function	N/A		X		O		X
+Msg Auth Code	Symmetric	O		O		X
+Digital Sign	Public		O		O		O
