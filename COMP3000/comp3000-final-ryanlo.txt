@@ -1,0 +1,74 @@
+COMP 3000 2021F Final Exam
+Name: Ryan Lo
+Student ID: 101117765
+
+1. You can write to /dev/null just like how you can write to a regular file. But when you read from /dev/null you get no data from it compared to reading from a regular file which returns what is saved in the regular file.
+
+
+2. In the assembly language given
+.LC0:
+.string "Hello world!\n"
+
+The .string is a literally string of "Hello world!\n" and the .LC0 is a label that can be referred to in the program.
+
+leaq .LC0(%rip), %rdi
+leaq is used to load the string into the program
+
+call puts@PLT
+call is used to call the puts which outputs the string "Hello world!\n"
+
+3. On x86-64 systems, a process’s virtual address space is larger than a host computer’s physical address space. A block of address space would be allocated for virtual address space and physical address space.
+
+
+4. Environment variable data are stored together just like a normal global variable as an array of chars (char*). The environment variable key-value pairs are stored as a string where the key and value are separated by a "=".	
+
+
+5. You can't make a C pure, standards-compliant C program that calls the fastread systemcall because standard C cannot make system calls. In order to make this systemcall we need to use a platform-specific compiler directive or inline assembly code that makes the systemcall because the stack needs to be properly configured to pass the syscall arguments and execite the syscall instructions.
+
+
+6. A statically-linked binary is bigger on disk than a dynamically-linked binary, this is because a statically-linked binary has already has all it's dependencies linked beforehand making the binary a larger file while the dynamically-linked binary links it during compile time.
+
+
+7. The open() or openat() linux system call is equivalent to this. The type of the return value is an int indicating whether or not the file was opened successfully.
+
+
+8. When a process writes to an existing file and it freezes/locks up it is usually due to the fact that the data being written is too big. The buffer could probably not have enough space for the writes and increasing the amount that the buffer can hold would help get process A to continue running.
+
+
+9. queue_nonfull is a condition variable that is used by the consumer to wait for the queue to free up. In line 163, this is where it is used to wait for the consumer to free up space in the queue. In line 275, this is where it is being used to signal or notify that the queue has space.
+
+
+10. Setting up busybox as the shell (lines 55-59) and copying the files needed to get busyubox working  (line 38) in 3000makefs.sh is what allows pd to work correctly. Using man busybox you can see the already defined functions as ps is already listed there, having busybox set up would allow ps to work.
+
+
+11. In the chrooted environment created by 3000makefs.sh, ls does depend on busybox. Because the new chrooted environment uses busybox as the new shell and with ls as one of its defined functions, it depends on busybox.
+
+
+12. A mount command can increase the space avaiable for storing files. When mounting a filesystem, you are able to specific the amount of blocks you want to mount to that filesystem. To increase the space available to store more things into that filesystem you can change the size of the ammount that you allow for that filesystem.
+
+
+13. When adding a new user the files /etc/passwrd, /etc/shadow has to be changed. And to add a new group the files /etc/group, /etc/gshadow has to be changed.
+
+
+14. find_binary makes this stat system call. These stat calls are used to check the details of the file itself, making sure that it is a valid file for us to be working with.
+
+
+15. Normally C library function buffers the output to the terminal and only outputs it when a newline is outputed. To force the terminal outwith without a newline the function fflush() command is needed. fflush() will force the C library to do a write immediately.
+
+
+16. sigaction() is used examine and change a signal action. The kill() command is used to send a signal to a process. sigaction makes changes what a signal can do while kill sends the signal.
+
+
+17. ePBF can watch the behavior of all the processes on the system rather than just one process at a time. Because of this you can count the total number of systemcalls being made. This is only possible because of the root privileges with eBPF compared to the unprivileged. 
+
+
+18. Taking a look at the source code for the kernel (https://elixir.bootlin.com/linux/v4.9/source/kernel/signal.c#L2847) you can see many signals that can be sent. Th sys_kill signal can be used to send signals to a process.
+
+
+19. I think it would be possible to make a special file that reading from it returna a random sentence. This can be done simular to the ones module in tutorial 7 but instead of it storing '1's it would store random sentences. After this module is created you can use the mknod command to create a speical file that mimics this new module.
+
+
+20. It does a whole bunch of read system calls but it never returns end of file. The ones module never returns end of buffer.
+
+
+21. It is unsafe to access process memories from pointer in userspace. To safely access process data you need to use the functions defined in the kernel APIs such as get_user, put_user, copy_to_user, etc...

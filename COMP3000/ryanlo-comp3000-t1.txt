@@ -1,0 +1,35 @@
+COMP 3000 Tutorial 1
+Ryan Lo
+101117765
+Sep 17, 2021
+
+1. 	Using the command "cat /etc/*-release" to find out the version of linux distribution, and "uname -r" for the linux kernel
+	a) Ubuntu 21.04, 5.11.0-1015-kvm
+	b) "echo $0" give me -bash as the name of the current shell
+	c) "cat /proc/cpuinfo", "cat /proc/meminfo", df
+
+2. 	which - returns the pathname of files which would be executed in the current environment
+	pwd - prints full name of current working dir
+	who - prints info of users crrently logged in
+	whoami - prints user name associated with current user id
+	env - print environment variables
+	whereis - locates files with common names
+
+3.	Using "type __" will tell you whether or not it's internal or external. cat, man, file are all external.
+
+4.	https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html
+	Using the export command you can add directories to current path. And using the source command you can make it permanent.
+
+5.	-rwxr-xr-x 1 root root 119848
+	man - owned by root and has permission execute
+
+6.	bit permission = r - read
+
+7.	/etc/passwd -rw-r--r-- 1 root root 2214
+	/etc/shadow -rw-r----- 1 root shadow 1363
+
+8.	execute permission lets you go into the directory and access it
+
+9.	ls -la to see all permission bits
+
+10.	It creates another process, parses the arguments and waits for the process to finish

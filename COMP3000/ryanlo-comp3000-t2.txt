@@ -1,0 +1,61 @@
+COMP 3000 Tutorial 2
+Ryan Lo
+101117765
+Sep 27, 2021
+
+A)
+1. 	After compiling hello.c and running it, it prints out Hello world!
+2. 	The size of hello-static is way bigger than hello, this is because static linking took all the dependencies and puts all of them into the binary during the compile whereas dynamic linking does it during runtime
+3. 	When you run ldd on hello-static it tells you that it is not a dynamic executable
+	When you run ldd on hello-dyn it shows you the dependencies that the executable is using
+	This is because hello-static has all its dependencies in its binary whereas hello-dyn doesn't and has to link them during runtime
+4.	hello-dyn has more system calls
+5.	hello-syn has more library calls
+6.	-z lazy shows the puts function being called on hello world
+7.	student group owns these files, they are part of the studnet group and all have same permissions
+8.	
+
+B)
+hello.c
+1.	hello-static defines more symbols
+2.	hello.o was produced
+	It defines:
+	U - _GLOBAL_OFFSET_TABLE_
+	r .LC0
+	T main
+ 	U puts
+3.	hello.s was produced
+	call puts@PLT
+	ret
+	no push
+	no pop
+	subq $8, %rsp
+	no syscall
+4.	It only shows the executions in main, format is different, uses hexidecimal, and memory addresses
+5.	the headers for hello-static and hello-dyn are slightly different
+6.	contents for object file are way different than contents of the executables, hello-static contains much more than hello-dyn
+7.	-v shows the stages of compilation
+
+syscall-hello.c
+1.	same as hello.c
+2.	syscallhello.o was created
+	It defines:
+	U - _GLOBAL_OFFSET_TABLE_
+	r .LC0
+	T main
+ 	U syscall
+3.	syscallhello.s was created
+	call syscall@PLT
+	ret
+	pushq %rbp
+	no pop
+	subq $32, %rsp
+	syscall@PLT
+4-7.	the same as hello.c
+
+C)
+1.	Everytime the executable is ran, it allocates a block of memory and since it's stored by address, it matters not where it's stored
+2.	The stack seems to be at address 7ffffc645370, heap at 560fdc4be000, code at 560fdadb26b0, and global vars at 560fdafb3010
+3.	the heap grew from 560fdc4be000 to 560fdc521000, the heap shouldn't run into the stack because it should be allocated an amount of memory in the block and were it to exceed that it would overflow and return an error
+4.	sbrk values didn't change, it exceeded what it could hold in memory
+5.	things are where I'd expect them to be

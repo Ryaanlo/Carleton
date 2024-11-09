@@ -1,0 +1,65 @@
+COMP 3000 Tutorial 8
+Ryan Lo
+101117765
+Nov 30, 2021
+
+Part A
+4. Running both 3000pc-fifo and 3000pc-rendezvous multiple times, it seems like theboth behave the same way. ren producer waitsw
+
+5. Running strace with both 3000pc-fifo and 3000pc-rendezvous, looks like they mostly call the same system calls except that 3000pc-rendezvous has an extra systemcall that 3000-pc fifo doesn't have which is the futex syscall.
+
+Part B
+1.
+a) pipe(pipefd) tries to open a fifo pipe.
+
+b) The consumer gets the next word from the pipefd, reads it and outputs the word
+
+c) The producer uses pick_word to get a random word then queues the word to the pipe which the consumer can recieve.
+
+d) srandom(time(NULL)) sets the randomness to the current time so the words picked would be psuedo random everytime.
+
+2. Replacing srandom(time(NULL)) with srandom(42), the behavior of 3000pc-fifo's is always going to be the same output. 
+
+3. Running 3000pc-fifo in the background and and listing all the file descriptors using ls -la /proc/$$/fd does not seem to show that it opens any fds
+
+4. I think it would break if we had multiple producers and multiple consumers. If multiple producers or multiple consumers opens the fd at the same time it might not work.
+
+Part C
+1. 
+a) 3000pc-rendezvous uses threads, mutex and semlocks to wait for producer and consumer while 3000pc-fifo just does it whenever and does not wait.
+
+b) line 335 shares memory with producer and consumer, code says it all
+
+c) when the producer queues the word it as a semlock that waits for the consumer when its no longer empty
+
+d) when the consumer gets the next word, it uses a semlock that waits for the producer when it's no longer full
+
+2. in queue_word, while the size of the queue or in this cause the first element is not the null terminator '\0' then it keeps going and waits till it is finished.
+
+3. In get_word, while the size of the queue or in this cause the first element is not the null terminator '\0' then it keeps going and waits till it is finished. 
+
+4. In line 335 the mmap shares the memory between the threads. While processes may not be able to share memory?
+
+5. The getrandom function in the C library seems to do the same as just getting random values from /dev/random
+
+6. changing pthread_mutexattr_setpshared and pthread_condattr_setpshared to 0 does break it. Now that it isn't shared it, finishes the producer but consumer is never reached.
+
+7. In 3000pc-rendezvous-timeout, the program includes a usleep and timeout which pauses the program for a bit. There may come a point in 3000pc-rendezvous where both producer and consumer uses the queue at the same time which causes it to deadlock but in 3000pc-rendezvous-timeout it waits for a bit and lets the other one finish before.
+
+8. 
+3000pc-fifo
+real	0m0.138s 
+user	0m0.085s
+sys	0m0.0052s
+
+3000pc-rendezvous
+real	0m0.488s
+user	0m0.139s
+sys	0m0.109s
+
+3000pc-rendezvous-timeout
+real	0m0.488s
+user	0m0.064s
+sys	0m0.052s
+
+Looks like 3000pc-fifo is the fastest, kinda expected since 3000pc-fifo does not wait for the producer or consumer with a semlock like how 3000pc-rendezvous and 3000pc-rendezvous-timeout does.

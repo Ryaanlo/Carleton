@@ -1,0 +1,37 @@
+COMP 3000 2021F Assignment 3
+Name: Ryan Lo
+Student ID: 101117765
+
+Collaborators:
+
+1. There are many risks of data loss from running this script. Specifically the rm command removes the files itself if you didn't want to remove it but did remove it then you'd lose data. The umount command also has risks of data loss as a filesystem is being unmounted everything inside it would be lost.
+
+
+2. After exiting the modified environment, I was able to get back to it by using the command sudo chroot ./3000fs.
+
+
+3. Lines 55-59 of 3000makefs.sh is building a script code named SETUP as 3000setupfs.sh. Line 55 uses busybox to create a shell. 56 installs busybox. 57 sets up the config for it. 58 and 59 mounts proc and dev.
+
+
+4. Lines 26-30 firsts tries to delete the chroot enivironment and if it already exists it unmounts /proc and the 3000fs itself and finally removes it. As /dev is mounted on line 59, it should be unmounted if 3000fs already exists.
+
+
+5. Using the command dd if=/dev/urandom of=test bs=1024 count=1000000 it goes over the space limit and ends at 355541. On line 23, the code dd if=/dev/zero of=$IMAGE bs=4096 count=$BLOCKS, we create this image called 3000fsimage which had a max limit of count BLOCKS which is 10000. As we copy files from line 38 onwards, it fills up and uses some of the space.
+
+
+6. As I fill up this confined environment using dd, I check before and after using ls -la and check if the space that the files outside of the environment changes or not. I also check the disk usage using df before and after to see if anything changes. Looking at these, while the space of the confined environment does change, the space outside of the confined environment does not change.
+
+
+7. This files were created in the 3000makefs.sh script on lines 55-59, when it was copying over all the files needed for this confined environment. Starting from line 38 and onwards files were copied over from the main environment to this confined environment and mainly lines 55-59 where it uses busybox as a shell and installs it and with using the config. Inside /bin there are lots of symbolic links because this refers to all the commands that busybox is able to use as a shell. Having symbolic links allow multiple things to have access to a file which in this case it's busybox.
+
+
+8. Using which or whereis nano shows us all the dependencies of nano. This gives us that nano is in /usr/bin/nano which I can use to copy over to the confined environment using the command cp /usr/bin/nano bin. After running nano on the confined environment it gives an error that it needs shared library libcursesw.so.6, so we need to copy that over as well. To copy all the files needed by nano I added the command cp `ldd /bin/nano | awk '{print}'` lib.
+
+
+9. First I created a new user in the regular environment, the student one using the command adduser confined. Then in the 3000makefs.sh script, I added a command "cp -r /home/confined /home" to copy over all the files from the user confined to the home directory in the confined environment. Then also copied over the user useradd command using cp /user/sbin/useradd sbin plus all it's dependencies using cp `ldd /bin/useradd | awk '{print}'` lib. And with the useradd command I created a new user and group confined.
+
+
+10. Using the mount root command, you can mount the main root filesystem inside of the confined environment. This would be very dangerous for the chroot'd environment as they have the permission to pretty much do whatever it wants.
+
+
+11.

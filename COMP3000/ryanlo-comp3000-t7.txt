@@ -1,0 +1,92 @@
+COMP 3000 Tutorial 7
+Ryan Lo
+101117765
+Nov 27, 2021
+
+Part A
+1. 
+a) cp /dev/urandom f1 tries to copy everything from /dev/urandom into a file called f1, and it eventually runs out of space while trying to copy everything.
+
+b) cp -a /dev/urandom f2, cannot create special file f2, operation is not permitted for a non-privileged user.
+
+c) sudo cp -a /dev/urandom f3, creates a special file f3
+
+d) mknod f4 c 1 9 does not work as a non privileged user without sudo root access
+
+e) sudo mknod f5 c 1 9 makes a special file character (unbuffered) f5
+
+2. Made a pipe named pipe using mkfifo pipe. To simulate ls | wc, on one terminal I directed ls > pipe and on a second terminal I directed wc < pipe.
+
+3. You do need to be root to do these operations. mknod myroot b 253 0 requires you to be root.
+
+4. Using the cmd tty shows me where my tty located. Using mknod mytty c 136 0 copies my terminal's tty. 
+Using the stty --file=mytty command:
+speed 38400 baud; line = 0;
+-brkint -imaxbel iutf8
+This is the same with the original tty using the command stty --file=mytty gives me the same output.
+
+5. With local echo disabled all input gets buffered? Input isn't read in terminal immediately until you hit enter. Just typing reset fixed it.
+
+Part B
+2. To view kernel logs, you can view it either in dmesg or /var/log/kern.log
+
+3. lsmod lists all modules currently loaded and indeed we do see that it has been loaded
+
+4. Used to command rmmod simple to remove the module from the kernel.
+
+5. trace 'p::printk printf "%s" arg1'
+PID	TID	COMM	FUNC	-
+20096	20096	insmod	printk	6Hello kernel world!
+20102	20102	rmmod	printk	6Goodbye kernel world.
+
+Looks like it traces the printk calls and printfs the argument of the module as well.
+
+
+Part C
+2. trace 'p::printk printf "%s" arg1'
+PID	TID	COMM	FUNC	-
+21831	21831	insmod	printk	6comp3000: Ones device registered using major %d.
+21840	21840	rmmod	printk	6comp3000: Unloading ones module.
+
+It creates a bunch of new files in the current directory.
+
+3. When I cat into /dev/ones it just outputs a bunch of 1's
+
+4. In,
+static void ones_exit(void)
+{
+        device_destroy(ones_class, MKDEV(ones_major, 0));
+        class_unregister(ones_class);
+        unregister_chrdev(ones_major, "ones");
+        info("Unloading Ones module.\n");
+        return;
+}
+
+You can change info("Unloading Ones module.\n"); to info("Oops.\n"); and this gets reported in the kernel logs once the module unloads or gets removed.
+
+5. 
+PID     TID     COMM            FUNC             
+21912   21912   insmod          __register_chrdev 
+        __register_chrdev+0x1 [kernel]		- registers the kernel?
+        do_one_initcall+0x48 [kernel]
+        do_init_module+0x62 [kernel]		- initializes it?
+        load_module+0x6fd [kernel]		- loads it
+        __do_sys_finit_module+0xc2 [kernel]	
+        __x64_sys_finit_module+0x1a [kernel]
+        do_syscall_64+0x38 [kernel]
+        entry_SYSCALL_64_after_hwframe+0x44 [kernel]
+
+
+Part D
+2. Current is a task struct. Tracing back the command that called it, task_tgid_vnr, to the code, you can see that it takes in a struct task_struct *tsk.
+
+static inline pid_t task_tgid_vnr(struct task_struct *tsk)
+{
+	return __task_pid_nr_ns(tsk, PIDTYPE_TGID, NULL);
+}
+
+3. modifying line 23 #define DEVICE_NAME "newgetpid" to #define DEVICE_NAME "describe" changes it so it creates a device file /dev/describe instead of /dev/newgetpid.
+
+4. First need to create new pid_t for each new id, then you need to call the task_...(current) function associated with the id then add it to the print function.
+
+snprintf(message, 100, "Your PID is %d! PPID is %d, UID is %d, GID is %d, EUID is %d, EGID is %d\n", thepid, the ppid, theuid, thegid, theeuid, theegid);

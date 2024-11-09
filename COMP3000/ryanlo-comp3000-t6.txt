@@ -1,0 +1,65 @@
+COMP 3000 Tutorial 6
+Ryan Lo
+101117765
+Nov 17, 2021
+
+Part A
+1. Running 3000test.c
+on a regular file: it reports the inode number, length, and a count
+on a directory: it reports the inode number and the length
+on a symbolic link: it reports the inode number, length and a count same as the two files that are linked
+on a device file (/dev): it reports inode 1 and the length
+
+2. Changing stat to lstat doesn't change the behavior of 3000test.c
+
+3. readlink(argv[1], buf, bufsiz);
+readlink takes in the argv[1] which is the file or directory that it is reading through and a buf to store it and the size of the buffer.
+
+4. Seems like 3000test runs on pretty much all files or directories. Tried removing read access from a directory using chmod and 3000test was still able to access it.
+
+5. Added a couple sleep(3); and ran it with creating random data. Using pmap to check the memory usage of 3000test it starts off as total 2512k to total 2516k after a while.
+
+Part B
+1. Running ls -lai, the numbers appearing in the left column is the inode number.
+
+2. The file foo when using ls is 268435456.
+
+3. After running mkfs.ext4 foo, foo did not change size.
+
+4. dumpe2fs foo, using man dumpe2fs it shows that it dumps the filesystem information of the filesystem provided.
+
+5. Using the fsck foo command we can check if the filesystem in foo has any issues.
+
+6. The command sudo mount foo /mnt doesn't seem to change what files are accessible.
+
+7. /dev/loop3 is mounted on /mnt, it looks like this just helps associate it with foo.
+
+8. The command rsync -a -v /etc /mnt copies all the files from /etc to /mnt. -a option is archive, to preserve almost everything. the -v option is verbose output, just increases the amount of information about what it is doing.
+There were some errors when copying, some permissions were denied.
+
+9. When unmounting the filesystem, everything that was copied from etc is now gone.
+
+11. conv=notrunc is copying way less compared to the one in question 2
+
+12. mount /mnt wrong fs type, bad option, bad superblock on dev/loop3, missing codepage or helper program, or other error.
+
+13. Running the command mkfs.ext4 foo makes foo mountable again.
+
+14. After running truncate -s 1G bar, bar is 1073741824 which is like around 4 times bigger than foo
+
+15. The space consumed on disk is 2564 out of 927944 for bar compared to 272 out of 218920 for foo.
+
+Part C
+1. Looking at the hard link counts of files locally and over sshfs  they do differ. I made a directory test inside otherfiles and locally the test directory only has 1 hard link which is to . while over sshfs there are 2 hardlinks . and ..
+
+2. mount foo /mnt can only work as superuser. Running it under strace loooks like it tries to do the operation but it fails.
+
+3. Under root when I try to access otherfiles using ls it is denied. ls: cannot access 'otherfiles': Permission denied
+
+4. Using ls -lai we can see that the local filesystems are mainly 6 digit inode numbers while the remote filesystem's inode is 1
+
+5. dd to local drive is way faster than over sshfs
+
+6. with sshfs ryanlo@access.scs.carleton.ca: carleton (name of folder that I created)
+
+7. Using the umount command unmounts the sshfs-mountedf filesystem.

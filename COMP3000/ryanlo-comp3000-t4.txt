@@ -1,0 +1,47 @@
+COMP 3000 Tutorial 4
+Ryan Lo
+101117765
+Oct 09, 2021
+
+1. opensnoop.bt
+  a)ls:
+ 	/lib/x86_linux-gnu/libselinux.so.1
+	/lib/x86_linux-gnu/libc.so.6
+	/lib/x86_linux-gnu/libpcre2-8.so.0
+	/lib/x86_linux-gnu/libdl.so.2
+	/lib/x86_linux-gnu/libpthread.so.0
+	/proc/filesystems
+	/usr/lib/locale/locale-archive
+	Most of these are what I expected such as /proc/filesystems for files
+
+  b)	top:
+	Most of them are in the /proc/ directory
+	top displays all the processes and in /proc/ shows information about the processes.
+
+  c)	static-sh has less files being opened than bash, since static-sh is static it doesn't do any library calls like bash does
+
+  d)	3000shell opens up
+	/lib/x86_linux-gnu/libc.so.6
+	/etc/ld.so.cache
+	depending on what the 3000shell binary uses, it changes what files it opens
+
+2. execsnoop.bt
+  a) Every typed command results in one execve sys call
+  b) It produce an execve call if you type in a non-existent command, also in 3000shell
+  c) Most of them are coming from /usr/ or /bin/
+
+3. killsnoop.bt
+  a) No kill system calls are happening when I'm not doing anything
+  b) Hitting Ctrl-C when I was running bc generated a kill system call
+  c) Hitting Ctrl-C at a bash prompt generates a kill system call
+  d) Not all signals are being sent via kill system calls, some are sent when I send an interrupt signal using ctrl-c
+  e) 0 signal is used for exit, when I log out it sends this
+
+4. syscount.bt
+  a) command-not fou, sshd, bash and bpftrace are generating the most system calls
+  b) Most common calls are 262 (newfstatat), 232 (epoll_wait), 72 (fcntl)
+
+5. bashreadling.bt
+  a) It traces any command used in bash
+  b) It just prints out the pid and str(retval)
+  c) Looking for new bash and doesn't reconize it till you send a command

@@ -1,0 +1,46 @@
+COMP 3000 2021F Assignment 2
+Name: Ryan Lo
+Student ID: 101117765
+
+Collaborators: https://bash.cyberciti.biz/guide/Sending_signal_to_Processes
+
+1. If we read from /dev/null we get no data. Inside /dev/null is completely empty. Using cat /dev/null, there were no outputs to the terminal as to what is inside /dev/null. Also tried using less -f /dev/null and it's completely empty inside.
+
+2. If a command doens't have a / in it, you could modify 3000capture so that the command begins with a ./ this allows the program to search starting from the current PATH to find the program.
+
+3. The purpose of the fflush() call in parent is to force the output onto the terminal, printf("Waiting."). If this doesn't happen, the printf statement is buffered while it waits for the parent and doesn't print it out till the function finishes running. This only happens for printf in this child function.
+
+4. In the child function, add an if statement
+if (getenv("CAPTURE") != NULL){
+	output_fn = getenv("CAPTURE");
+}
+
+5. countdown.sh creates 12 processes and runs 12 executables. Using sudo bpftrace /usr/local/share/bpftrace/tools/execsnoop.bt traces the exec calls. One exec call for ./countdown.sh, one for seq 10 -1 1 and ten sleep 1 calls for a total of 12.
+
+6. child_exited is used as a boolean for the parent to know when the child has exited. It is used to signal the end of the executable and when the child is done writing to the file. Without it, the parent won't know when the child is finished writing to the file and when it can stop.
+
+7.  Made a shell script called sigterm.sh
+	#!/bin/bash
+	kill -15 $PPID
+	echo "Killing $PPID!"
+
+When I run ./3000capture on it, it does the waiting then it says terminated. It doesn't print out that the child terminated normally.
+
+8. Using sudo bpftrace /usr/local/share/bpftrace/tools/killsnoop.bt traces all the kill calls and when I do run ./3000capture ./sigterm.sh /dev/null the sigterm.sh sends the sigterm signal to 3000capture it does indeed show up in the bpftrace.
+PID	COMM		SIG	TPID	RESULT
+5844	sigterm.sh	15	5843	0
+
+9. 
+In the main function, attach the SIGUSR1 signal to the signal handler
+	if (sigaction(SIGUSR1, &signal_handler_struc, NULL)){
+		fprintf(stderr, "Couldn't register SIGUSR1 handler.\n");
+	}
+In the signal_handler function:
+	if (the_signal == SIGUSR1){
+		fprintf(stout, "SIGUSR1 received, shutting down.\n");
+		result_pid = wait(&result_status);
+		wait(1);
+		kill(result _pid, SIGTERM);
+		child_exited = 1;
+	}
+In the parent function, when it waits for the child to return, once it returns with the signal, it reports whether it came from a signal or it returned normally. If the child is still running, parent can send a kill signal to the child and reports "Child still running, aborting." and return the value of -10.

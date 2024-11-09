@@ -1,0 +1,37 @@
+COMP 3000 2021F Midterm Exam
+Name: Ryan Lo
+Student ID: 101117765
+
+1. You can technically make a file that consistently behaves like /dev/null. The file must be constantly running and checking to delete any files that gets put into the directory.
+
+2. A C statment that could have generated the following assembly language code is 
+
+int defaultName = "Jane";
+
+The first line in the assembly language creates the variable called defaultName the second line in assembly assigns the string "Jane" to the variable defaultName.
+
+3. It is not possible for the stack and heap to grow to the extent that they would both run into each other. There is a specific amount of block in memory that is allocated just for the stack and just for the heap. If it gets to the point where the stack or the heap were to grow to the extent where they won't have enough space, it would just crash and give an overflow error.
+
+4. The command line arguments is just an array of char*. It is an array of char pointers where the last element in the array is a NULL to indicate the end of the array.
+
+5. The friend is incorrect. They are stored in a char* array as a string key-value pair where the key and the value are separated by an =. An array of key-value pair is stored in a way where it's easy to access and doesn't take up too much space in memory.
+
+6. Since argv is just an array of char* it's easy enough for the program to change it's value just like any other char* arrays. Adding elements to the argv array is just like adding an element to any normal array. Although it might be considered to create a new array and reallocate enough space for an extra added element into the array.
+
+7. This system calls shows that the personality of the linux system is being set to 0. This in term defaults the personality of the system to always be the same and consistent per run having set the memory layout everytime a setarch -R is provided. 
+
+8. You cannot make a pure, standards-compliant C program that calls the fastread system call. Calling a system call that is not in the library is the same as the system call not existing. Calling a system call that doesn't exist, doesn't work without any errors that arise from it.
+
+9. In process memory, a statically-linked binary file is bigger than a dynamically-linked binary file. This is because the statically-linked binary file links all it's library calls when the file is created and before it's compile. A dynamically-linked binary file on the other hand does the linking during compile time. 
+
+10. 3000shell makes a stat call everytime a file is being accessed. The maximum number of stat calls 3000shell makes is during the run_program. A stat call is used to find the path of the program being ran. 
+
+11. The C library minimizes the number of system calls it makes. One way you could make the C library functions make more write system calls is to have a bigger buffer. Having a bigger buffer means that it needs to make more write calls.
+
+12. printf() will always print to stdout, fprintf takes in a file and prints it to that file, dprintf takes a file descriptor and prints it to that file descriptor, sprintf takes a buffer where you want to store the string and prints it to the buffer. printf and sprintf can only print to can only print to a specific thing inlike dprintf which can print to any file descriptor that is provided.
+
+13. The signal() library function is used to associate a signal with a signal handler. The library function doesn't actually call the signal handler, the signal handler intercepts the signal that it recieves, does its thing and processes the signal.
+
+14. eBPF can provide security over ptrace. ePBF will not access things that it doesn't need to unlike ptrace. You can trace many different things with eBPF such as files opened, exeve calls, kill calls, syscall counts, and commands. eBPF doesn't have access to everything such that ptrace has.
+
+15. The kill() systemcall is used to send signals. Signals can be sent without using this systemcall. During a fork(), when the child exits, it sends a signal to the parent signalling that the child has exited. Does this by default without the systemcall.

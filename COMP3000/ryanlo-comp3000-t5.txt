@@ -1,0 +1,36 @@
+COMP 3000 Tutorial 5
+Ryan Lo
+101117765
+Nov 04, 2021
+
+1. 3000userlogin works without the need to type in the password of the new user.
+
+2. A struct passwd is returned from getpwnam(). This is as what I expected. This contains the user's username, password, uid, gid, user info, home dir, and shell program.
+
+3. When you run 3000userlogin as a regular user and running it as setuid root the uid, gid, euid, and egid are all the same. Running it as root, the uid, gid, euid, egid are all 0.
+
+4. 3000userlogin changes its gid before changing its uid because you need higher privileges to change uid. If you switch the order of these operations 3000userlogin does not work and says it failed to change to gid 1XXX.
+
+5. Changing the exec command to run the user password entry
+execve(pw_entry, shell_argv, environ)
+
+6. You cannot set 3000shell to be a suer's regular shell. 3000shell needs to be included in the list of shells in /etc/shells to be able to become a shell. 3000shell doesn't set environment variables.
+
+7. It does not have to be a regular shell, it could be an arbitrary program. I used chsh and changed the login shell to 3000quiz and everytime you login it would run that program.
+
+8. Depending on what is being used environment variables would be needed. These environment variables are not the only ones that are set after login. There are others such as PWD, LS_COLORS, LESSCLOSE, LESSOPEN, SHLVL, XDG_DATA_DIRS 
+
+9. When using envp instead of environ and logging into the user "other" from "student", it takes all the environment variables from "student" itself and puts it into "other". It does not set the required environment variables.
+
+10. 3000userlogin uses the syscall setuid to change its uid. This was what I expected. ssh makes multiple setuid syscalls. A bunch of setresuid, setfsuid and setuid.
+
+13. It looks like when you do ssh student@hocalhost bc -l, it first runs a shell and then has the shell run the command.
+
+14. bash accesses 
+/etc/ld.so.cache
+/etc/nsswitch.conf
+/etc/passwd
+/etc/profile
+/etc/bash.bashrc
+/etc/init.d
+It looks like both logging in via 3000userlogin and ssh both seem to access the same files in /etc

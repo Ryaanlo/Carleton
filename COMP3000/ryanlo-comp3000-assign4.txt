@@ -1,0 +1,43 @@
+COMP 3000 2021F Assignment 4
+Name: Ryan Lo
+Student ID: 101117765
+
+Collaborators: https://elixir.bootlin.com/linux/latest/source/kernel/sys.c
+
+1. Looking in the source codes for system calls for the linux kernel, we can see that the name of the task variable is task_stuct and the type of the task is a struct.
+
+
+2. Taking a look at the read system call, it takes in a file descriptor, a buffer and the length/count. When we look at the ones_read it also takes in a file descriptor, a buffer and the length of the bytes to read from which directly matches the arguments of the read system call. While the ones_read does have a 4th argument for the offset, this is used for offsetting to start reading from the start of the msg in the file instead of at the beginning of the file.
+
+
+3. ones_fops is a struct that declares the 3 variables open, read and release assigns it to the corresponding 3 functions ones_open, ones_read and ones_release. It doesn't have anything uninitialized everything has been intialized to the corresponding functions that were created.
+
+
+4. Replacing line 38 of the ones module with buf[i] = '1'; does not work. When printing out the contents of ones, it is empty. The function that we replaced put_user is used to put the data into a buffer in userspace. Writing directly to a pointer for a kernel is not usually safe to do because it might be incorrect.
+
+
+5. In the ones_read function, instead of the for loop looping over the len of the buffer we can change it so it loops 10,000 times and so the ones module will always only have 10,000 1's.
+
+
+6a. After making the modifications, and created the_pipe as an empty regular file, the consumer happens first before the producer
+
+
+6b. The behaviour does cahnge if ran multiple times without emptying the_pipe, sometimes the producer would finish first and some other times the consumer would finish first.
+
+
+6c. Creating a pipe using the command mknod pipe p and changing the lines
+        if (pid == 0) {
+                /* Producer */
+                pipefd[1] = open("pipe", O_WRONLY);
+                producer(count, pipefd[1], prod_interval);
+        } else {
+                /* Consumer */
+                pipefd[0] = open("pipe", O_RDONLY);
+                consumer(count, pipefd[0], con_interval);
+        }
+To open a pipe instead and use that allows the modified 3000pc-fifo to behave like the orginal.
+
+7. Replacing the call to mmap() in 3000pc-rendezvous-timeout to a malloc call makes it so that only the producer is allowed to use the memory space. Because of this change memory is not shared anymore and only the producer can access the memory while the consumer cannot.
+
+
+8. nonempty_mutex is used to notify that the queue is nonempty while the queue_nonempty is used to as a conditional to check whether or not the queue is empty. Putting these two together one checks if it's empty and the other notifies if it's empty using the other one.

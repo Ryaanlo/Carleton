@@ -1,0 +1,26 @@
+COMP 3000 Tutorial 9
+Ryan Lo
+101117765
+Dec 1, 2021
+
+Part A
+3. put_user is only used for copying a single variable while copy_to_user and copy_from_user is used for copying many things. Maybe accessing username addresses directly is not as accurate?
+
+4. ioctl takes in a request code and performs that request on the fd. It passes in a file descriptor and the case for allocating kernel memory for the struct for memview. For physicalmemview it registers it in a struct. 
+
+Part B
+2. They both report the physical memory report view while the memview2 reports the virtual memview.
+
+3. The pattern in the virtual mem address is that it increases with a fixed value of 1010 everytime. Physical mem address does not have this same pattern, probably because in physcial memory they allocate blocks randomly depending on if there is space.
+
+4. 
+a) both virtual and physical addresses seems to change every run.
+
+b) main, puts, lmsg, gmsg all seem to stay the same after every run, maybe because local variables are always stored the same
+
+
+Part C
+1. They all seems to be allocated in around the same area in virtual space compared to userspace.
+
+2. Page allocation does seem to differ from slab allocation, there seems to be a gap between each slab allocation before it starts a new one.
+
