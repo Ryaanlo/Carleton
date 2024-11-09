@@ -1,0 +1,15 @@
+SYSC3303 Assignment 1
+Ryan Lo (101117765)
+
+Source Files:
+Agent.java
+
+Chef.java
+
+Box.java
+
+Main.java
+
+Setup:
+Open up Eclipse, open projects from file system,
+Select the directory to import, run as Java application
