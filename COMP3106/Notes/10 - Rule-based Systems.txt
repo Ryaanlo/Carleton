@@ -1,0 +1,111 @@
+What is the purpose of the variable elimination algorithm?
+Rewrite to compute bayesian networks more efficiently
+
+Variable Elimination Algorithm
+Suppose we wish to infer the probably of a query variable (Q) given some evidence variable (E) on a Bayesian network with hidden variables (Y).
+1. Choose ordering of y_1, ..., y_m
+2. Colect all terms with y_i
+3. Compute f_i by summing over all possible terms with y_i
+4. Replace the summation with f_i
+5. Repeat for all y_i
+
+Example
+	Junk Food (J)		Genetics (G)
+	->	Hypertension (H)	<-
+		v		v
+	Stroke (S)		Aneurysm (A)
+
+P(J = T|S = T) = 1 / P(S = T) * sum_g sum_h sum_a P(S = T|H = h) P(A = a|H = h)
+						P(H = h|J = T & G = g) P(J = T) P(G = g)
+
+= 1 / P(S = T) * P(J = T) sum_g P(G = g) sum_h P(S = T|H = h) P(H = h|J = T & G = g) 
+						sum_a P(A = a|H = h) 
+
+f_1(h) = sum_a P(A = a|H = h) 
+f_2(g) = sum_h [P(S = T|H = h) P(H = h|J = T & G = g) f_1(h)]
+f_3 = sum_g [P(G = g) f_2(g)]
+
+20 operations
+
+What if we swap the ordering of summations?
+sum_g sum_a sum_h
+
+f_1(g, a) = sum_h P(S = T|H = h) P(H = h|J = T & G = g) P(A = a|H = h)
+f_2(g) = sum_a f_1(g, a)
+f_3 = sum_g [P(G = g) f_2(g)]
+
+32 operations
+
+How to order?
+Eliminate first variables with the fewest terms
+Eliminate first whichever variable is nearest a left node in the Bayesian Network
+
+Expert Systems
+- system that uses knowledge specific to a domain to solve problems
+
+has
+- user interface
+	how user interacts with system
+- inference engine
+	applies knowledge from the knowledge base to the presented problem
+- knowledge base
+	general knowledge + case-specific
+
+Why separate knowledge base and inference engine?
+1. Naturally represent knowledge
+2. Easy to change out inference engine
+3. Re-use our inference engine
+
+How do we build our knowledge base?
+Domain Experts - provide domain knowledge, consult similar knowledge bases
+Data - prior cases collected by another system
+
+How do we build this?
+Knowledge engineer - implement domain knowledge into the knowledge base
+End user - define requirements for the system
+
+		     <->
+Expertise <-> Conceptual Model <-> Knowledge Base 
+	Domain Expert		Knowledge Engine
+
+Rule-Based Systems
+Implement domain knowledge as
+	IF 	... 	THEN 	... 	rules
+	   antecedent 	   consequence/conclusion
+
+Challenge: What happens when not all propositions are askable?
+
+Example: Medical Diagnosis System
+IF coughing and sneezing THEN diagnosis is cold
+IF vomiting and fever THEN diagnosis is flu
+IF mouth temp high and ear temp high THEN fever
+
+Goal-Based Reasoning
+Idea: Searching toward determining the value of some "goal" proposition
+0. Identify our goal
+1. Identify all rules that match our goal
+2. For each rule R that matches our goal
+	i. Query the user on the value of all askable proposition in R's antecedent, add the value to working memory
+	ii. For non-askable propositions of R's antecedent, use goal-based reasoning to determine their value. Add the values to working memory.
+	iii. If the antecedent of R is true, then the consequence of R is true.
+
+Example: Medical Diagnosis System
+IF coughing and sneezing THEN diagnosis is cold
+IF vomiting and fever THEN diagnosis is flu
+IF mouth temp high and ear temp high THEN fever
+
+			Diagnosis
+	               <-	->
+	diagnosis(cold)		  diagnosis(flu)
+	coughing, sneezing		vomiting, fever -> rule 3
+						mouth temp high, ear temp high
+
+Suppose 
+Working memory: 
+coughing = true
+sneezing = false
+vomiting = true
+ear temp high = true
+mough temp high = true
+fever = true
+diagnosis = flu

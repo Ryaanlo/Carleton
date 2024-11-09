@@ -1,0 +1,112 @@
+Genetic Algorithm
+A strategy to search for an optimal solution to a problem
+
+Imagine we have a starting population
+Members reproduce sexually based on fitness
+There are mutations to the offspring
+Iterate for many generations
+After many generations, we have a member that is optimal (or very close to optimal)
+
+Genetic Algorithm
+0. Initialize population of candidate solutions P
+1. Evaluate the fitness of every member of P
+2. Select pairs for reproduction according to their fitness
+3. Produce offspring from pairs using the genetic operator
+4. Add mutations to the offspring with small probability
+5. Eliminate members of P with lowest fitness
+6. Repeat from 1
+
+Fitness Function
+A function f(x) that describes to what extent we would like x to reproduce
+	f(x) proportional to 1/distance of x to the optimal solution
+
+Represent candidate solutions as strings
+
+Genetic Operator
+A function g(x,y) that combines x,y to produce a new solution
+When x,y represented as strings, do cut and paste operations.
+
+Example:
+x = x_1 x_2 x_3 x_4 x_5
+y = y_1 y_2 y_3 y_4 y_5
+
+g(x,y) = x_1 x_2 x_3 y_4 y_5
+g(x,y) = y_1 x_2 x_3 x_4 y_5
+
+Mutation Function
+A mutation function  m(x) is a function that produces a new solution that is similar to x
+When x is a string, can do simple edit operation on x
+
+Example:
+x = x_1 x_2 x_3 x_4 x_5
+m(x) = x_1 x_2 x_3 z x_5
+m(x) = x_1 x_3 x_2 z x_5
+
+Example: Conjuctive Normal Form (CNF) Satisfaction
+(A v B) n (A v ~C) n (B v C v D)
+
+Candidate solutions take the form:
+x: A = True, B = False, C = True, D = True
+
+Fitness function:
+f(x) = # of clauses that are true
+Binary string representation:
+x = b_a b_b b_c b_d
+where b_i = {1 if i is True, 0 if i is False}
+x = 1011
+
+Genetic operator
+g(x,y) = b_1 ... b_i (from x) b_i+1 ... b_4 (from y)	for random 1<=i<=n
+
+Mutation function
+m(x) = b_1 ... b_i-1 z b_i+1 ... b_4
+for random 1<=i<=n and random in {0,1}
+
+(A v ~B v C v ~D) n (E v F) n (G v H) n (~G v ~H)
+
+Initial population:
+01011111	f(x) = 2 <- 0101
+01010000	f(x) = 1
+10110011	f(x) = 2
+00000001	f(x) = 3 <- 0001
+
+High probability to select highest f(x)
+Select 1,4:
+0101 | 0001
+m(x) = 0(0)010001
+
+Select 3,4
+10 | 000001
+m(x) = 10000(1)01
+
+Example: N-Queens Problem
+n = 4
+4x4 chess board
+
+Fitness function:
+f(x) = 1 / # of conflicts
+
+Representation:
+The row index of the queen in each column
+x = 1302
+x = 0132
+
+Genetic operator:
+g(x,y) = x_1 ... x_i y_i ... y_n	for random 1<=i<=n
+
+Mutation:
+m(x) = x_1 ... x_i-1 ... z x_i+1 ... y_n	for random 1<=i<=n, random z in [0,n-1]
+
+Initial population:
+0123	f(x) = 1/6
+0213	f(x) = 1/2
+2301	f(x) = 1/4
+0033	f(x) = 1/3
+
+Select 2,4
+02|33
+(1)233
+
+Select 3,4
+2|033
+203(2)

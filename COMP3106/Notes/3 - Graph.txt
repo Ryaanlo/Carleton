@@ -1,0 +1,100 @@
+What does it mean for a task environment to be episodic?
+The current action does not affect future actions
+
+What is the difference between a simple reflex agent and a model-based reflex agent?
+Simple Reflex Agent
+- Take actions based on only current percept
+Model-Based Reflex Agent
+- Agent that maintains some internal model of the environment state
+
+What is the difference between a goal-based agent and utility-based agent?
+Goal-Based Agent
+- Reach some state, goal state
+Utility-Based Agent
+- maximize happiness?
+
+Goal-Based Agents
+- Agents that act to achieve some desirable goal state
+- Flexible with respect to the goal state
+- Go from point A to B
+
+Utility-Based Agents
+- Agents that act to maximize some utility functions
+- Learn to walk
+
+What are the differences between goal-based and utility-based agents?
+1. Utility function provides a continuous quantity to maximize
+2. Utility function allows multiple goals to be considered with some tradeoff
+3. Utility functions allows probabilities of achieving hoal states from a set of goals to be maximized
+
+Examples: Robot Vaccuum
+Simple-Reflex: 
+	If dirt in current square then clean
+	If no dirt in current square then move
+
+Model-Based: 
+	Record which squares it cleans most
+	Best path between each set of squares
+	Keep track of tiles most recently cleaned
+	Closest dirty square
+	
+	If dirt in dirty square then 
+	navigate to most likely dirty square
+	record the current state
+
+Goal-Based:
+	Goal: All squares are clean
+
+Utility-Based:
+	Consider tradeoff between time taken and how many squares are clean
+
+Example: Robotic medical tutor for training surgeons using a plastic model
+Simple-Reflex
+	If trainee's action was correct then :check_mark:
+	If trainee's action was incorrect then :incorrect:
+
+Model-Based:
+	Current state of the patient
+	The sequence of steps completed
+	The correct workflow of steps
+	Time elapsed
+
+Goal-Based:
+	Goal: Surgery completed successfully
+
+Utility-Based:
+	What steps have been completed successfully
+	Patient stability
+	How long is the recovery
+	Time taken
+
+Graph Theory
+A set of vertices/nodes V
+A set of edges connecting the vertices E
+Path is a sequence of nodes connecting two vertices using successive edges
+
+Example: 
+Node: A,B,C,D,E,F
+Edges: (A,C), (A,D), 
+
+Path from C to B
+C, A, F, B
+C, D, E ,B
+
+Path from C to A
+C, A
+C, D, A
+
+Graphs Representation of Problems
+Let nodes in our graph represent environment states
+S - set of start states		S <= V, S != Empty Set
+G - set of goal states 		G <= V, G != Empty Set
+Let edges in or graph represent actions E
+
+A solution to our problem is a path from s in S to a g in G
+
+Example: Simple Robot Vacuum
+	- Look at picture
+
+Task Environment
+Fully observable (knows current state), single agent, deterministic, sequential, static, discrete, known

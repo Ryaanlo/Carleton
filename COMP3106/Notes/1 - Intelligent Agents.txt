@@ -1,0 +1,63 @@
+Intelligent Agents
+
+Agent
+- An entity that perceives its environment using sensors and acts on its environment using actuators
+
+Percepts - inputs to agent
+Actions - outputs from agent
+
+Ex. Human agent
+Sensors: Eyes, Nose, Ears
+Actuators: Arms, Legs, Hands, Mouth, Joints
+
+Ex. Smartphone agent
+Sensors: Keys, Microphone, Camera, Pen
+Actuator: Flashlight, Screen, Vibration, Speakers
+
+How do we map percepts to actions?
+Agent function - describes mapping of percepts to actions
+Agent program - implementation of the agent function
+
+Ex. Robot Vacuum
+
+Sensors: LIDAR, Camera, Odometer, Bumper, Battery Sensor
+Actuators: Wheels, Vacuum suction
+Percepts: Dust in current square, obstacles, battery capacity
+Actions: Forward, Backwards, Left, Right, Clean
+
+What does an agent function look like?
+Percept
+- no dust in square
+- obstacles on left
+- dust in square
+- obstacle left, right
+------------
+Action
+- move left
+
+- clean
+
+What about sequences of percepts?
+Percept Sequence
+[B,clean], [A,clean]
+---------
+Action
+- move down
+
+Rational Agent
+- An agent is rational if for all percept sequences it selects the action that is expected to maximize a performance measure given the percept sequence and built-in knowledge it has.
+
+Performance Measure
+- A way of evaluating the desirability of a sequence of environment states.
+
+For Robot Vacuum Example
+Performance Measure: # of squares that have dirt
+		     time to clean room
+
+An agent is called autonomous if its behaviour changes based on what it perceives
+
+Task Environment - fully characterized if we can define the 4 things below
+(P)erformance Measure
+(E)nvironment
+(A)ctuators
+(S)ensors

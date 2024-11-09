@@ -1,0 +1,46 @@
+Daily pollev
+What is the priority function f(n) in A* search? Assume h(n) is a heuristic.
+h(n) + path_cost
+What happens if we use an inconsistent heuristic in A* search?
+Might not find a solution
+What is the advantage of using a heuristic that better estimates the true cost of the path from each node to the goal state in A* search?
+A* finds the optimal solution faster
+
+Aversarial Search
+Fully observable, multiple agent, deterministic, static, sequential, discrete, known
+
+Adversarial game - A two player game where one person tries to maximize the outcome and the other player tries to minimize the outcome
+
+Consider some turn-based two player game
+Players: Maxwell - maximize score, Minerva - minimize score
+
+Suppose Minerva always takes the optimal action
+
+RULE:
+If it is Max's, the state's value is the maximum of its children.
+If it is Min's, the state's value is the minimum of its children.
+
+Minimax Function
+The minimax value of a state in an adversial game is:
+minimax(s) = {	score (s),	if s is terminal
+		max(minimax(x)), x = children(s), if s is max	
+		min(minimax(x)), x = children(s), if s is min}
+
+ply - action by one player
+turn - action by all players
+
+What is the complexity of minimax search?
+Assume the game has m "plies"
+State has b children
+Time complexity: O(b^m)
+Space complexity: O(bm)
+
+Alpha-Beta Pruning
+
+alpha - minimum value a node can take
+beta - maximum value a node can take
+
+Rules for alpha-beta pruning:
+1. If the beta value for a min node is <= the alpha for any of its max node ancestors, then stop search its descendents
+2. If the alpha value for a man node is >= the beta for any of its min node ancestors, then stop search its descendents
+

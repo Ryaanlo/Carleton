@@ -1,0 +1,137 @@
+Daily PollEv
+What does a "why" query tell us?
+Why a query was asked
+What does a "how" query tell us?
+How we know a premise is true
+Consider a fuzzy set A in a universe U. What is the sum over all elements u in our universe of mA(u)?
+Not enough information given.
+
+Fuzzy Logic
+Standard Logic, given a statement S
+	S is true or S is false
+
+Fuzzy Truth
+The fuzzy truth value of a statement S, T(S), is a real value on the range [0,1]
+
+Example: Consider the statements:
+	A: 3 is about 4
+	B: 4 is about 4
+	C: 12 is about 4
+	D: 1 is about 4
+
+T(A) = 0.7
+T(B) = 1
+T(C) = 0
+T(D) = 0.1
+
+NOT (negation)
+Negation n(x) is a function from the range [0,1] -> [0,1] that satisfies n(x) = 1-x "~"
+T(~A) 	= n(T(A))
+	= 1 - T(A)
+
+AND (t-norm)
+A t-norm t(x,y) is a function from [0,1]*[0,1] -> [0,1] that satisfies:
+1. t(x,1) = x (identity)
+2. t(x,y) = t(y,x) (commutativity)
+3. t(x, t(y,z)) = t(t(x,y),z) (associativity)
+4. If x <= w and y <= z then t(x,y) <= t(w,z) (monotonicity)
+
+OR (s-norm)
+An s-norm s(x,y) is a function from [0,1]*[0,1] -> [0,1] that satisfies:
+1. s(x, 0) = x
+2. s(x,y) = s(y,x)
+3. s(x, s(y,z)) = s(s(x,y), z)
+4. If x <= w and y <= z then s(x,y) <= s(w,z)
+
+Godel t-norm and s-norm
+t(x,y) = min(x,y)
+s(x,y) = max(x,y)
+
+Goguen t-norm and s-norm
+t(x,y) = x*y
+s(x,y) = x+y - x*y
+
+Example: Consider the statements:
+	A: 3 is about 4
+	B: 4 is about 4
+	C: 12 is about 4
+	D: 1 is about 4
+
+T(A) = 0.7
+T(B) = 1
+T(C) = 0
+T(D) = 0.1
+
+A and D using godel, goguen:
+T(A and D) = 0.1
+T(A and D) = 0.07
+
+A or D using godel, goguen:
+T(A or D) = 0.7
+T(A or D) = 0.73
+
+Operations on Fuzzy Sets
+Complement
+Given a universe U and a fuzzy set A, the fuzzy set ~A or U\A has membership function: 
+	m_{U\A}(x) = n(m_A(x))
+
+Intersection:
+Given a universe U and fuzzy sets A, B, the membership function for their intersection A n B is:
+	m_{A n B}(x) = t(m_A(x), m_B(x))
+
+Union:
+Given a universe U and fuzzy sets A,B, the membership function for their union A u B is:
+	m{A u B}(x) = s(m_A(x), m_B(x))
+
+Example
+Two fuzzy sets A,B with triangle membership functions
+A: a = 0, b = 2, c = 4
+B: a = 2, b = 8, c = 10
+
+What is ~A, A n B, A u B?
+Use Godel t-norm, s-norm
+
+Fuzzy IF-THEN Rules
+IF 	... 		THEN 	...
+	antecedent		consequence
+1. Compute truth value of each proposition
+2. Compute truth value of antecedent (rule strength)
+3. Compute the output membership function by clipping the consequence membership function by the rule strength
+
+Example: If patient is coughing AND patient is sneezing THEN diagnosis is cold.
+	T(patient is coughing) = 0.7
+	T(patient is sneezing) = 0.6
+	Use godel t-norm
+	Rule strength is 0.6
+	m_consequence(x) = {	1 if x is cold
+				0 otherwise	}
+	m_output(x) = {	0.6 if x is cold
+			0 otherwise	}
+
+Fuzzy Rule-Based System
+1. Compute the fuzzy truth value of all propositions
+2. Compute the rule strength for all rules
+3. Compute output membership function for each rule
+4. Compute the combined membership function by taking the union over all outupt membership functions
+5. Defuzzify by taking the argmax
+
+Example: IF patient coughing lots AND patient sneezing lots THEN diagnosis is cold
+	IF patient coughing little AND patient sneezing lots then diagnosis is allergies
+
+Patient with 4 cough/min, 4 sneeze/min
+What is diagnosis? Godel t-, s-norm
+
+1. 	T(coughing lots) = 0.1
+	T(sneezing lots) = 0.9
+	T(coughing little) = 0.8
+2.	1 Rule strength = 0.1
+	2 Rule strength = 0.8
+3.	m_1(x) = {	0.1 x is cold
+			0 otherwise	}
+	m_2(x) = {	0.8 x is allergies
+			0 otherwise 	}
+4. 	m_combined(x) =	{0.1 x is cold
+			0.8 x is allergies
+			0 otherwise	}
+5. Max is Allergies 
+			

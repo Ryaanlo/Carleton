@@ -1,0 +1,81 @@
+Daily PollEV
+What is the difference between supervised learning and reinforcement learning?
+Supervised learning mapping inputs to outputs
+Reinforcement learning maximizing rewards 
+
+Reinforcement learning
+Agent in Environment
+^ State (S_t) & Action (a_t) & Reward (r_t+1)
+
+t - discrete time step in our environment
+s_t - the environment state at time t
+a_t  the action at time t
+r_t - the reward at time t (measure of desirability of a state-action pair)
+
+pi - the policy for taking actions in a given state (mapping from states to actions)
+
+V - a function that computes the value (the expected long term rewards) of a state (an estimate of the long-term rewards associated with a state)
+
+Take a_t in state s_t
+
+If we know V then the optimal policy is to take the action leading to the state with the highest V.
+
+How do we find V?
+
+Passive Reinforcement Learning
+Fix agent's policy, and try to learn V
+
+Active Reinforcement Learning
+Simultaneously learn the policy and value V
+
+Example: Tic-Tac-Toe
+
+_|_|_
+_|_|_
+ | |
+
+Terminal State - game end
+
+_|_|X
+_|_|X
+O| |
+
+^ What is the value?
+Negative? cause opponent is close to winning
+Positive? cause we take actions that lead to positive reward
+
+Should be positive
+
+Example: Six ball game where players can take 1 or 2 balls. The player that takes last ball loses
+
+Initially: 6 balls
+Us: Take 1, 5 balls	<- What is value of this state?
+Opp: Take 2, 3 balls
+Us: Take 2, 1 balls
+Opp: Take 1, 0 balls (Terminal state)
+
+Positive? Because it results in terminal state with positive reward
+Negative? Because if opponent plays optimally, we lose
+
+Positive cause it can lead to a win
+
+Sequential Decision Making
+V^pi(s_0) = sum_{t=0}{inf} r(s_t)
+
+If we have a stochastic environment
+V^pi(s_0) = E[sum_{t=0}{inf} r(s_t)]
+E - expected value
+
+Discount factor - gamma in [0,1] that controls how much we value long term rewards
+V^pi(s_0) = E[sum_{t=0}{inf} gamma^t * r(s_t)] 
+- rewards in the future becomes less
+- as t increases, gamma decreases
+
+V^pi(s_0) = E[r(s_0)] + E[sum_{t=0}{inf} gamma^t * r(s_t)]
+	= r(s_0) + gamma * E[sum_{t=0}{inf} gamma^{t-1} * r(s_t)]
+				^ V^pi(s_1)
+	= r(s_0) + gamma E[V^pi(s_1)]
+	= r(s_0) + gamma sum_{s_1} P(s_1|s_0, pi(s_0)) * V^pi(s_1)
+
+Bellman Equation (for fixed policy)
+V^pi(s_t) = r(s_t) + gamma * sum{s_t+1} P(s_t+1|s_t, pi(s_t)) * V^pi (s_t+1)

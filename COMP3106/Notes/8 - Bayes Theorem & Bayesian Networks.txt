@@ -1,0 +1,168 @@
+Bayes Theorem & Bayesian Networks
+
+Performance Measures for Regression
+
+True label y_i
+Predict yhat_i
+
+Mean average error (MAE): sum of the absolute difference / n
+RMSE: root of the squared difference
+corr = cov (yhat, y) / (sigma_yhat * sigma_y)
+
+Model Validation - how well models work
+
+Train/Val/Test Sets
+Training set: Fine tune model's parameters
+Validation set: Fine tune model's hyperparameters
+Testing set: Evaluate model's performance
+
+Assume we have N labelled samples, called x_i.
+Split x_i into 3 different sets: training (~60%), validation (~20%), test (~20%).
+
+For 0 in all combinations of hyperparameters
+	train model M(0) on training set
+	validate M(0) on the validation set
+test M(0) achieving best performance on the validation set of the test set
+
+Bayes Theorem
+Supervised Machine Learning
+
+Suppose we have 2 events
+
+P(A|B) = P(A n B) / P(B)
+
+P(B|A) = P(B n A) / P(A)
+
+Bayes Theorem - Let's suppose A, B be events on our sample space
+P(B) != 0
+P(A|B) = P(B|A) P(A) / P(B)
+
+A is some hypothesis
+B is some evidence
+P(hypothesis|evidence) = P(evidence|hypothesis) P(hypothesis) / P(evidence)
+
+evidence - observation of data
+hypothesis - label
+
+Often interested in multiple hypothesis that partition sample space 
+
+h - hypothesis, e - evidence
+
+P(h_i|e) = P(e|h_i) P(h_i) / sum_j P(e|h_j) P(h_j) } P(e)
+
+If we are interested in the most likely hypothesis
+
+argmax_i [P(e|h_i) P(h_i)]
+
+What happens if we have multiple pieces of evidence?
+
+Enumerate them e, ... e_n
+
+P(h_i| e_1 ... e_n) = P( e_1 ... e_n|h_i) P(h_i) / P(e_1 ... e_n)
+
+Very computationally expensive to model P(e_1 ... e_n|h_i)
+	~ 2^n probabilities
+
+We assume our pieces of evidence are conditionally independent
+	P(e_1, ..., e_n|h_i) = P(e_1|h_i), ..., P(e_n|h_i)
+	Naive Bayes Assumption
+P(h_i| e_1 n ... n e_n) = product_j^n P(e_j|h_i) P(h_i) / P(e_i n ... n e_n)
+			= product_j^n P(e_j|h_i) P(h_i) / sum product P(e_j|h_k) P(h_k)
+
+If we are interested in the most likely hypothesis
+
+	argmax_i (product_j^n P(e_j|h_i) P(h_i))
+	Naive Bayes Classifier
+
+Bayes Theorem Example
+Imagine we are going on a road trip, we want to get a warm beverage at the next stop.
+
+TH - Tim hortons, MD - mcdonalds, SB - starbucks
+
+Suppose you get a coffee...
+What is the probability the restaurant was SB?
+	Prob TH = 0.5
+	If TH, prob coffee = 0.6
+	Prob MD = 0.3
+	If MD, prob coffee = 0.8
+	Prob SB = 0.2
+	If SB, prob coffee = 0.3
+
+P(SB|c) = P(c|SB) P(SB) / P(c)
+
+	= P(c|SB) P(SB) / P(c) / P(c|TH) P(TH) + P(c|MD) P(MD) + P(c|SB) P(SB)
+	= 0.3 * 0.2 / 0.6 * 0.5 * 0.8 * 0.3 * 0.3 * 0.2
+	= 0.06 / 0.6
+	= 0.1
+
+We want to find:
+	argmax_i (P(c|r_i) P(r_i))
+	P(c|TH) P(TH) = 0.6 * 0.5 = 0.3
+	P(c|MD) P(MD) = 0.8 * 0.3 = 0.24
+	P(c|SD) P(SD) = 0.3 * 0.2 = 0.06
+
+TH is most likely
+
+Naive Bayes Classifier Example
+P(e_1 n ... n e_n|h) = product_{j=1}^{n} P(e_j|h) -> Naive Bayes Assumption
+
+Imagine we want to classify pictures of dogs and cats
+
+Feature 1: Tail Length
+Feature 2: Height
+Feature 3: Thickness of coat
+
+Suppose we have a photograph
+	Tail Length = 20 cm
+	Height = 40 cm
+	Thickness of coat = 3 cm
+
+P(dog|TL = 20 n H = 40 cm n CT = 3 cm)
+	= P(TL 20|dog) P(H = 40|dog) P(CT = 3|dog) P(dog) / P(TL = 20 n H = 40 n CT = 3)
+	= P(TL = 20|cat) P(H = 50|cat) P(CT = 3|cat) P(cat) / P(TL = 20 n H = 40 n CT = 3)
+
+Most likely class 
+	argmax_i (P(TL = 20|c_i) P(H = 50|c_i) P(CT = 3|c_i) P(c_i))
+
+In general, the most likely class
+	argmax_i (P(f_1 = x_1|c_i) * ... * P(f_n = x_n|c_i) P(c_i))
+
+The Naive Bayes Classifier
+
+Why not use Bayes Classifier?
+1. Naive Bayes does not hold in practice.
+2. These probability distributions P(evidence|hypothesis) are not known (or difficult to compute)
+
+Bayesian Networks
+
+Example: The weather effects if I go on a walk and if there is snow on the ground.
+	Dog affects if I walk.
+	Both whether I walk and whether there is snow on the ground affects whether I fall.
+
+		Dog -> Walk <- Weather -> Snow
+			->     Fall 	<-	
+
+Bayesian Network is a directed acyclic graph:
+1. Each node corresponds to a random variable
+2. Directed edges correspond to direct influences
+For each node, we can compute a conditional probability
+	P(x|parents(x))
+
+How can we compute the probability a particular situation occurs?
+	P(X_1 = x_1 n ... n X_n = x_n)
+	= P(X_n = x_n|X_n-1 = x_n-1 n ... n X_1 = x_1) * ... * P(X_2 = x_2|X_1 = x_1) P(X_1 = x_1)
+
+For a network with some conditional probabilities
+	P(X_1 = x_1 n ... n X_n = x_n = product{i = 1}{n} P(X_i = x_i|X_j = x_j for parents j)
+
+Example: P(Dog, Sunny, Walk, !Snow, Fall)
+	= P(Dog) P(Sunny) P(Walk|Dog n Sunny) P(!snow|Sunny) P(Fall|Walk n !Snow) 
+
+Inference on Bayesian Networks
+Suppose we know P(child|parent),
+	What is P(parent|child)?
+
+Example: Given P(walk|Dog n Sunny), what is P(Sunny|Fall)?
+
+P(Sunny|Fall) = 1 / P(Fall) P(Sunny n Fall) = 1 / P(Fall) sum{D=yes/no}_sum{D=yes/no}_sum{D=yes/no} P(Sunny n Fall n D n W n S)
+	= 1 / P(Fall) sum{D=yes/no}_sum{D=yes/no}_sum{D=yes/no} P(D) P(Sunny) P(W|D n Sunny) P(S|Sunny) P(Fall|W n S)

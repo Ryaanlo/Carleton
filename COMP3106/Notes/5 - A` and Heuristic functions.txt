@@ -1,0 +1,114 @@
+Daily pollev
+How do we implement the frontier in our graph search algorithm in breadth first search?
+First in first out (FIFO) queue
+How do we implement the frontier in our graph algorithm in depth first search?
+Last in first out (LIFO) stack
+How is the priority function f(n) in uniform cost search? Assume h(n) is a heuristic?
+n.path_cost
+What is the priority functin f(n) in greedy heuristic search? Assume h(n) isa heuristic.
+h(n)
+
+Uniform cost search
+Imagine a tree with arity b with solution at depth d, and maximum depth m
+Time complexity: O(b^m)
+Space complexity: O(b^m)
+
+Really slow...
+
+Why use uniform cost search then?
+Always finds a solution and the most optimal one
+
+Greedy Heuristic Search
+Some estimate of cost to get to the goal state from every node n
+Heuristic - h(n) (estimate)
+
+The frontier has priority function
+f(n) = h(n)
+
+Time complexity: O(b^m) - depends on how good the heuristic is
+Space complexity: O(b^m) - same thing ^
+
+A* Search
+Frontier has priority function:
+f(n) = g(n) + h(n)
+
+Explored: 	Ott (f = 300, -)
+		Per (f = 350, Ott)
+		Kin (f = 360, Ott)
+		Pet (f = 365, Per)
+		Tor (f = 420, Kin)
+
+0. Frontier:	Ott (f = 300, -)
+
+1. Frontier: 	Per (f = 350, Ott)
+	 	Kin (f = 360, Ott)
+		Mon (f = 460, Ott)
+		NB  (f = 550, Ott)
+
+2. Frontier: 	Kin (f = 360, Ott)
+	 	Pet (f = 365, Per)
+		Mon (f = 460, Ott)
+		NB  (f = 550, Ott)
+
+3. Frontier: 	Pet (f = 365, Per)
+		Tor (f = 420, Kin)
+		Mon (f = 460, Ott)
+		NB  (f = 550, Ott)
+
+4. Frontier: 	Tor (f = 420, Kin)
+		Mon (f = 460, Ott)
+		NB  (f = 550, Ott)
+
+5. Frontier: 	Bar (f = 420, Tor)
+		Mon (f = 460, Ott)
+		NB  (f = 550, Ott)
+
+6. Barrie is goal!
+
+Ott -> Kin -> Tor -> Bar
+Cost: 420
+
+Time complexity: O(b^m)
+Space complexity: O(b^m) 
+
+What makes a good heuristic?
+1. Gets the optimal solution
+2. Gets the solution fast
+
+Property:
+- Uniform Cost Search always finds the optimal solution
+
+Proof:
+When we explore a node x, we have already found the optimal path to get there.
+Contradiction:
+Suppose there exists some other shorter path, this path has not been fully explored. 
+Some node y in that path is on the frontier.
+Then, g(y) < g(x)
+y should've been explored before x if g(y) < g(x)
+Therefore, under uniform cost search (UCS), we always find optimal solution.
+
+Consistent/Monotone Heuristic
+- A heuristic is called consistent if for all nodes n and all successors n'
+1. h(n) <= cost(n, n') + h(n')
+2. h(goal) = 0
+
+Example
+h(Ott) <= cost(Ott, NB) + h(NB)
+h(Ott) - h(NB) <= cost(Ott, NB)
+
+A* Search always acheieves the optimal solution if the heuristic h(n) is consistent
+
+Proof - Observation
+f(n) along any path is increasing
+Consider n and a successor n'
+f(n') 	= g(n') + h(n')
+	= g(n) + cost(n, n') + h(n')
+	>= g(n) + h(n)
+	= f(n)
+	f(n') >= f(n)
+1. When a goal state x is explored, we have found the optimal path to x
+Suppose there exists a shorter path to x.
+Some node y on this path in the frontier.
+f(y) <= f(x) on the shorter path
+f(x) on the shorter path < f(x) on the path so far
+2. When a goal state x is explored, there is no shorter path to some other goal state.

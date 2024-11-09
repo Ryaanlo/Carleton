@@ -1,0 +1,36 @@
+1. Implementation detail
+2. Everytime we add a node for frontier, keep track of where we came from "Parent" attribute
+3. Important. Affects search behaviour
+	Queue
+	Priority Queue
+	Stack
+
+Breadth first search
+Frontier is FIFO queue
+
+Complexity:
+Imagine graph is a tree with arity b
+
+Imagine out solution is at depth d
+
+Time complexity: O(b^d)
+
+Space complexity: O(b^d)
+
+Depth First Search
+Frontier is a LIFO stack
+
+Complexity:
+Imagine our graph is a tree with arity b and our solution is at depth d,
+with maximum depth m?
+
+Time complexity: O(b^m)
+
+Space complexity: O(mb)
+
+Advanced Graph (Best First) Search
+How do we assign priority?
+Consideration: The length of the path from the start state to the current statess
+
+Uniform Cost Search
+Frontier is a priority queue

@@ -1,0 +1,115 @@
+PollEv
+Suggest a strategy to initialize the population for a genetic algorithm.
+Random, distribute
+For the CNF satisfaction problem using the genetic algorithm, which of the following are valid mutation operations?
+character substitution/transposition
+
+Natural Language Processing
+1. Context matters - language uses assumed knowledge
+2. Different words have different meaning
+3. Language is changing
+4. Language is pattern-based
+5. Language has purpose
+
+Characteristics of Language
+1. Prosody - rhythm of speaking
+2. Phonology - how sounds are combined
+3. Morphology - how words are composed
+4. Syntax - how words are arranged into sentences
+5. Semantics - meaning of words
+6. Progmatics - how language affects listeners
+7. World knowledge - what do we need to know about the world to understand language
+
+Analysis of Language
+1. Parsing - analysis of syntactic structures
+2. Semantic Interpretation - representation of meaning
+3. Expanded Interpretation - use other knowledge to expand representation
+
+Example:
+"My dog ate my homework"
+
+1. Parsing	pronoun "my", noun "dog" <- noun phrase <- sentence -> verb phrase -> verb "ate", noun phrase -> pronoun "my", noun "homework"
+
+2. Semantic Interpretation
+	[my dog] (ate)->[my homework]
+
+3. Expanded Interpretation
+	[my dog] (ate)->[my homework] Homework: Comp3106, Assignment #3, Online
+"I didn't do my homework"
+
+Language Models
+language - a set of legal strings
+grammar - the set of rules that can be used to generate sequences of strings
+
+n-gram character model
+"artifcial"
+P("artifcial")
+P(c_1, ..., c_N)
+n-gram - a sequence of n characters
+n-gram model - a probability distribution over n character sequences
+
+Example: 2-gram model
+P("at") = 0.01
+P("zk") = 0.00001
+
+In an n-gram model, the probability associated with a subsequent character depends only on the prior n-1 characters
+P(c_i|c_1, ..., c_i-1) = P(c_i|c_i-(n-1), ..., c_i-1)
+
+To determine the probability of a sequence of N characters...
+P(c_1, ..., c_N) = P(c_N|c_1, ...,c_N-1) P(c_N-1|c_1, ..., c_N-2) * ... * P(c_2|c_1) P(c_1)
+= P(c_N|c_N-(n-1), ..., c_N-1) P(c_N-2|c_N-1, ..., n_N-2) * ... * P(c_2|c_1) P(c_1)
+
+Example: "the cat in the hat"
+1-gram: P("at") = P("t"|"a") P("a")
+	= P("t") P("a") = 4/18 * 2/18 = 2/81
+2-gram: P("at") = P("t"|"a") P("a")
+	= P("t"|"a") P("a") = 2/2 * 2/18 = 1/9
+
+P(c_i|c_i-(n-1), ..., c_i-1) = count(c_i-(n-1), ..., c_i-1, c_i) / count(c_i-(n-0), ..., c_i-1)
+
+Language Classification
+Build an n-gram model for each language
+Use Bayes Classifier
+P(l|c_1, ..., c_N)
+
+L* = argmax_l P(l|c_1, ..., c_N)
+L* = argmax_l P(c_1, ..., c_N|l) P(l)
+
+Bag of Words Model
+Seek a vector representation of a text
+Representation is independent of order of words
+1. Create a vocabulary from a set of documents
+2. For each document, create an occurrence vector (one-shot representation) (0 if not appear 1 if appear)
+
+Example
+Doc 1: "the cat in the hat"
+Doc 2: "the magic cowboy hat"
+Doc 3: "cat the cat who is that"
+
+Vocabulary:
+[the,cat,in,hat,magic,cowboy,who,is,that]
+
+Occurrence vector:
+Doc 1: [1,1,1,1,0,0,0,0,0]
+Doc 2: [1,0,0,1,1,1,0,0,0]
+Doc 3: [1,1,0,0,0,0,1,1,1]
+
+Count vectors:
+Doc 1: [2,1,1,1,0,0,0,0,0]
+Doc 2: [1,0,0,1,1,1,0,0,0]
+Doc 3: [1,2,0,0,0,0,1,1,1]
+
+Term-frequency vectors:
+Doc 1: [2,1,1,1,0,0,0,0,0] / 5
+Doc 2: [1,0,0,1,1,1,0,0,0] / 4
+Doc 3: [1,2,0,0,0,0,1,1,1] / 6
+
+idf(w) = log(# documents / # documents containing w)
+Inverse document frequency vector:
+[]
+
+TF-IDF(w,d_ = tf(w,d) * idf(w)
+TermFrequency-IDF vectors:
+Doc 1: [0,0.036,0.096,0.036,0,0,0,0,0]
+Doc 2: []
+Doc 3: []

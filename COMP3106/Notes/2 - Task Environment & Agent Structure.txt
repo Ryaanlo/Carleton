@@ -1,0 +1,85 @@
+A rational agent selects an action that:
+it expects to optimize a performance measure
+
+What is the difference between an agent function and an agent program?
+agent function - mapping from input/percepts to output
+agent program - implementation
+
+Task Environment & Agent Structure
+Performance Measure
+Environment
+Activators
+Sensors
+
+Ex. Autonomous Taxi Driver
+Performance Measure: Safety, # of successful trips, customer satisfaction, trip length
+Environment: lights, cars, pedestrians, customers, parking enforcement, debris, animals
+Activators: wheels, turnlights, brakes, steering, horn
+Sensors: camera, air bag sensors, microphone, lane sensors, speedometer, GPS
+
+Properties of Task Environment
+Fully vs Partially Observable
+Does agent have access to complete environment state at all times?
+Single vs Multiple Agent
+How many agents are in the environment?
+
+Deterministic vs Stochastic (randomness)
+Are the action and state the only things the subsequent state depends on?
+
+Static vs Dynamic
+Does the environment change while the agent(s) decides what to do?
+
+Discrete vs Continuous
+Are any of the states, percepts, actions, time discrete or continuous?
+
+Known (knowns its action) vs Unknown
+Does the agent know the outcomes for all actions?
+
+Sequential vs Episodic (current action does not affect future actions)
+Does the current action affect future actions?
+
+Ex. Vaccuum Cleaner
+Partially Observable (doesn't know each square)
+Single Agent (only agent in the environment)
+Deterministic (no new dirt appears)
+Sequential
+Static (no new dirt appears)
+Discrete (either you clean or you don't)
+Known
+
+Ex. Autonomous Taxi Driver
+Partially Observable
+Multi Agents (other drivers)
+Stochastic
+Sequential 
+Dynamic
+Continuous
+Known (knows when to break, turn)
+
+Agent Structure
+Architecture: Physical compute device, sensors and activator
+Agent: Agent program + architecture
+
+*WAY TOO BIG IN SIZE/TIME*
+Lookup Table Agent
+def lookup_agent(percept):
+	percept_sequence = percept_sequence.append(percept)
+	action = table.look_up(percept_sequence)
+	return action
+If we have a set of percepts P over time T:
+	Table has: sum_{t=1}{T} |P|^t
+
+*INSUFFICIENT FOR COMPLEX ENVIRONMENTS*
+Simple Reflex Agent
+Take actions based on only current percept
+Size of lookup table: |P|
+def simple_reflex_agent(percept):
+	action = select_action(percept)
+	return action
+If percept then action
+
+Model-Based Reflex Agent
+Agent that maintains some internal model of the environment state
+1. Information on how its actions affect the environment
+2. Information on how the environment changes 
+def model_based_reflex_agent(percept):

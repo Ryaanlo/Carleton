@@ -1,0 +1,102 @@
+Daily PollEv
+What are the components of an expert system?
+User interface, knowledge base, inference engine
+
+What is the difference between goal-based reasoning and data-driven reasoning?
+Goal-based: Start with the goal and work towards the goal, 
+Data-driven: Starting with whatever we know and then try to find out things about the system
+
+Data-Driven Reasoning
+Seeks to find out all possible information about a system starting from the evidence we have
+
+1. For every rule R
+	i. Check if the propositions in antecedent are askable or known
+	ii. If all proposition in antecedent are askable or known, then query the user about the askable propositions
+	iii. Add the values to working memory
+	iv. Check if antecedent is true, if true then add consequence to working memory
+
+Iterate until no new rules "fire" (are true)
+
+Example: Medical Diagnosis System
+IF coughing* and sneezing* THEN diagnosis is cold
+IF vomiting* and fever% THEN diagnosis is flu
+IF mouth temp high* and ear temp high* THEN fever
+
+* = askable
+
+Working memory: 
+	Coughing true
+	Sneezing false
+
+	rule 2: vomiting askable but fever not askable
+
+	rule 3:
+	mouth temp high true
+	ear temp high true
+	fever true
+
+	vomiting true
+
+	diagnosis flu
+
+1. Goal-driven reasoning achieves goal faster
+2. Don't evaluate the truth values of antecedents if we don't know all propositions
+
+Explanation in Rule-Based Systems
+How: how the system reached a conclusion
+Why: Why did the system query the user for the value of a proposition
+
+Keep track of which rule or query led to which conclusion
+
+How explanations:
+	If conclusion was queried from user:
+		print("queried from user")
+	else:
+		print("follows from " + rule)
+
+Keep track of which rule was under consideration when a query was asked.
+
+Why explanations:
+	print("this is needed to determine value of " + rule.antecedent + "in" + rule)
+
+Fuzzy Sets
+Standard set theory: Given a set A, and an element x, either x belongs to A or x !belongs to A
+
+Fuzzy Set
+Given a universe of discourse U, a fuzzy set is a function m:U -> [0,1]
+We call m the "membership function"
+We call m(x) the degree of membership
+Fuzzy set: A, Membership: m_A(x)
+
+Example: Consider the fuzzy set defined as "about 4" in the universe of integers
+	0 if x<1 or x>7
+	0.1 if x=1 or x=7
+m(x)={	0.4 if x=2 or x=6	}
+	0.7 if x=3 or x=5
+	1 if x=4
+
+Membership Functions on the Reals
+Triangle: 
+
+	0 if x<=a
+	x-a/b-a if a<=x<=b
+m(x)={	c-x/c-b if b<=x<=c	}
+	0 if x>=c
+
+Trapezoidal:
+
+	0 if x<=a
+	x-a/b-a if a<=x<=b
+m(x)={	1 if b<=x<=c	}
+	d-x/d-c if c<=x<=d
+	0 if x>=d
+
+Flat (Hat):
+
+	0 if x<a
+m(x)={	1 if a<=x<=b	}
+	0 if x>b
+
+Gaussian:
+
+m(x) = e^[-1/2 (x-mu/sigma)^2]

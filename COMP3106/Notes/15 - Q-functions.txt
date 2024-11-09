@@ -1,0 +1,104 @@
+Daily PollEV
+What is the difference between a value function and a Q-function?
+Q function - long term rewards state-action pair
+value function - long term rewards state
+
+Adaptive Dynamic Programming with Exploration + Exploitation
+V(s) <- r(s) + gamma * max_a [f sum_s' P(s'|s,a) V(s'), N(s,a)]
+N(s,a) - count f times action a taken in s
+
+f(x,y) = {	R+	if y < N_E	
+		x	otherwise	} <- "exploration function"
+
+N_E - threshold
+R+ - a constant value that estimate the largest possible reward at any state
+
+pi(s) <- argmax_a [f (sum_s' P(s'|s,a) V(s'), N(s,a))]
+
+"if we haven't taken an action very much in a state s, take it"
+
+G-1	G+1	<-
+^	X	^
+^->	->	^
+
+r(s) = {-1 if s = G-1
+	+1 if s = G+1
+	-0.1 otherwise	}
+
+f(x,y) = {	R+ if y < N_E	N_E = 1
+		x otherwise	R+ = +1	}
+
+V(s) = {	1 if s = G+1	
+		-1 if s= G-1
+		0.5 otherwise	}
+
+Start state: (2,0)
+V(2.0) 	<- r(2,0) + gamma * max_a f(sum_s' P(s'|s,a) V(s') N(s,a))
+	<- -0.1 + gamma * max ( ^ +1 , -> +1 )
+	<- 0.9
+Take action maximizing f(sum_s' P(s'|s,a) V(s') N(s,a))
+Say we go up ^
+V(1,0)	<- -0.1 + max ( ^ +1 , v +1 )
+	<- 0.9
+Say we just pick ^ cause max (0.9,0.9) = either
+V(0,0) = -1
+
+Start: (2,0)
+V(2,0)	<- -0.1 + max( ^ P(1,0|2,0, ^) V(1,0) + P(2,1|2,0, ^) V(2,1) , -> +1 )
+	<- -0.1 + max( 1 * 0.9 + 0 * 0.5 , 1)
+	<- 0.9
+
+Policy: Take action move right ->
+
+V(2,1)	<- -0.1 + max( <- +1, -> +1)
+	<- 0.9
+Take action ->
+.
+.
+.
+
+Start(2,0) <- -0.1 + max( ^ 1* 0.9 + 0 * 0.9 , -> 0 * 0.9 + 1 * 0.9)
+	   <- 0.8
+
+Take action ^
+
+Q-Learning
+Q(s,a) - estimate the long-term rewards associated with taking action a in state s
+"Q-value", "Q-function", "action-value", "action-utility"
+
+V(s) = max Q(s,a)
+
+Bellman Equation (for Q-functions)
+Q(s,a) = r(s) + gamma * sum_s' P(s'|s,a) max_a' Q(s',a')
+
+ADP:
+Q(s,a) <- r(s) + gamma * sum_s' P(s'|s,a) max_a' Q(s',a')
+
+Temporal Difference Q-Learning
+Iteratively re-estimate Q(s,a) from max Q(s',a') each time on action a was taken at state s and resulted in state s'
+
+Q(s,a) <- Q(s,a) + alpha*(r(s) + gamma * [max_a' Q(s'|a')] - Q(s,a))
+
+ASIDE - state-action-reward-state-action (SARSA) Learning
+Q(s,a) <- Q(s,a) + alpha*(r(s) + gamma*Q(s',a') - Q(s,a)), where a' is action taken in s'
+
+Optimal policy:
+pi(s) = argmax_a Q(s,a)
+
+1. Q-Learning with a fixed policy
+- define a fixed policy (often random)
+- generate trajectories through the environment
+- iterate through trials and update Q
+
+Challenge 1: We are not using the optimal Q-value during the initial phase 
+Challenge 2: Very slow.
+
+Start 	-> Set of states which always lead to low total reward
+	-> Set of state with high total reward
+
+2. Q-Learning with Exploration and Exploitation
+- perform trials in environment under the policy
+	pi(s) = argmax_a f[Q(s,a), N(s,a)]
+	f(x,y) = {R+ if y < N_E
+		  x otherwise	}
+	update Q and pi as we iterate through our environment

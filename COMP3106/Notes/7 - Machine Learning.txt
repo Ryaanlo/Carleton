@@ -1,0 +1,118 @@
+Types of Machine Learning
+- Improving performance of a system on future tasks based on observations/data about the population
+
+3 Types of Machine Learning:
+- Supervised learning
+- Unsupervised learning
+- Reinforced learning
+
+Supervised Learning
+Data: Pairs (x,y)
+	- x is input
+	- y is label
+
+Objective: Learn a function f, such that f(x) = y
+
+Tasks: Classification, Regression, Image Segmentation
+
+Unsupervised Learning
+Data: x
+	- x is input
+
+Objective: Learn structure of data
+
+Tasks: Clustering, Dimensionality Reduction, Density Estimation
+
+Reinforced Learning
+Data: s, r
+	- s is environment state
+	- r is reward
+
+Objective: Learn actions maximizing reward
+
+Tasks: Sequential Decision Making, Search/Planning, Control Systems
+
+Machine Learning Methods
+SUPERVISED LEARNING
+• Analogy-based methods
+	• Nearest neighbour
+	• Support vector machine
+• Inductive methods
+	• Rule-based systems (will discuss later)
+	• Decision trees
+• Connective methods
+	• Neural networks (will discuss later)
+• Evolutionary methods
+	• Genetic algorithm (will discuss later)
+• Bayesian methods
+	• Bayesian inference (will discuss later)
+
+UNSUPERVISED LEARNING
+• Clustering methods
+	• Hierarchical clustering
+	• K-means clustering
+• Dimensionality Reduction methods
+	• Principal components analysis
+• Density estimation
+	• Kernel density estimation
+
+Nearest Neighbour
+	- classification or regression
+
+Support Vector Machine
+	- boundary line that separate points
+	- classification
+	- ex. good day to rent a bike? input: weather
+
+Decision Tree
+	- Splits into 2
+
+Hierarchical Clustering
+	- Unsupervised
+	- Looks at similarity of inputs
+
+K-means Clustering
+	- Unsupervised
+	- Centroid
+
+Principal Components Analysis
+	- Dimensionality Reduction
+
+Kernel Density Estimation
+	- Density Estimation
+
+NOT GOING INTO DETAIL
+
+Performance Measure (Supervised Learning)
+
+𝐴𝑐𝑐𝑢𝑟𝑎𝑐𝑦 = # 𝑐𝑜𝑟𝑟𝑒𝑐𝑡 𝑝𝑟𝑒𝑑𝑖𝑐𝑡𝑖𝑜𝑛𝑠/# 𝑝𝑟𝑒𝑑𝑖𝑐𝑡𝑖𝑜𝑛𝑠
+𝑆𝑒𝑛𝑠𝑖𝑡𝑖𝑣𝑖𝑡𝑦 = 𝑅𝑒𝑐𝑎𝑙𝑙 = # 𝑡𝑟𝑢𝑒 𝑝𝑜𝑠𝑖𝑡𝑖𝑣𝑒𝑠/# 𝑝𝑜𝑠𝑖𝑡𝑖𝑣𝑒𝑠
+𝑆𝑝𝑒𝑐𝑖𝑓𝑖𝑐𝑖𝑡𝑦 = # 𝑡𝑟𝑢𝑒 𝑛𝑒𝑔𝑎𝑡𝑖𝑣𝑒𝑠/# 𝑛𝑒𝑔𝑎𝑡𝑖𝑣𝑒𝑠
+𝑃𝑟𝑒𝑐𝑖𝑠𝑖𝑜𝑛 = # 𝑡𝑟𝑢𝑒 𝑝𝑜𝑠𝑖𝑡𝑖𝑣𝑒𝑠/# 𝑝𝑟𝑒𝑑𝑖𝑐𝑡𝑒𝑑 𝑝𝑜𝑠𝑖𝑡𝑖𝑣𝑒𝑠
+𝐹1 = 2 (𝑝𝑟𝑒𝑐𝑖𝑠𝑖𝑜𝑛 × 𝑟𝑒𝑐𝑎𝑙𝑙)/(𝑝𝑟𝑒𝑐𝑖𝑠𝑖𝑜𝑛 + 𝑟𝑒𝑐𝑎𝑙𝑙)
+
+AREA UNDER THE CURVE (AUC)
+• Imagine our classifier predicts 𝑃 (𝐶 = 1)
+0 0 0 0 0 0 1 0 0 0 1 0 1 0 1 1 0 1 1 1 1
+𝑃 (𝐶 = 1)
+
+Least likely to be C = 1 -> Most likely to be C = 1
+
+Multi-Class Classification
+
+“MACRO” AVERAGE
+
+𝑀𝑎𝑐𝑟𝑜𝐴𝑐𝑐𝑢𝑟𝑎𝑐𝑦 = 1 / |𝑐𝑙𝑎𝑠𝑠𝑒𝑠 |෍ *
+SUM_𝑐∈𝑐𝑙𝑎𝑠𝑠𝑒𝑠 # 𝑐𝑜𝑟𝑟𝑒𝑐𝑡 𝑝𝑟𝑒𝑑𝑖𝑐𝑡𝑖𝑜𝑛𝑠 𝑓𝑜𝑟 𝑐 / # 𝑝𝑟𝑒𝑑𝑖𝑐𝑡𝑖𝑜𝑛𝑠 𝑓𝑜𝑟 𝑐
+
+𝑀𝑎𝑐𝑟𝑜𝑆𝑒𝑛𝑠𝑖𝑡𝑖𝑣𝑖𝑡𝑦 = 𝑀𝑎𝑐𝑟𝑜𝑅𝑒𝑐𝑎𝑙𝑙 = 1 / |𝑐𝑙𝑎𝑠𝑠𝑒𝑠 | *෍
+SUM_𝑐∈𝑐𝑙𝑎𝑠𝑠𝑒𝑠 # 𝑡𝑟𝑢𝑒 𝑝𝑜𝑠𝑖𝑡𝑖𝑣𝑒𝑠 𝑓𝑜𝑟 𝑐 / # 𝑝𝑜𝑠𝑖𝑡𝑖𝑣𝑒𝑠 𝑓𝑜𝑟 𝑐
+
+𝑀𝑎𝑐𝑟𝑜𝑆𝑝𝑒𝑐𝑖𝑓𝑖𝑐𝑖𝑡𝑦 = 1 / |𝑐𝑙𝑎𝑠𝑠𝑒𝑠 |෍ *
+SUM_𝑐∈𝑐𝑙𝑎𝑠𝑠𝑒𝑠 # 𝑡𝑟𝑢𝑒 𝑛𝑒𝑔𝑎𝑡𝑖𝑣𝑒𝑠 𝑓𝑜𝑟 𝑐 / # 𝑛𝑒𝑔𝑎𝑡𝑖𝑣𝑒𝑠 𝑓𝑜𝑟 𝑐
+
+𝑀𝑎𝑐𝑟𝑜𝑃𝑟𝑒𝑐𝑖𝑠𝑖𝑜𝑛 = 1 / |𝑐𝑙𝑎𝑠𝑠𝑒𝑠 |෍ *
+SUM_𝑐∈𝑐𝑙𝑎𝑠𝑠𝑒𝑠 # 𝑡𝑟𝑢𝑒 𝑝𝑜𝑠𝑖𝑡𝑖𝑣𝑒𝑠 𝑓𝑜𝑟 𝑐 / # 𝑝𝑟𝑒𝑑𝑖𝑐𝑡𝑒𝑑 𝑝𝑜𝑠𝑖𝑡𝑖𝑣𝑒𝑠 𝑓𝑜𝑟 𝑐
+
+𝑀𝑎𝑐𝑟𝑜𝐹1 = 2 (𝑚𝑎𝑐𝑟𝑜𝑝𝑟𝑒𝑐𝑖𝑠𝑖𝑜𝑛 × 𝑚𝑎𝑐𝑟𝑜𝑟𝑒𝑐𝑎𝑙𝑙) / (𝑚𝑎𝑐𝑟𝑜𝑝𝑟𝑒𝑐𝑖𝑠𝑖𝑜𝑛 + 𝑚𝑎𝑐𝑟𝑜𝑟𝑒𝑐𝑎𝑙𝑙)
+

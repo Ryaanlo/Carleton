@@ -1,0 +1,83 @@
+POLLEV
+Which of the following is the correct expression for the conditional probability of an event A given event B?
+P(A|B) = P(A AND B) / P(B)
+
+Supposed we have two events A and B. Which of the following is equivalent to saying A and B are independent?
+P(A|B) = P(A)
+
+According to Bayes Theorem, how do we compute the most likely hypothesis (h_i) given evidence (e)?
+argmax(P(e|h_i) P(h_i))
+
+What happens if we want to do Bayes Classification if the Naive Bayes Assumption does not hold?
+The Naive Bayes Classifier may still provide useful results
+We can still do Bayes Classification without the Naive Bayes Assumption
+The conditional probabilities may me expensive to compute
+All of the above!
+
+In a Bayesian network we have a directed edge from one node X to another node Y if?
+X directly influences Y
+
+--------------------------------------------------------------------
+Efficient Inference on Bayesian Networks
+
+Disease Diagnosis
+20% have flu
+	- 60% with flu have headache
+10% have COVID
+	- 40% with COVID have headache
+70% are healthy
+	- 10% healthy have a headache
+
+A patient has a headache.
+What is their diagnosis?
+
+P(COVID|headache) = [ P(headache|COVID) P(COVID) ] / [sum_{diseases} P(headache|disease) P(disease) ]
+= 0.4 * 0.1 / [ (0.6 * 0.2) + (0.4 * 0.1) + (0.1 * 0.7) ]
+= 0.17
+
+What is the most likely?
+P(headache|flu) P(flu) = 0.12 !!!
+P(headache|covid) P(covid) = 0.04
+P(headache|healthy) P(healthy) = 0.07
+
+Most likely disease is the flu.
+
+Bayesian Networks
+DAG which:
+1. Each node corresponds to a random variable
+2. Directed edges correspond to direct influences
+
+Example:
+		Dog -> Walk <- Weather -> Snow
+			->     Fall 	<-	
+
+P(Sunny|Fall) = 1 / P(Fall) P(Sunny n Fall) = 1 / P(Fall) sum{D=yes/no}_sum{D=yes/no}_sum{D=yes/no} P(Sunny n Fall n D n W n S)
+	= 1 / P(Fall) sum{D=yes/no}_sum{D=yes/no}_sum{D=yes/no} P(D) P(Sunny) P(W|D n Sunny) P(S|Sunny) P(Fall|W n S)
+
+5 terms -> 4 multiplications
+8 summations -> 32 operations
+
+Query Variables: Variables we are interested in
+Evidence Variables: Variables whose values are known
+Hidden Variables: Other variables in our system
+
+= 1 / P(Fall=T) * P(Weather = T) *
+	sum_d P(Dog = d) 
+	sum_w P(Walk = w|Dog = d & Weather = T)
+	sum_s P(Snow = s|Weather = T) * P(Fall = T|Weather = w & Snow = s)
+
+f_1(w) = sum_s P(Snow = s|Weather = T) * P(Fall = T|Weather = w & Snow = s)
+	-> 1 multiplication * 2 terms * 2 values (T/F) = 4 operations
+f_2(d) = sum_w P(Walk = w|Dog = d & Weather = T) f_1(w)
+	-> 1 multiplication * 2 terms * 2 values (T/F) = 4 operations
+f_3 = sum_d P(Dog = d) f_2(d)
+	-> 1 multiplication * 2 terms = 2 operations
+Total: 10 operations
+
+Variable Elimination Algorithm ^
+0. Write an expression for our desired conditional probability
+1. Choose an ordering of hidden variables
+	For all i in hidden variables,
+		i. Collect all terms containing i
+		ii. Compute f_i by summing over all terms containing y_i
+		iii. Replace the summation with f_i

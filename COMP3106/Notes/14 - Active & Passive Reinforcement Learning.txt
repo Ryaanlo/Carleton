@@ -1,0 +1,102 @@
+Daily PollEV
+What is the difference between reward and value in reinforcement learning?
+Reward - how immediate desireable, given by environment
+Value - long-term rewards, calculated by taking actions
+
+In reinforcement learning, what does the policy define?
+Which action to take in which state (mapping from actions to state)
+
+G-1	G+1	<-
+^	X	^
+^->	->	^
+
+r(s) = {-1 if s = G-1
+	+1 if s = G+1
+	0 otherwise	}
+
+Passive Reinforcement Learning
+Assume a fixed policy pi, and compute the value function.
+
+Under the fixed policy, generate trajectories (sequence of state-action pairs) in our environment
+
+Direct Estimation (Monte Carlo)
+for a given trajectory
+	for each state in the trajectory
+		compute the sum of (discounted) from s to the goal state
+
+The value of a state is the average of the above.
+
+Adaptive Dynamic Programming
+Initially estimate V(s)
+Usually V(s) = r(s)
+
+V(s) <- r(s) + gamma sum_s' P(s'|s, pi(s)) V(s')
+
+Repeat until convergence
+
+Compute P(s'|s, pi(s)) from trajectories
+P(s'|s, pi(s)) = count (s, pi(s), s') / count (s, pi(s))
+
+Temporal Difference Learning
+Initially estimate V(s)
+Each time we encounter transition from s to s' update V(s)
+
+V(s) <- V(s) + alpha[r(s) + gamma*V(s') - V(s)]
+			^
+		estimate value of V(s) given V(s')
+
+alpha is the learning
+
+Direct Estimation
+(2,0) -> (2,1) -> (2,2) -> (1,2) -> (0,2) -> (0,1)
+(2,0) -> (1,0) -> (0,0)
+(2,0) -> (2,1) -> (2,2) -> (2,1) -> (2,2) -> (1,2) -> (0,2) -> (0,1)
+
+V(2,0) = 0.5 + (-1.2) + 0.3 / 3 = -0.133
+V(2,1) = 0.6 + 0.4 + 0.6 / 3 = 0.533
+
+Adaptive Dynamic Programming
+P[(2,1)|(2,0), -> ] = 2/3
+P[(1,0)|(2,0), -> ] = 1/3
+P[(2,1)|(2,2), ^ ] = 1/3
+P[(1,2)|(2,2), ^ ] = 2/3
+
+Initially estimate V(s) = {	+1 if s=G+1
+				-1 if s=G-1
+				0.5 otherwise	}
+
+V(2,0) 	<- r(2,0) + gamma*sum_s' P(s'|s, pi(s)) V(s')
+	<- -0.1 + 2/3(0.5) + 1/3 * 0.5
+	<- 0.4
+
+V(2,2)	<- r(2,2) + gamma*sum_s' P(s'|s, pi(s)) V(s')
+	<- -0.1 + 1/3 * 0.5 + 2/3 * 0.5
+	<- 0.4
+
+V(0,2)	<- -0.1 + 1 * 1
+	<- 0.9
+
+Temporal Difference Learning
+V(s) <- V(s) + alpha[r(s) + gamma*V(s') - V(s)]
+V(2,0) 	<- V(2,0) + alpha(r(2,0) + gamma*V(2,1) - gamma(2,0))
+	<- 0.5 + 0.1(-0.1 + 0.5 - 0.5)
+	<- 0.49
+V(2,1) 	<- 0.5 + 0.1(-0.1 + 0.5 - 0.5)
+	<- 0.49
+V(0,2)	<- V(0,2) + alpha(r(0,2) + gamma*V(0,1) - gamma(0,2))
+	<- 0.5 + 0.1(-0.1 + 1 - 0.5)
+	<- 0.54
+
+Active Reinforcement Learning
+Learn the value function V(s) and the optimal policy pi simultaneously.
+
+Optimal Policy
+pi*(s) = argmax_pi (V^pi(s))
+
+Bellman Equation (optimal policy)
+V(s) = r(s) + gamma*max_a sum_s' P(s'|s, a) V(s')
+
+Adaptive Dynamic Programming
+V(S) <- r(s) + gamma* max_a sum_s' P(s'|s,a) V(s')
+
+pi(s) <- argmax_a sum_s' P(s'|s,a) V(s')
