@@ -1,0 +1,439 @@
+\documentclass[12pt]{article}
+
+\usepackage{hyperref}
+\usepackage{fullpage}
+\usepackage{amssymb}
+\usepackage{fancybox}
+\usepackage{amsmath}
+\usepackage{paralist}
+\usepackage{xcolor}
+
+\usepackage{verbatim}
+
+\newcommand{\IE}{\mathbb{E}}
+\newcommand{\Mystery}{\textsf{\sc Mystery}}
+\newcommand{\EULER}{\textsf{\sc Euler}}
+\newcommand{\TOTAL}{\mathord{\it total}}
+\newcommand{\DEG}{\mathord{\it deg}}
+
+
+%%%%%%%%%%%%%% Capsule %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\capsule}[2]{\vspace{0.5em}
+  \shadowbox{%
+    \begin{minipage}{.90\linewidth}%
+      \textbf{#1:}~#2%
+    \end{minipage}}
+  \vspace{0.5em} }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcounter{ques}
+\newenvironment{question}{\stepcounter{ques}{\noindent\bf Question \arabic{ques}:}}{\vspace{5mm}}
+\newcommand{\solution}[1]{{\color{blue}\textbf{Solution: }#1}}
+
+
+\begin{document}
+
+\begin{center} \Large\bf
+Ryan Lo (101117765)
+
+COMP 2804 --- Assignment 4
+\end{center}
+
+\noindent {\bf Due:} Sunday December 5, 11:59 pm.
+
+\vspace{0.5em}
+
+\noindent {\bf Assignment Policy:}
+\begin{itemize}
+\item Your assignment must be submitted as one single PDF file through
+      cuLearn.
+\item {\bf Late assignments will not be accepted.}
+\item You are encouraged to collaborate on assignments, but at the level
+      of discussion only. When writing your solutions, you must do so
+      in your own words.
+\item Past experience has shown conclusively that those who do not put
+      adequate effort into the assignments do not learn the material and
+      have a probability near 1 of doing poorly on the exams.
+\item When writing your solutions, you must follow the guidelines below.
+      \begin{itemize}
+      \item You must justify your answers.
+      \item The answers should be concise, clear and neat.
+      \item When presenting proofs, every step should be justified.
+      \item Each part of each question is worth 2 marks, except for 4.2 (4 marks) and 4.2 (6 marks)
+      \end{itemize}
+\end{itemize}
+
+\begin{question}
+\begin{itemize}
+\item Write your name and student number.
+\end{itemize}
+\end{question}
+
+
+
+\begin{question}
+	\href{https://en.wikipedia.org/wiki/Craps}{Craps} is a game where you roll two dice and bet on the outcome. There are many ways to play, but we will focus on one specific scenario. On your "come-out" roll you roll a $9$ on two dice. Now the game is this: you must keep rolling 2 dice until you either roll $9$ again, in which case you win, or you roll a $7$, in which case the house wins (you lose).
+	\begin{enumerate}
+		\item \begin{enumerate}
+			\item \label{a} Find the probability that you win.
+			\item \label{b} Find the probability that the house wins.
+		\end{enumerate} 
+		 Show all your work for both parts. Observe that the probabilities from \ref{a} and \ref{b} added together should total $1$, but you may NOT use this fact to determine your answers.
+		
+		Let A be the event that we roll a 9.
+
+		Let B be the event that we roll a 9 or 7.
+
+		Let X be the event that we win and Y be the event that the house wins.
+
+		$\sum_{i=0}^{\infty} x^n = \frac{1}{1-x}$
+		
+		a) Probability that you win = probability of you rolling a 9 before rolling a 7.
+		
+		$Pr(X) = \sum_{i=0}^{\infty} Pr(Bc)^i * Pr(A)$
+		
+		$Pr(A) = \frac{4}{36}$
+
+		$Pr(B) = \frac{10}{36}$
+
+		$Pr(Bc) = \frac{26}{36}$
+
+		$\sum_{i=0}^{\infty} Pr(Bc)^i * Pr(A)$
+
+		$= \frac{1}{1-{\frac{26}{36}}} * Pr(A)$
+		
+		$= \frac{1}{1-{\frac{26}{36}}} * \frac{4}{36}$
+
+		$Pr(X) = \frac{2}{5}$
+
+		b) Probability that the house wins = probability of the house rolling a 7 before rolling a 9.
+		
+		Let C be the event that we roll a 7.
+
+		$Pr(Y) = \sum_{i=0}^{\infty} Pr(Bc)^i * Pr(C)$
+		
+		$Pr(C) = \frac{6}{36}$
+
+		$Pr(B) = \frac{10}{36}$
+
+		$Pr(Bc) = \frac{26}{36}$
+
+		$\sum_{i=0}^{\infty} Pr(Bc)^i * Pr(C)$
+
+		$= \frac{1}{1-{\frac{26}{36}}} * Pr(C)$
+		
+		$= \frac{1}{1-{\frac{26}{36}}} * \frac{6}{36}$
+
+		$Pr(Y) = \frac{3}{5}$
+		
+		\item Assume you have bet $\$10$. You roll a $9$ on your "come-out" roll, same as above. If you win the casino pays you $\$10$. If you lose the casino takes your $\$10$ bet. What is your expected winnings or losings (i.e., the expected value) of this round of craps?
+		
+		Define random variable Z is the amount that you win or lose
+
+		Z(event where you win) = 10
+
+		Z(event where you lose) = -10
+
+		E(X) = Z(event where you win) x Pr(X) + Z(event where you lose) x Pr(Y)
+
+		$E(X) = 10 * \frac{2}{5} + (-10) * \frac{3}{5}$
+
+		$E(X) = -2$
+
+	\end{enumerate}
+	  
+\end{question}
+\newpage
+\begin{question}
+	You are playing a board game about pirates that uses special six-sided fair dice. Three sides of each die has a zero on it, while the other three sides have the numbers $1$ through $3$ (this represents damage done by your ship's cannons). Your ship has five cannons, so to attack you roll $5$ of these six-sided dice.  Let 
+	\begin{eqnarray*} 
+		A & = & \mbox{The sum of the values of the $5$ dice.} \\ 
+		B & = & \mbox{The number of times a zero is showing.} \\ 
+	\end{eqnarray*} 
+	
+	\begin{enumerate}
+		\item What is $E(A)$ and E$(B)$?
+		
+		$E(X) = \sum_{w \in S} X(w) * Pr(w)$
+
+		$E(A) = 5 * (0 * Pr(0) + 0 * Pr(0) + 0 * Pr(0) + 1 * Pr(1) + 2 * Pr(2) + 3 * Pr(3))$
+	
+		$E(A) = 5 * (1 * Pr(1) + 2 * Pr(2) + 3 * Pr(3))$
+
+		$E(A) = 5 * (1 * \frac{1}{6} + 2 * \frac{1}{6} + 3 * \frac{1}{6})$
+
+		$E(A) = 5 * \frac{1}{6} (1 + 2 + 3)$
+
+		$E(A) = 5 * \frac{6}{6}$
+		
+		$E(A) = 5$
+
+		$E(B) = 5 * Pr(0)$
+
+		$E(B) = 5 * \frac{1}{2}$
+		
+		$E(B) = 2.5$
+
+		\item Are $A$ and $B$ independent random variables?
+		
+		Find a case where A and B are not independent random variables.
+
+		$Pr(A = 30 \cap B = 5) = Pr(A = 30) * Pr(B = 5)?$
+
+		$Pr(A = 30 \cap B = 5) = 0$
+
+		$Pr(A = 30) = 1/6^5$, (6,6,6,6,6)
+
+		$Pr(B = 5) = 1/6^5$, (0,0,0,0,0)
+
+		$Pr(A = 30 \cap B = 5) \neq Pr(A = 30) * Pr(B = 5)$
+
+		$\therefore$ A and B are not independent random variables.
+
+	\end{enumerate}
+\end{question}
+
+
+
+
+\begin{question}
+	When FX and his girlfriend XF have a child, this child is a boy with 
+	probability $1/2$ and a girl with probability $1/2$, independently of 
+	the sex of their other children. FX and XF stop having children as soon 
+	as they have three girls or two boys. 
+	
+	
+	Consider the random variables 
+	\begin{eqnarray*} 
+		C & = & \mbox{the number of children that FX and XF have,} \\ 
+		G & = & \mbox{the number of girls that FX and XF have.} \\ 
+		B & = & \mbox{the number of boys that FX and XF have.} \\ 
+	\end{eqnarray*} 
+
+\begin{enumerate}
+	\item Determine the expected values $E(C)$ and $E(G)$
+	
+	$E(C) = \sum_{w \in S} C(w) * Pr(w)$
+
+	Pr(2 children) = {BB}, $|S| = 2^2 = 4$
+
+	Pr(3 children) = {GGG, GBG, GBB}, $|S| = 2^3 = 8$
+
+	Pr(4 children) = {GGBG, GBGG, BGGG, BGGB, GBGB, GGBB}, $|S| = 2^4 = 16$
+
+	$E(C) = 2 * (1/4) + 3 * (3/8) + 4 * (6/16) = 25/8$
+
+	$E(G) = \sum_{w \in S} G(w) * Pr(w)$
+
+	Pr(0 girls) = {BB}, $|S| = 2^2 = 4$
+
+	Pr(1 girls) = {GBB, BGB}, $|S| = 2^3 = 8$
+
+	Pr(2 girls) = {GGBB, GBGB, BGGB}, $|S| = 2^4 = 16$
+
+	Pr(3 girls) = {GGG, GGBG, GBGG, BGGG}, $|S1| = 2^3 = 8$, $|S2| = 2^4 = 16$
+
+	$E(G) = 0 (1/4) + 1 * (2/8) + 2 * (3/16) + 3 * (1/8) + 3 * (3/16) = 25/16$
+
+	\item We are told that the last child FX and XF had was a boy. Determine the expected values $E(B)$ and $E(G)$ and $E(C)$.
+
+	Last Child was a boy so it has to end with a B. Stopped having children from the amount of boys.
+
+	Let A be the event that the last child was a boy.
+
+	$E(B)  = \sum_{w \in S} B(w) * Pr(w)$
+
+	$Pr(B = 2| A) = Pr(B = 2 \cap A) / Pr(A) = Pr(A) / Pr(A) = 1$
+
+	$E(B)  = 2 * 1 = 2$
+
+	A = {BB, GBB, BGB, GGBB, GBGB, BGGB}
+
+	$Pr(A) = Pr( A \cap C = 2) + Pr( A \cap C = 3) + Pr( A \cap C = 4) = 1/4 + 2/8 + 3/16 = 11/16$
+
+	$E(C)= \sum_{w \in S} C(w) * Pr(w)$
+
+	$E(C) = \frac{1}{Pr(A)} * \sum_{k=2}^{4} Pr(C = k \cap A)$
+
+	$E(C) = 2 * 1/4 + 3 * 2/8 + 4 * 3/16 = 32/16 = 32/11$
+
+	$E(G) = \sum_{w \in S} G(w) * Pr(w)$
+
+	Cannot have 3 girls cause that would mean it ends on a girl but we can only end on a boy.
+
+	Pr(0 girls) = {BB}, $|S| = 2^2 = 4$
+
+	Pr(1 girls) = {GBB, BGB}, $|S| = 2^3 = 8$
+
+	Pr(2 girls) = {GGBB, GBGB, BGGB}, $|S| = 2^4 = 16$
+
+	$Pr(G | A) = Pr(G \cap A) / Pr(A)$
+
+	$E(G) = \frac{1}{Pr(A)} * \sum_{k=2}^{4} Pr(G = k \cap A)$
+
+	$E(G) = 0 * 1/4 + 1 * 2/8 + 2 * 3/16 = 10/16 / (P(A) = 10/16  / 11/16 = 10/11$
+
+\end{enumerate}
+	
+	
+	 
+\end{question}
+
+
+
+\begin{question}
+	In the \href{https://dnd.wizards.com/}{Dungeons and Dragons} question from last assignment we talked about how to roll for stats (that is, we take the sum of $3$ six-sided dice). It was briefly mentioned that to get higher stats, we can roll $4$ six-sided dice and take the sum of the $3$ highest dice. In this question we will compare the expected outcome from both of these techniques.
+	\begin{enumerate}
+		\item\label{threedice} Determine the expected value of the sum of rolling $3$ fair six-sided dice.
+		
+		$E(X) = \sum_{w \in S} X(w) * Pr(w)$
+
+		$E(A) = 3 * (1 * Pr(1) + 2 * Pr(2) + 3 * Pr(3) + 4 * Pr(4) + 5 * Pr(5) + 6 * Pr(6))$
+	
+		$Pr(1) = Pr(2) = Pr(3) = Pr(4) = Pr(5) = Pr(6) = \frac{1}{6}$
+
+		$E(A) = 3 * \frac{1}{6} * (1 + 2 + 3 + 4 + 5 + 6)$
+
+		$E(A) = 10.5$
+	
+
+		\item What is the size of the sample space $S$ of all possible dice rolls with $4$ dice?
+	
+		$|S| = 6 * 6 * 6 * 6 = 6^4$
+	
+	\end{enumerate}
+
+		Let $d_1,d_2,d_3,d_4$ be random variables corresponding to the values of $4$ six-sided dice after being rolled. Let $Y$ be the value of the three highest dice. That is, $Y =\left(\sum_{i=1}^4 d_i \right)- \min\{d_1,d_2,d_3,d_4\}$. Thus our goal is to find $E(Y)$ and compare it to the answer from \ref{threedice}.
+		
+		Let the random variable $X_i$ be the sum of the highest $3$ dice if the lowest die is equal to $i$, that is $\min\{d_1,d_2,d_3,d_4\}=i$.  Let $X_i =0$ if the lowest die is not equal to $i$.  Let $A_i$ be the event that the lowest die out of $d_1,d_2,d_3,$ and $d_4$ is equal to $i$. 
+	\begin{enumerate}\setcounter{enumi}{2}	
+		\item In a few sentences explain why $$\sum_{\omega \in S} Y(\omega)= \sum_{i=1}^6 \sum_{\omega \in S} X_i(\omega) = \sum_{i=1}^6 \sum_{\omega \in A_i} X_i(\omega)$$
+		
+		$Y =\left(\sum_{i=1}^4 d_i \right)- \min\{d_1,d_2,d_3,d_4\}$ = Taking the 3 highest rolls
+
+		S = rolling 4 dices
+
+		$S = \{ \{1,1,1,1\} \dots \{6,6,6,6\} \}$
+
+		w = $\{1,2,3,4\}$
+		
+		Y(w) = 1+2+3+4 - 1 = 9
+
+		X1 = 2 + 3 + 4 , X2 = 0, X3 = 0, \dots, X6 = 0
+
+		When we roll a die, we get event w, if min calue is i, then Ai happened, then Y(w) = Xi, Xj = 0 such that j != i
+		Y(w) = X1
+
+		The first or left most summation above gives us EVERY conbination's sum of 3 largest die.
+		The middle equation gets the sum of all the combos sum of 3 largest die once even though we literate through the set 6 times.
+		The reason we don't add each combo's sum of 3 largest die more than once is because of $X_i$, which ensures that each combo is only added once.
+
+
+		\item Use the above expression and linearity of expectation to express $E(Y)$ in terms of $E(X_i(\omega))$ given that $\omega \in A_i$. 
+		
+		E(Y) in terms of E(Xi(w))
+
+		$E(Y) = E(Y(w))$
+
+		$Y(w) = \sum_{w \in S} Y(w) / |S|$, by rearranging $Y(w) * |S| = \sum_{w \in S} Y(w)$
+
+		$E(Y(w)) = \sum_{w \in S} Y(w) / |S|$
+
+		$E(Y(w)) = E(\sum_{i=1}^{6} \sum_{w \in A} (Xi(w) /|S|)) = (\sum_{i=1}^{6} \sum_{w \in A} E(Xi(w) /|S|))$
+
+		$\sum_{w \in S} E(Y(w)) = (\sum_{i=1}^{6} \sum_{w \in A} E(Xi(w)))$
+		
+		
+		\item Let $A_i'$ be the event that $d_1$ is the lowest die out of $\{d_1,d_2,d_3,d_4\}$ and that $d_1 = i$. Let  $X_i'(\omega)=d_2+d_3+d_4$ if $\omega \in A_i'$ and let $X_i'(\omega)=0$ if $\omega \notin A_i'$. Find  $E(X_i'(\omega))$ given that $\omega \in A_i'$. That is, assuming that $i$ is the lowest die roll and $d_1 = i$, find the expected value of $X_i'$. Recall that $\forall \omega \in A_i', X_i'(\omega) = d_2(\omega)+d_3(\omega)+d_4(\omega)$, where each of $d_2,d_3,$ and $d_4$ is at least $i$.
+	
+		$E(x_i) = E(d_2 + d_3 + d_4) = E(d_2) + E(d_3) + E(d_4) = \sum_{i = 1}^{3} E(d_i)$
+
+		$E(d_2) + E(d_3) + E(d_4)$, $d \geq i$
+
+		i = the value that each particular die has to be greater than or equal together
+
+		k is a die from die 2 to die 4
+		
+		j is the value from i = 6 (all legal values that $d_2, d_3, d_4$ can that on)
+
+		$E(d_k) = \sum_{j = i}^{6} j * P(j \geq i)$
+
+		$E(d_k) = \sum_{j = i}^{6} j * (6-j+1)/6$
+
+		$E(d_k) = 1/6 \sum_{j = i}^{6}  j * (6-j+1)$
+	
+		$E(d_k) = 3 + i/2$
+
+		$E(d_1 + d_2 + d_3) = 3* (3 + i/2)$
+		
+		\item\label{given} Observe that the term $E(X_i(\omega))$ in $\sum_{\omega \in A_i} E(X_i(\omega))$ is a constant, since it is the weighted average of the values $\forall \omega \in A_i, X_i(\omega)$. Similarly the term $E(X_i'(\omega))$ in $\sum_{\omega \in A_i'} E(X_i'(\omega))$ is also a constant. We will not prove it at this time, but we will use the fact that for the expressions given above, $E(X_i'(\omega))<E(X_i(\omega))$ to show a lower bound on $E(Y)$. Given that $E(X_i'(\omega))<E(X_i(\omega))$, briefly explain why $\sum_{\omega \in A_i} E(X_i'(\omega))<\sum_{\omega \in A_i} E(X_i(\omega))$. 
+		
+		$E(X_i') < E(X_i)$ since $X_i'$ is rolling 3 die so less than $X_i$ which is rolling 4 die
+
+		Therefore $X_i'$ is a subset of $X_i$.
+
+
+		one has constrant while the other doesn't
+		Xi' is subset
+		Xi doesn't matter
+
+		\item Recall that $A_i$ is the event that $\min\{d_1,d_2,d_3,d_4\}=i$. Show that $|A_i|= (6-i+1)^4-(6-i)^4$. 
+		
+		6-i+1 is the number of different values to get a value = i
+
+		6-i is the number of different values for the die to be greater than i
+
+		$(6-i+1)^4$ at least one of our 4 die has to be = to i
+
+		We have to subtract $(6-i)^4$ to ensure that at least one of our die is equal to i
+
+		This is because not all of our die can be greater than i.
+
+		\item Explain why $\sum_{\omega \in A_i} E(X_i'(\omega)) = \left((6-i+1)^4-(6-i)^4\right)\cdot E(X_i'(\omega))$.
+		
+		$|A_i|= (6-i+1)^4-(6-i)^4$
+
+		$\sum_{w \in A} E(X_i'(w))$, we iterate through that by $(6-i+1)^4-(6-i)^4$ many times
+
+		$(6-i+1)^4-(6-i)^4 = E(X_i'(w))$, given the lineraity of expectation
+
+		$E(X_i'(w))$ is much like an average, so we can do the above and do linearity of expectation.
+		
+		\item Now show that
+		
+		\begin{align*}
+			E(Y) & > \sum_{i=1}^6  \left(3\cdot\left(3+\frac{i}{2}\right)\right)\cdot\frac{(6-i+1)^4-(6-i)^4}{6^4}
+		\end{align*} 
+		which, if you plug into Wolfram alpha, is $>11.63$. 
+		
+		$E(Y) = \sum_{i=1}^{6} \sum_{w \in A} E(X_i(w) /|S|)$ , $E(X_i') < E(X_i)$
+
+		$E(Y) > \sum_{i=1}^{6} \sum_{w \in A} E(X_i'(w) /|S|)$, $E(X_i') = 3(3+i/2)$
+
+		$E(Y) > \sum_{i=1}^{6} \sum_{w \in A} 3(3+i/2) /|S|)$, $|S|=6^4$
+
+		$E(Y) > \sum_{i=1}^{6} \sum_{w \in A} 3(3+i/2) / 6^4)$ , $|A_i| = (6-i+1)^4-(6-i)^4$
+
+		$E(Y) > \sum_{i=1}^{6} 3(3+i/2) * (6-i+1)^4-(6-i)^4/ 6^4)$
+		
+		\item[Bonus:] In part \ref{given} we provide that $E(X_i)>E(X_i')$. That is, the average value of the highest $3$ dice of all the rolls in $A_i$ is higher than the average value of the highest $3$ dice of all the rolls in $A_i'$. Explain the idea behind why this is the case. You do not need to prove it, so you may use examples to help articulate it. Hint: $A_i'\subseteq A_i$. 
+		
+
+	\end{enumerate}
+
+\end{question}
+
+\newpage
+\begin{question}
+	\textbf{Bonus:} Michiel’s Craft Beer Company (MCBC) sells $n$ different brands of India
+	Pale Ale (IPA). When you place an order, MCBC sends you one bottle of
+	IPA, chosen uniformly at random from the $n$ different brands, independently
+	of previous orders.\\
+	\indent Simon places $m$ orders with MCBC. Define the random variable $X$ to
+	be the total number of distinct brands that Simon receives. Determine the
+	expected value $E(X)$ of $X$.\\
+\indent	Hint: Use indicator random variables. Note that your answer will have two variables, $n$ and $m$, and thus might not simplify very much. 
+\end{question}
+
+
+\end{document}

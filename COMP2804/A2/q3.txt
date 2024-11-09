@@ -1,0 +1,25 @@
+I will give solution of Q3, please post other questions separately.
+
+solution for Q3:
+
+Each time the function "THIRD" goes into recursion, n is reduced to n by 3. Now we have n as power of 3,
+
+so lets take n = 3k for some k belongs to natural numbers.
+
+Then we have k = log3(n)
+
+Here the base case will be n = 3.
+
+When n = 3, total number times "PROCESS" is called = 3
+
+When n = 32, total number times "PROCESS" is called = 32
+
+When n = 33, total number times "PROCESS" is called = 33
+
+......
+
+......
+
+When n = 3k, total number times "PROCESS" is called = 3k
+
+So total number of times "PROCESS" is called is (31 + 32 + ... + 3k) = 3*(3k - 1) / (3-1) = (3/2) * (n-1)

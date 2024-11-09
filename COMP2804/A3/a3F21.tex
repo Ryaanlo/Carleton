@@ -1,0 +1,664 @@
+\documentclass[12pt]{article}
+
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{hyperref}
+\usepackage{fullpage}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{fancybox}
+\usepackage{textcomp}
+\usepackage{verbatim}
+
+
+%%%%%%%%%%%%%% Capsule %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\capsule}[2]{\vspace{0.5em}
+  \shadowbox{%
+    \begin{minipage}{.90\linewidth}%
+      \textbf{#1:}~#2%
+    \end{minipage}}
+  \vspace{0.5em} }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\solution}[1]{{\color{blue}\textbf{Solution: }#1}}
+\newcounter{ques}
+\newenvironment{question}{\stepcounter{ques}{\noindent\bf Question \arabic{ques}:}}{\vspace{5mm}}
+
+\begin{document}
+
+\begin{center} \Large\bf
+Ryan Lo (101117765)
+
+COMP 2804 --- Assignment 3
+\end{center}
+
+\noindent {\bf Due:} Sunday November 14, 11:59 pm.
+
+\vspace{0.5em}
+
+\noindent {\bf Assignment Policy:}
+
+\begin{itemize}
+	\item Your assignment must be submitted as a single .pdf file. Typesetting (using Latex, Word, Google docs, etc) is recommended but not required. Marks will be deducted for illegible or messy solutions. This includes but is not limited to excessive scribbling, shadows, blurry photos, messy handwriting, etc.   
+	\item {\bf No late assignments will be accepted. } 
+	\item You are encouraged to collaborate on assignments, but at the level 
+	of discussion only. When writing your solutions, you must do so 
+	in your own words. 
+	\item Past experience has shown conclusively that those who do not put 
+	adequate effort into the assignments do not learn the material and have a probability near 1 of doing poorly on the exams (which is where most of the marks are).
+	\item When writing your solutions, you must follow the guidelines below.
+	\begin{itemize}
+		\item You must justify your answers. 
+		\item The answers should be concise, clear and neat.
+		\item When presenting proofs, every step should be justified.
+	\end{itemize}
+\end{itemize}
+
+\vspace{1em} 
+
+
+
+
+\begin{question}
+\begin{itemize}
+\item Write your name and student number.
+\end{itemize}
+\end{question}
+\newpage
+\begin{question}
+	You join a group that plays \href{https://dnd.wizards.com/}{Dungeons and Dragons}. Each character has $6$ stats (short for statistics): Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma. The value of each stat is determined\footnote{There are variations, such as rolling $4$ dice and taking the highest $3$.} by rolling three $6$-sided dice and taking the sum. So each stat has a starting value from $3$ to $18$. 
+	\begin{enumerate}
+		\item What is the size of the sample space for rolling an individual stat?
+		
+		6 possible outcomes for first die, 6 for second die and 6 for third die.
+
+		Total = 6 * 6 * 6 = $6^3$
+		
+		= 216 possible outcomes for an individual stat.
+			
+		\item What is the probability that an individual stat is $16$ or higher?
+		
+		Let P(x) be the probability of an individual stat being x.
+
+		Let A be the set of ways for a stat to be 16 or higher.
+		
+		P(A) = Probability that individual stat is $16$ or higher = P(16) + P(17) + P(18)
+
+		P(16) = (4,6,6), (6,4,6), (6,6,4), (6,5,5), (5,6,5), (5,5,6)
+		
+		P(17) = (6,6,5), (6,5,6), (5,6,6)
+
+		P(18) = (6,6,6)
+
+		P(16) + P(17) + P(18) = 6 + 3 + 1 = 10
+
+		$|A| = 10$
+
+		$|S| = 216$
+	
+		P(A) = 10/216
+
+		\item What is the size of the sample space over all six stats?
+		
+		If the number of outcomes for one stat is $6^3$ and there are 6 stats then 
+
+		$6^{3^6} = 6^{18}$ or
+
+		If the sample space for one stat is 216 and we have six stats.
+
+		$216 * 216 * 216 * 216 * 216 * 216 = 216^6$
+
+		Therefore the size of the sample space over all six stats is $6^{18}$ or $216^6$.
+			
+		\item Given that you have rolled dice for all $6$ stats, what is the probability that \textbf{exactly} one out of your six stats is $16$ or higher?
+		
+
+		Let A be the set of all ways to have exactly 1 stat that is 16 or higher
+
+		Let S be the sample space over 6 stats
+
+		$|A|$ the number of ways to have exactly 1 stat that is 16 or higher
+
+		$|S| = 6^{18}$
+
+		Step 1: Pick one stat 6 ways
+
+		There is 6 ways to do this
+
+		Step 2: Have this stat be 16 or higher
+
+		There are 10 ways for a stat to be 16 or higher
+
+		Step 3: Have the other 5 stats 15 or lower
+
+		The probability for one stat to be 15 or lower is $(6^3 - 10)$ using the complement rule,
+		the number of ways for a stat to be 15 or lower is the sample space $6^3$ - the number of ways
+		for a stat to be 16 or higher as calculated in question 2 which is 10. 
+		And we have 5 stats total $(6^3 - 10)$ options for 5 stats
+	
+		$|A| = (6^3 - 10) * (6^3 - 10) * (6^3 - 10)* (6^3 - 10)* (6^3 - 10)$
+
+		$|A|$ = $6 * 10 * (6^3 - 10)^5$
+
+		$Pr(A) = |A|/|S|$
+
+		$Pr(A) = \frac{6 * 10 * (6^3 - 10)^5}{6^{18}}$
+
+		\item What is the probability that at least one of your six stats is $16$ or higher?
+		
+		Let A be the set of ways that at least one of your six stats is $16$ or higher.
+
+		Probability that at least one of your six stats is 16 or higher includes exactly 1,2,..,6
+
+		Let Ac be the complement of A.
+
+		Ac = not (at least 1) = exactly 0
+
+		$Pr(A) = |A|/|S|$, but $Pr(A) = 1 - Pr(Ac)$
+		
+		$Pr(Ac) = |Ac|/|S|$
+		
+		Sample size is still rolling 3 6-sided dices with 6 stats so, 
+
+		$|S| = 6^{(3^6)} = 6^{18}$
+
+		For a single stat to be 15 or lower we calculated in part 4 that it is $(6^3 - 10)$
+
+		And there are 6 stats so,
+
+		$|Ac| = (6^3 - 10)^6$
+
+		$Pr(A) = 1 - |Ac|/|S| = 1 - \frac{(6^3 - 10)^6}{6^{18}}$
+
+
+		
+		\item What is the probability that at least two of the six stats are $16$ or higher?
+		
+		Let A be the set of ways that at least two of your six stats is $16$ or higher
+
+		Probability that at least one of your six stats is 16 or higher includes exactly 2,3,..,6
+
+		Let Ac be the complement of A.
+
+		Ac = not (at least 2) = exactly 0 or exactly 1 (2 cases)
+
+		Recall that,
+
+		$|Ac| = |B \cup C| = |B| + |C| - |B \cap C|$ 
+		but B and C are disjoint, so, 
+		$|B \cap C| = 0$
+
+		Sample size is still rolling 3 6-sided dices with 6 stats so, 
+
+		$|S| = 6^{(3^6)} = 6^{18}$
+
+		$|Ac| = |Ac1| + |Ac2|$
+
+		Case 1: $|Ac1|$ - exactly 0
+
+		We calculated this in the previous question.
+		
+		$|Ac1| = (6^3 - 10)^6$
+
+		Case 2: $|Ac2|$ - exactly 1
+
+		We calculated this in question 4.
+
+		$|Ac2|$ = $6 * 10 * (6^3 - 10)^5$
+
+
+		$|Ac| = (6^3 - 10)^6 + (6 * 10 * (6^3 - 10)^5)$
+
+		$Pr(A) = 1 - |Ac|/|S|$
+
+		$Pr(A) = 1 - \frac{(6^3 - 10)^6 + (6 * 10 * (6^3 - 10)^5)}{6^{18}}$
+
+	
+	\end{enumerate}
+\end{question}
+
+\begin{question}
+	We learned in the Newton-Pepys lecture that there is a higher probability of getting at least one $6$ on six dice than at least three $6$'s on eighteen dice. We will explore this idea further by looking some similar games. Compute the probability of winning each of the games listed below.
+	\begin{enumerate}
+		\item To win game (a): Roll $8$ dice and have at least one die showing $6$. To win game (b): Roll $24$ dice and have at least three dice showing $6$.
+		
+		a) Roll $8$ dice and have at least one die showing $6$.
+		
+		Let A be the set of ways that at least one dice shows 6
+
+		Let Ac be the complement of A.
+
+		Ac = not (at least one dice shows 6) = exactly 0 dice show 6's
+
+		S = ways to roll 8 dices (6-sided)
+
+		$|S| = 6^8$
+
+		$Pr(A) = 1 - Ac$
+
+		Step 1: Pick a side that is not 6
+
+		5 ways
+	
+		Step 2: Pick all other 7 dices that are not 6 
+
+		$5*5*5*5*5*5*5 = 5^7$
+
+		$|Ac| = 5* 5^7 = 5^8$
+
+		$Pr(Ac) = |Ac|/|S| = \frac{5^8}{6^8}$
+
+		$Pr(A) = 1 - Pr(Ac) = 1 - \frac{5^8}{6^8}$
+
+
+		b) Roll $24$ dice and have at least three dice showing $6$.
+		
+		Exactly 0, 1, 2
+
+		Let A be the set of ways that at least three dice shows 6
+
+		Let Ac be the complement of A.
+
+		Ac = not (at least three dice shows 6) = Exactly 0, 1, 2 show 6's
+
+		S = ways to roll 24 dices (6-sided)
+
+		$|S| = 6^{24}$
+
+		\textbf{Case 1: Exactly 0 dice}
+
+		5 possibilities for each dice and 24 dices to roll. 
+
+		$5^{24}$
+
+		\textbf{Case 2: Exactly 1 dice}
+
+		Step 1: Choose 1 die to show 6
+
+		24 ways for this
+
+		Step 2: roll 1-5 on the 2nd dice
+		
+		\dots
+
+		Step 24: roll 1-5 on the 24th dice
+
+		$24 * 5 *\dots * 5 = 24 *5^{23}$
+
+		\textbf{Case 3: Exactly 2 dice}
+
+		Step 1: choose 2 dices to show 6
+
+		$24 \choose 2$ ways
+
+		Step 2: roll 1-5 on die 3
+
+		\dots
+
+		Step 23: roll 1-5 on die 24
+
+		${24 \choose 2} * 5*5*\dots*5 = {24 \choose 2} * 5^{22}$
+
+		$|Ac|=|C1|+|C2|+|C3| = 5^{24} + 24 *5^{23} + {24 \choose 2} * 5^{22}$
+
+		$Pr(Ac)= |Ac|/|S| = \frac{5^{24} + 24 *5^{23} + {24 \choose 2} * 5^{22}}{6^{24}}$
+
+		$Pr(A) = 1 - \frac{5^{24} + 24 *5^{23} + {24 \choose 2} * 5^{22}}{6^{24}}$
+
+	\end{enumerate} 
+
+\end{question}
+
+\newpage
+
+\begin{question}
+	You scan the rest of the questions in this assignment and decide it is time to get back to your music career. You are now in a band called \emph{The Inclusions}. Each song is now defined by a single sequence of $7$ chords from the set $\{A,B,C,D,E,F,G\}$ with no other restrictions (for example, $(A,B,G,G,G,A,D)$ is a song). Each band consists of $4$ members each with a unique instrument (we consider the singer as having an instrument). There is always exactly $1$ singer and $1$ drummer. The other two members must choose an instrument from the following set: $\{$guitar, bass, banjo, saxophone, keyboard$\}$. Each instrument in a band must be unique. Given a set $S$ of songs, two songs $s_1$ and $s_2 \in S$ are unoriginal if they have the same $7$ chords in the same order played with the same instruments. For the questions below we will make the unrealistic assumption that all songs are chosen uniformly at random from the set of all possible original songs.
+	\begin{enumerate}
+		\item What is the number of possible original songs?
+		
+		There are 7 possible chords and 7 chords make up a song, also 5 possible instruments that 2 other members must choose from.
+
+		$7^7 * {5 \choose 2}$
+		
+		\item One of your songs is about to break the top $100$, that is, the top $100$ most popular songs in the nation for a given time period. Assuming all the songs in the top $100$ are chosen uniformly at random, what is the probability that all the top $100$ songs are original?
+		
+		The probability that all top 100 songs are original.
+
+		$|S| = 7^7 * {5 \choose 2}$ for the first song
+
+		$|S| = 7^7 * {5 \choose 2} - 1$ for the second song
+
+		$|S| = 7^7 * {5 \choose 2} - 2$ for the third song
+
+		\dots
+
+		$|S| = 7^7 * {5 \choose 2} - 99$ for the 100th song
+
+		For the ith song in the top 100: it has i less songs
+
+		$7^7 * {5 \choose 2} - i$
+
+		$\sum_{i=0}^{99} \frac{7^7 * {5 \choose 2} - i}{7^7 * {5 \choose 2}}$
+
+		$= \frac{7^7 * {5 \choose 2}!}{(7^7 * {5 \choose 2})^{100}(7^7 * {5 \choose 2}-100)}$
+
+		\item Your song will not get into the top $100$ if it is unoriginal. Assuming  that each song of the top $100$ is original, what is the probability that your song is original when compared to the top $100$? Note: Assume that the top $100$ is chosen uniformly at random but without replacement, i.e., each song is chosen randomly but each song is chosen only once.
+		
+		$\frac{100}{7^7 * {5 \choose 2}}$ probability of it being unoriginal
+
+		$1-(\frac{100}{7^7 * {5 \choose 2}})$ using complement gives us the probability of it being original
+		
+		\item There is another band called \emph{The Exclusions} who also have an up and coming hit song. The record label will promote both of your songs as long as they don't sound similar. Two songs are \emph{similar} if they have all the same chords in the same quantity (ignoring the order of the chords). Both your song and The Exclusions' song use exactly $3$ chords. What is the probability that the two songs use the same $3$ chords in the same quantity? For example, if your band's song was  $(A,A,B,C,A,B,C)$ then it uses $3$ $A$'s, $2$ $B$'s and $2$ $C$'s. If the Exclusions song was $(C,B,A,C,B,A,A)$ then these songs would be considered similar because each has $3$ $A$'s, $2$ $B$'s and $2$ $C$'s. If the Exclusions song was $(C,B,C,C,B,A,A)$ it would not be similar to your song since they use $3$ $C$'s and $2$ $A$'s. 
+		
+		\{A,B,C,D,E,F,G\} 7 chords and we want 3 unique chords
+
+		Let $x_1$ be the number of unique cord 1
+		
+		Let $x_2$ be the number of unique cord 2
+
+		Let $x_3$ be the number of unique cord 3
+
+		$x_1 + x_2 + x_3 = 7$, all 3 of these unique cords should add up to 7 since there are 7 chords in a song
+	
+		And since a chord must be included at least once in the song 
+
+		$x_1 + x_2 + x_3 = 7$, $x >= 1$ 
+
+		We must make some adjustments and subtract 1 from every x
+
+		$x_1' = x_1 - 1$ $->$ $x_1 = x_1' + 1$
+
+		$x_2' = x_2 - 1$ $->$ $x_2 = x_2' + 1$
+
+		$x_3' = x_3 - 1$ $->$ $x_3 = x_3' + 1$
+
+		$(x_1' + 1) + (x_2' + 1) + (x_3' + 1) = 7$, $x >= 0$ 
+
+		$x_1' + x_2' + x_3' = 4$, $x >= 0$ 
+
+		Using the formula ${n+k-1} \choose {n-1}$ where n = 3 and k = 4
+
+		${{3+4-1} \choose {3-1}} = {6 \choose 2}$ ways to choose the quantity of the unique chords
+
+		Total number of ways to write a song = 
+		
+		number of ways to choose the unique chords * number of ways to choose the quantity of the unique chords
+
+		$= {7 \choose 3} * {6 \choose 2}$ 
+
+		Probability that our song is the same as the Exclusions = $\frac{1}{{7 \choose 3} * {6 \choose 2}}$
+
+	\end{enumerate}
+\end{question}
+\newpage
+\begin{question}
+	In Blackjack you want a hand that totals as close to $21$ as possible without going over. The dealer will deal you two cards, then deal themselves one card, all face up. All numbered cards have a value equal to their number. All face cards (King = $K$, Queen = $Q$, Jack=$J$) are worth $10$. Aces=$A$ are worth $1$ or $11$. Let $C$ be the event that your first card is a black suited card worth $10$. That is, $C$ is the event that your first card is in the set $\{10\spadesuit, 10\clubsuit, J\spadesuit, J\clubsuit, Q\spadesuit, Q\clubsuit, K\spadesuit, K\clubsuit\}$. Let $D$ be the event that your second card is a red Ace. That is, $D$ is the event that your second card is in the set $\{A\heartsuit, A\diamondsuit\}$.
+	
+	\begin{enumerate}
+		\item What is $Pr(C\cap D)$?
+		
+		$P(C \cap D) = |C \cap D| / |S|$
+
+		$|S| = 52 * 51$ you get 2 cards out of the deck
+
+		$C \cap D$ : first card is black suited card with value equal to 10 aND second card is red ace
+
+		Step 1: Choose the first card to be black suited with value of 10. There are 8 ways to do this.
+
+		Step 2: Choose the second card to be a red ace. There is 2 ways to do this.
+
+		$Pr(C \cap D) = \frac{8*2}{52*51}$
+
+		\item What is $Pr(C\cup D)$?
+		
+		$Pr(C\cup D) = Pr(C) + Pr(D) - Pr(C \cap D)$
+
+		$|C|$ : first card is black suited card with value equal to 10, second card is whatever
+
+		$|C| =$ 8 options * 51 options
+
+		$Pr(C) = \frac{8*51}{52*51}$ 
+
+		$|D|$ : second card is red ace
+
+		D1 : first card is NOT a red ace, second card is red ace
+
+		D2 : first card IS red ace, second is also red ace
+
+		$|D| = |D1| + |D2| = 102$
+
+		$|D1|$ = 50 options * 2 options
+
+		$|D2|$ = 2 options * one option
+
+		$Pr(D) = \frac{102}{52*51}$
+
+		$Pr(C\cup D) = \frac{8*51}{52*51} + \frac{102}{52*51} - \frac{8*2}{52*51} = \frac{494}{52*51}$
+
+		\item Are the events $C$ and $D$ independent? In other words, is $Pr(C\cap D)=Pr(C)\cdot Pr(D)$?
+		
+		$Pr(C) = \frac{8*51}{52*51}$ 
+
+		$Pr(D) = \frac{102}{52*51}$
+
+		$Pr(C)\cdot Pr(D) = \frac{8*51}{52*51} * \frac{102}{52*51} = \frac{1}{169}$
+
+		$Pr(C \cap D) = \frac{8*2}{52*51}$
+
+		$Pr(C\cap D) \neq Pr(C)\cdot Pr(D)$
+
+		NO, they are not independent events.
+	
+	\end{enumerate}
+\end{question}
+
+
+\newpage
+
+\begin{question}
+	You are playing $5$ card poker with your friends. In this game you are initially dealt $5$ cards and on each round of betting you can exchange any number of cards to try and get a better hand. You are using a standard deck of 52 cards, and any cards you exchange go into a discard pile and are no longer in play for this hand. All cards are dealt uniformly at random.
+	
+	\textbf{Hint}: Since you know your own cards but no one else's, you may assume that your next cards are drawn uniformly at random from the 47 cards not currently in your hand (since that is, in effect, exactly what happens). 
+	
+	\begin{enumerate}
+		\item In your first hand you are dealt $\{5\diamondsuit, 5\spadesuit, 7\diamondsuit, 8\clubsuit, 9\diamondsuit \}$. You keep the pair of $5$'s and exchange the 7, 8 and 9 for three more cards. What is the probability that the three cards you receive are three of a kind (thus giving you a full house)? What is the probability that you receive at least one other $5$?
+		
+		Number of cards that we can get is 47. And we want to exchange for 3 cards.
+
+		$|S| = {47 \choose 3}$ 
+
+		The cards left that still have 4 in the desk : $\{A,2,3,4,6,10,J,Q,K\}$
+
+		Cards that have 3 of them still in the desk : $\{7,8,9\}$
+
+		Let A be the event that we get 3 of the same cards.
+
+		$|A| = 9 * {4 \choose 3} + 3 * {3 \choose 3}$
+
+		$Pr(A) = |A| / |S| = \frac{9 * {4 \choose 3} + 3 * {3 \choose 3}}{{47 \choose 3}}$
+
+		Let B be the probability of getting at least one other 5 = 1 - probability of getting no 5s
+
+		$Pr(Bc) = \frac{{45 \choose 3}}{{47 \choose 3}}$
+
+		$Pr(B) = 1 - Pr(Bc)$
+
+		$Pr(B) = 1 - \frac{{45 \choose 3}}{{47 \choose 3}}$
+ 
+ 		\item \href{https://en.wikipedia.org/wiki/Texas_hold_\%27em}{Texas Hold 'em} is a variety of poker where each player is dealt $2$ cards initially. Five other cards are dealt to the middle for all players to share, however for this exercise we will focus on the first $2$ cards you are dealt. Assume the dealer is using a single deck of $52$ cards. 
+ 		\begin{enumerate}
+ 			\item What is the probability that the two cards you are dealt are a matching pair? A matching pair is two cards of the same denomination. For example $\{2\spadesuit, 2\heartsuit\}$ and $\{Q\clubsuit, Q\diamondsuit\}$ are matching pairs, but $\{5\spadesuit, 7\spadesuit\}$ and $\{Q\clubsuit, K\diamondsuit\}$ are NOT matching pairs.
+
+			Sample Space:
+
+			Choose 2 cards from a desk with 52 cards.
+
+			$|S| = {52 \choose 2}$
+
+			Let A be the event that the first and second card are matching pairs.
+
+			Step 1: Pick a rank, we have 13 different ranks. 13 possible ways.
+
+			Step 2: Pick 2 cards from the 4 cards in a rank. ${4 \choose 2}$
+
+			$Pr(A) = \frac{13* {4 \choose 2}}{{52 \choose 2}}$
+
+ 			\item The dealer deals your two cards by grabbing both cards at once and tossing them at you carelessly. As a result you happen to catch a glimpse of one of your cards and see a black $7$. That is, you know at least one of your cards is from the set $\{7\spadesuit, 7\clubsuit\}$ (although you did not notice which one). What is the probability that you have a matching pair now? That is, what is the probability that both of your cards are $7$'s given that at least one of your cards is a black $7$?
+
+			Let C be the event that you were dealt a matching pair
+
+			Let D be the event that one of yours cards is a black 7
+
+			$Pr(C|D) = Pr(C \cap D)/Pr(D)$
+
+			Event D:
+
+			Let A be the event that we get 7 of clubs and B be the event that we get the 7 of spades.
+			
+			$|D| = |A| + |B| - |A \cap B|$
+
+			Step 1: Pick on of the 2 black 7s. 2 Ways.
+
+			Step 2: Pick the other card. 51 ways.
+
+			$|A| = |B| = 2 * 51$
+
+			If we get both blacks, there are 2 ways for this.
+
+			$|A \cap B| = 2$
+
+			$|D| = 2*(2 * 51) - 2$
+
+			$|S| = 52 * 51$
+
+			$Pr(D) = |D| / |S| = \frac{2*(2 * 51) - 2}{52*51}$
+
+			Step 1: Choose the black 7, there is 2 choose 1 ways to do this
+
+			Step 2: Place the black 7, 2 choose 1 ways
+
+			Step 3: Pick the 2nd card to be a black 7, 3 ways left since one of the card is a black 7
+
+			Step 4: Remove the 2 cases where they overlap
+
+			$|C \cap D|= ({2 \choose 1} * {2 \choose 1} * 3) - 2 = 10$
+
+			$Pr(C \cap D) = \frac{10}{52*51}$
+
+
+			$Pr(C|D) = Pr(C \cap D)/Pr(D) = \frac{10/52*51}{\frac{2*(2 * 51) - 2}{52*51}}$
+
+ 		
+ 		\end{enumerate}
+		
+		\item Assuming you have the same hand as above: $\{5\diamondsuit, 5\spadesuit, 7\diamondsuit, 8\clubsuit, 9\diamondsuit \}$. This time you trade in the $5\spadesuit$ and the $8\clubsuit$. What is the probability that the two cards you receive are both diamonds ($\diamondsuit$)? (Five cards of the same suit is called a flush, which is superior to a full house or three of a kind.)
+	
+		Let A be the event that the two cards you receive are both diamonds.
+
+		Number of cards that we can get is 47. And we want to exchange for 2 cards.
+
+		$|S| = 47*46$ 
+
+		The diamond cards still left in the desk : $\{A,2,3,4,6,9,10,J,Q,K\}$
+
+		Step 1: Pick a diamond card, 10 ways for this
+
+		Step 2: Pick the second diamond card 9 ways for this.
+
+		$Pr(A) = \frac{9*10}{{47*46}} = \frac{90}{{47*46}}$
+
+	\end{enumerate}
+\end{question}
+\newpage
+\begin{question}
+	We have designed $k$-redundant circuits. That is, we have designed a circuit $C$ with $n$ components $C_1,C_2,...,C_n$ where $C$ fails only if $k$ or more circuits fail for $1\leq k\leq n$. Each of the circuits fails with probability $p$, and all of them are mutually independent.
+	\begin{enumerate}
+		\item Determine the probability that exactly $j$ circuits fail.
+		
+		Let A be the event that j components fail
+
+		$n \choose j$ all combinations of components that fail
+
+		${n \choose j}p^j * (1-p)^{n-j}$
+
+		\item Determine the probability that $C$ fails. 
+		
+		If k or more components fail then the circuit fails
+
+		the sum of k components failing, k+1, k+2, all the way up to n components failing.
+
+		$Pr(A) = \sum_{i=k}^{n} {n \choose i}p^i * (1-p)^{n-i}$
+
+
+	\item Let $A$ be the event that $C$ fails. Prove that, for $k=0$ (that is, $C$ fails if $0$ or more circuits fail) $Pr(A)=1$.  
+	
+	$\sum_{i=k}^{n} {n \choose i}p^i * (1-p)^{n-i}$
+
+	$\sum_{i=0}^{n} {n \choose i}p^i * (1-p)^{n-i}$
+
+	$Pr(A) = p+(1-p)^{n} = 1^n = 1$
+
+	\end{enumerate}
+\end{question}
+
+
+\begin{question}
+	Let ${d_1,d_2, ..., d_n}$ be $n$ $6$-sided dice. Assuming we roll all $n$ dice, determine the probabilities below.   
+	\begin{enumerate}
+		\item What is the probability that $d_1$ is the highest roll? Note this may not be as simple as it first seems, since even if $d_1$ is the highest, it may not be the only highest. 
+		
+		Let A be the event of rolling less than or equal to i.
+
+		$1/6 \sum_{i=1}^{6} (Pr(A))^{n-1}$
+
+		$|S| = 6$
+
+		$Pr(A) = |A| / |S| = i/6$ for a given i
+
+
+
+
+		$|E|= |E_1| + |E_2| + |E_3| + |E_4| + |E_5| + |E_6|$
+
+		We want to find Pr(E) = $|E|/|S|$
+
+		$|S| = 6^n$
+
+		We need to find $|E|$
+
+		For each Ei that means d1 is the f 
+
+
+		\item What is the probability that the highest roll is $i$, for $1\leq i \leq 6$?
+		
+		i is the largest value of the die and j is the ith die
+
+		$\sum_{j=1}^{6}$
+
+		$Pr(A) = 1/6 (i/6)^{n-1}$
+
+		Let Ei be the event that the highest roll is i
+
+		PR(Ei) = $|Ei|/|S|$
+
+		For each Ei, we have k dice that have value i
+
+		Task 1: choose k dice from n dice: (n C k)
+
+		Task 2: choose value for k dice that have value i : 1 ways
+
+		Task 3: choose value for the remaining fice . there are n-k ddice
+
+		$|Ei|$ = $\sum_{k = 1}^{n} {n \choose k}*(i-1)^{n-k}$
+
+		$Pr(Ei) = |Ei| / |S| = \sum_{k = 1}^{n} {n \choose k}*(i-1)^{n-k} / 6^n$
+
+	\end{enumerate}
+
+\end{question}
+
+\end{document}

@@ -1,0 +1,415 @@
+\documentclass[12pt]{article}
+
+\usepackage{fullpage}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{fancybox}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\usepackage{verbatim}
+
+\newcommand{\IR}{\mathbb{R}}
+
+\newcommand{\age}{\mathord{\it age}}
+
+\newcounter{ques}
+\newenvironment{question}{\refstepcounter{ques}{\noindent\bf Question \arabic{ques}:}}{\vspace{5mm}}
+
+\newcommand{\solution}[1]{{\color{blue}\textbf{Solution: }#1}}
+
+%%%%%%%%%%%%%% Capsule %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\capsulenew}[1]{\vspace{0.5em}
+  \shadowbox{%
+    \begin{minipage}{.90\linewidth}%
+      #1%
+    \end{minipage}}
+  \vspace{0.5em} }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document} 
+
+\begin{center} \Large\bf
+Ryan Lo (101117765)
+
+COMP 2804 --- Assignment 1 (Updated Sept 20)
+\end{center} 
+
+\noindent {\bf Due:} Sunday October 3rd, 11:59 pm. 
+
+\vspace{0.5em} 
+
+\noindent {\bf Assignment Policy:} 
+\begin{itemize}
+\item Your assignment must be submitted as a single .pdf file. Typesetting (using Latex, Word, Google docs, etc) is recommended but not required. Marks will be deducted for illegible or messy solutions. This includes but is not limited to excessive scribbling, shadows, blurry photos, messy handwriting, etc.   
+\item {\bf No late assignments will be accepted. } 
+\item You are encouraged to collaborate on assignments, but at the level 
+      of discussion only. When writing your solutions, you must do so 
+      in your own words. 
+\item Past experience has shown conclusively that those who do not put 
+      adequate effort into the assignments do not learn the material and have a probability near 1 of doing poorly on the exams (which is where most of the marks are).
+\item When writing your solutions, you must follow the guidelines below.
+      \begin{itemize}
+      \item You must justify your answers. 
+      \item The answers should be concise, clear and neat.
+      \item When presenting proofs, every step should be justified.
+      \end{itemize}
+\item There are $7$ questions. Each part of each question is worth $2$ marks, except for \ref{last}~\ref{f} which is $4$ marks. In general an acceptable solution gets $2$ marks and a solution that gets some things right but misses some things will get $1$ mark.
+\end{itemize}
+
+\vspace{1em} 
+
+
+\begin{question} 
+\begin{itemize}
+\item Write your name and student number. 
+\end{itemize}
+\end{question} 
+
+\begin{question}	
+	You decide to blow off computer science to pursue your dream of being a rock star. You have a guitar and you can play 7 different chords $\{ A,B,C,D,E,F,G\}$, and you are trying to figure out how long of a career you will have based on how many songs you can come up with.
+	
+	A song uses 3 chords for a verse and 4  chords for the chorus, and the order you play the chords matters (that is, $(A,B,C) \neq (B,C,A)$). So a song can be expressed as $(Verse=(A,B,C),Chorus=(A,D,F,G))$. We may also express the same song as a single sequence with the chords of the verse followed by the chords of the chorus, which we call the \emph{chord sequence} of the song. The chord sequence of the above song is $(A,B,C,A,D,F,G)$. Given a set $S$ of songs, two songs $s_1$ and $s_2$ in $S$ are considered \emph{unoriginal} if every chord in their chord sequence is the same. We say that a song $s\in S$ is \emph{original} if the song differs from every other song $s'\in S$ in at least one chord. In the following problem, $S$ is the set of songs that you will write throughout your career.
+	
+	\begin{enumerate}[label = (\alph*)]
+		\item\label{one} How many original songs can you make?
+		
+		There are 7 possible chords for the first chord in the sequence, 7 for the second one, 7 for the third one, etc\dots
+		
+		$7*7*7*7*7*7*7 = 7^7 = 823,543$ possibilities.
+		
+	
+		
+		\item\label{two} To make sure there is enough melody in your songs, you want to never play the same chord twice in a row in your verse or in your chorus. Thus $((A,B,C),(C, D, C, D))$ is valid, but $((A,B,B),(C, D, A, A))$ is not. How many original songs is it possible to make given this restriction?
+		
+		There are 7 possible chords for the first chord, 6 possible chords for the second one since it cannot be the same as the previous one, 6 for the third one, etc\dots
+
+		$7*6*6*7*6*6*6 = 7^2*6^5 = 381,024$ possibilities.
+	
+		\item\label{bridge} You decide to experiment by adding a \emph{bridge} to some of your songs. A bridge is a short interlude of anywhere from $0$ chords (no bridge) up to $3$ chords, and every chord in the bridge must be unique. Example: $Bridge = (), Bridge = (G,C), Bridge = (A,B,C)$ are all allowed, however $Bridge = (A,B,A)$ is not allowed, since there are duplicate chords. Now the chord sequence of a song is the original chord sequence with the chords of the bridge appended (alternatively, the triple $(Verse, Chorus, Bridge)$). Adjust your answer from \ref{two} to determine how many original songs you can make with an optional bridge. 
+		
+		$7^2*6^5$ possibilities from (b) $*$ \# of possibilities from bridge.
+
+		4 possible cases, empty set, 1 chord, 2 chords or 3 chords in the bridge.
+
+		Empty set: 1 possibilty
+
+		One chord: 7 possible chords
+
+		Two chords: 7 possible chords + 6 possible chords since it cannot be the same as the first chord
+
+		Three chords: 7 possible chords + 6 possible chords since it cannot be the same as the first chord + 5 possible chords since it cannot be the same as the first two chords
+
+		$1 (empty set) + 7 + 7*6 + 7*6*5 = 260$
+
+		$7^2*6^5 * 260 = 99,066,240$ possibilities.
+		
+		\item\label{d} You are not as good at guitar as you thought, so you decide to take out the bridge, but you find you are very good at the chord progression $(F, A, D)$. You decide to include $(F, A, D)$ in all your songs in either the verse or chorus or both. If you ignore all the restrictions of parts \ref{two} and \ref{bridge}, how many original songs can you come up with that include $(F,A,D)$ in either the verse or the chorus or both?
+		
+		Both ways, there are 2 possibilities (X,F,A,D) or (F,A,D,X) for chorus and one possibilty for verse (F,A,D)
+
+		X having 7 possibilities each, so 7 + 7 for both ways
+
+		In the verse only, there is only one possibilty for the verse (F,A,D), the chorus then has (X,X,X,X) 7*7*7*7 different possibilities 
+
+		$7*7*7*7 = 7^4$
+
+		In the chorus only, there are 2 possibilities (X,F,A,D) or (F,A,D,X), 7 possibilities for X, and (X,X,X) 7*7*7 possibilities for verse
+
+		$2*7^4$
+
+		Taking the union of all chorus, verse or both having (F,A,D), the total number of possibilities would be:
+
+		$14 + 7^4 + 2 * 7^4 = 7,217$ possibilities.
+
+		\item You have gotten better at guitar, so you no longer no longer need to include $(F,A,D)$ in every song in order. However, you still like how the $F$, $A$, and $D$ chords sound in a song together. Find how many original songs have at least one $F$ chord, at least one $A$ chord, {and} at least one $D$ chord (anywhere in the song in any order). You may ignore the constraints of parts \ref{two}, \ref{bridge}, and of course \ref{d}. 
+		
+		7 possible chord spots, choose 3 of them for F, A, D.
+		
+		$7\choose3$
+
+		The other 4 spots has 7 different chords as a possibility
+
+		$7*7*7*7 = 7^4$
+
+		Total number of possibilities:
+
+		${7\choose3} * 7^4 = 84,035$ possibilities.
+
+		\item You no longer are constrained to include $F$, $A$ or $D$. However, you find that some of your choruses are repetitive. You want more originality in your chorus, so you will require that your choruses use at least $3$ different chords in the $4$ chord sequence. So a valid chorus is $(G,C,C,D), (A,B,A,F)$ or $(F,A,D,E)$ but not $(B,B,B,B)$ since it only uses $1$ chord, and not  $(A,B,A,A)$ since it only uses $2$ chords. Given this restriction, how many original \textbf{CHORUSES} can you make? You may ignore the constraints from all the previous parts. 
+		
+		Calculate the number of possibilities for a less than 3 chords in 4 chord sequence,
+
+		(A,A,A,A) where all chords are same 7 possibilities
+
+		(A,A,A,X) where all but one chords are same, 7 possibilities for A and 7 for X, 4 ways it can be rearranged $7 * 7 * 4$ possibilities
+
+		(A,A,X,X) where both chords have pairs, 7 possibilities for A and 7 for X, 6 ways it can be rearranged $7 * 7 *6$
+
+		(A,A,X,X),(A,X,A,X),(A,X,X,A),(X,A,X,A),(X,X,A,A),(X,A,A,X)
+
+		$(7+7*7*4+7*7*6) * 7^3 = 170,471$
+
+		\end{enumerate}
+\end{question} 
+
+\newpage
+
+\begin{question}
+	After a long quarantine you bike to the bar. You plan on staying long enough to have 6 drinks. Each time you order a drink you choose between 2 different beer on tap (Corona or Corona Delta Variant), or 3 different sodas (Cloak\textsuperscript{TM}, Pepci\textsuperscript{TM} or Kanata Dry Gingerale\textsuperscript{TM}).
+	
+	\begin{enumerate}[label = (\alph*)]
+		\item\label{a} How many different combinations (where order matters) of drinks can you have this evening?
+		
+		5 possibilities for each drink, 6 times.
+
+		$5*5*5*5*5*5 = 5^6 = 15,625$ ways.
+
+		\item\label{b} Assume that you had $i$ beer this evening, for an integer $0\leq i\leq 6$. How many ways could you have had $i$ beer over the $6$ rounds?
+		
+		If we had i number of beers this evening then we have 6-i number of sodas this evening.
+
+		i places are chosen out of 6 different ways, $6\choose i$
+
+		Each soda can be chosen in 3 ways while beers can be chosen in 2 ways.
+
+		$2^i$ ways to place the beers. After i ways are chosen there are 6-i slots remaining.
+
+		So there are now $3^{6-i}$ choices to place the sodas.
+
+		Therefore there are ${6\choose i} * 2^i * 3^{6-i}$ ways you could have beer.
+
+		\item If you drink 3 or more beer this evening you will leave your bike at the bar and Uber home. Count all combinations of drinks that require you to take an Uber home, and count all combinations of drinks where you can still bike home. (Observe that since these are non-overlapping sets, the sum of these two should equal your answer from \ref{a}.)
+		
+		3 possible type of beers and 2 possible type of sodas.
+
+		Bike home:
+
+		0, 1 or 2 beers.
+
+		0: $3*3*3*3*3*3 = 3^6 = 729$ possibilities
+
+		1: $3*3*3*3*3*2 * {6\choose1} = 3^5*2* {6\choose1} = 2,916$ possibilities
+
+		2: $3*3*3*3*2*2 * {6\choose2} = 3^4*2*2*{6\choose2} = 4,860$ possibilities
+
+		$729 + 2,916 + 4,860 = 8,505$ possibilities for biking home
+
+		Uber Home:
+
+		3, 4, 5 or 6 beers.
+
+		3: $3*3*3*2*2*2 * {6\choose3} = 3^3*2^3* * {6\choose3} = 4,320$ possibilities
+
+		4: $3*3*2*2*2*2 * {6\choose4} = 3^2*2^4* * {6\choose4} = 2,160$ possibilities
+
+		5: $3*2*2*2*2*2 * {6\choose5} = 3^1*2^5* * {6\choose5} = 576$ possibilities
+
+		6: $2*2*2*2*2*2 * {6\choose6} = *2^6 * {6\choose6} = 64$ possibilities
+
+		$4,320 + 2,160 + 576 + 64 = 7,120$ possibilities for ubering home
+
+		$8,505 + 7,120 = 15,625$ total possibilities which matches up with the part (a).
+
+		\end{enumerate}
+\end{question}
+
+\begin{question}	
+	You are playing laser tag. The players are a mix of $8$ adults and $5$ children. The staff tell you to line yourselves up against the wall in order to pick teams.
+	
+	\begin{enumerate}[label = (\alph*)]
+		\item How many ways can you arrange everyone in a line if all children must be separated, that is, no two children may be beside one another?
+		
+		Since no two children can stand beside each other, they can only be inbetween 2 adults or on the front or end of the adults
+
+		\_A\_A\_A\_A\_A\_A\_A\_A\_
+
+		So 9 possible places for the children to stand in the row itself, plus 8 possible places for the adults to stand in the row.
+
+		$\dfrac{9!}{(9-5)!} * 8! = \dfrac{9!}{4!} * 8! = 609,638,400$
+
+		\item Assume that we allow up to $2$ children to line up together, but never $3$ or more together. How many ways can everyone be lined up now?
+	
+		With 5 children there are two possibilities and only two children max can be standing beside each other, either one pair of students are beside each other and the other 3 are separate or
+		two pairs of children are beside each other and one children separate.
+
+		Case 1: One pair,
+
+		${5\choose2} *2! * \dfrac{9!}{(9-4)!} * 8! = {5\choose2} *2! * \dfrac{9!}{5!} * 8! = 2,438,553,600$
+
+		Case 2: Two pairs,
+
+		${5\choose2} * 2! * {3\choose2}* 2! * \dfrac{9!}{(9-3)!} * 8! = {5\choose2} * 2! * {3\choose2}* 2! * \dfrac{9!}{6!} * 8! = 2,438,553,600$
+
+		Total = $2,438,553,600 + 2,438,553,600 = 4,877,107,200$
+	
+	\end{enumerate} 
+ Hint: It is easier to place the parents first then arrange the children among them.\\
+	
+\end{question}
+
+
+
+\begin{question}
+The Ottawa Senators played 80 games this season and won 51 of them, and lost or tied the other 29. You watched some of the games and observed that they had a one losing streak of 5 games (that is, they lost 5 games in a row) and another losing streak of 3 games. You also heard mentioned that they did not have any 3 or 4 game winning streaks. Prove that they must have had at least one winning streak of 5 or more games.\\
+\end{question}
+
+They had a losing streak of 5 games and 3 games.
+
+Let's say that they lost the first 5 games, so 29 games total lost = 5
+
+Since we assume that they cannot win 3 or 4 games or more in a row,
+
+so for every lost we have a 2 game winning streak. 
+
+This minimizes the amount of loses and maximizes the amount of wins.
+
+They won 2 games, and then had the 3 games losing streak, 
+
+
+Win: 2, Lost/Tie: 8
+
+Win: 4,  Lost/Tie: 9
+
+Win: 6,  Lost/Tie: 10
+
+Win: 8,  Lost/Tie: 11
+
+Win: 10,  Lost/Tie: 12
+
+Win: 12,  Lost/Tie: 13
+
+Win: 14,  Lost/Tie: 14
+
+Win: 16,  Lost/Tie: 15
+
+Win: 18,  Lost/Tie: 16
+
+Win: 20,  Lost/Tie: 17
+
+Win: 22,  Lost/Tie: 18
+
+Win: 24,  Lost/Tie: 19
+
+Win: 26,  Lost/Tie: 20
+
+Win: 28,  Lost/Tie: 21
+
+Win: 30,  Lost/Tie: 22
+
+Win: 32,  Lost/Tie: 23
+
+Win: 34,  Lost/Tie: 24
+
+Win: 36,  Lost/Tie: 25
+
+Win: 38,  Lost/Tie: 26
+
+Win: 40,  Lost/Tie: 27
+
+Win: 42,  Lost/Tie: 28
+
+Win: 44,  Lost/Tie: 29
+
+By the time we reached 29 losts, the amount of wins does not add up to the amount of won.
+Having a maximum of 2 game winning streak would be impossible for it to reach the total amounr of wins.
+Since they didn't have a 3 or 4 game winning streak they must of had at least a winning streak of 5 or more games.
+
+\newpage
+
+\begin{question}
+	You have won a prize package at your favourite store. This store has $n$ products for sale, with unlimited stock, and you are allowed to choose $k$ items total for your prize package ($k$ may be larger than $n$). You may take $k$ of the same product, or $\min\{k,n\}$ different products, or any combination in between. Two prize packages are the same if they consist of all the same products in the same quantities, otherwise they are considered different. For the questions below, be sure to explain your answer, i.e., what are the sequence of tasks you performed to obtain your answer? If you only put the answer you will get $0$. 
+	
+	\begin{enumerate}[label = (\alph*)]
+		\item How many different prize packages are there?
+		
+		Each product is available in unlimited number of quantity. We can take k quantitiesfor each product.
+		Polynomial expression for each product.
+		So the total number of different prizes is:
+
+		$(x^0 + x^1 + x^2 + ...)*(x^0 + x^1 + x^2 + ...)*...$
+
+		This is selected n number of times
+
+		$(x^0 + x^1 + x^2 + ...)^n$
+
+		$S = x^0 + x^1 + x^2 + ...$
+		
+		$xS = x^1 + x^2 + x^3 ...$
+
+		$S-xS = 1$
+
+		$S(1-x) = 1$
+
+		$S = \dfrac{1}{1-x}$
+
+
+		$(\dfrac{1}{1-x})^n = (1-n)^{-n}$
+
+		$(1-n)^{-n} = 1+nx + \dfrac{n(n+1)}{2!}*x^2+ ... + \dfrac{x(n+1)(x+2)...(n+k-1)}{k!}*x^k$
+
+		Multiple top and bottom by $\dfrac{(n-1)!}{(n-1)!}$
+
+		$\dfrac{(n-1)!}{(n-1)!}*\dfrac{n(n+1)(x+2)...(n+k-1)}{k!} = \dfrac{(n+k-1)!}{(n-1)!k!}$
+
+		Choose formula is $\dfrac{n!}{k!(n-k)!} = {n\choose k}$
+
+		Therefore, the number of different prize packages is ${{n+k-1}\choose{k}} = {{n+k-1}\choose{n-1}}$
+
+		\item For an integer $j$ where $1\leq j \leq \min\{k,n\}$, how many different prize packages of there of exactly $j$ different products (where the total products still sum to $k$)? 
+		
+		Calculate the number of prizes which contain k products of only j products, we select j amount of products from n ways.
+
+		$n\choose j$
+		
+		The amount of different prizes from j products: 
+
+		$(x^0 + x^1 + x^2 + ...)^j$
+
+		$(1-x)^{-j} = {{j+k-j-1}\choose{k-j}} = {{k-1}\choose{k-j}}$
+
+		Therefore the number of different prizes from j different products is ${n\choose j}*{{k-1}\choose{k-j}}$
+		
+		\item Use the answers from above to explain why 
+		\textcolor{red}{$$\sum_{i=1}^{\min\{k,n\}} {n\choose i}\cdot {k-1 \choose i-1} = {n+k-1\choose k-1}.$$ This is incorrect. The correct version is:}
+		
+		$$\sum_{i=1}^{\min\{k,n\}} {n\choose i}\cdot {k-1 \choose i-1} = {n+k-1\choose n-1}.$$
+		
+		From part (b) we can use that result to calculate total different prizes of k products from n products.
+
+		For 1 product - ${n\choose 1} * {{k-1}\choose{k-1}}$
+
+		For 2 product - ${n\choose 2} * {{k-1}\choose{k-2}}$
+
+		For 3 product - ${n\choose 3} * {{k-1}\choose{k-3}}$
+
+		etc...
+
+		So the total number of different prizes:
+
+		$$\sum_{i=1}^{\min\{k,n\}} {n\choose i} * {k-1 \choose k-i} = {{n+k-1}\choose{n-1}}$$
+
+
+	\end{enumerate}
+\end{question}
+
+
+\begin{question}\label{last}
+	You do not have enough money to eat out or get groceries until payday $4$ days from now. Each day consists of three meals: breakfast, lunch, and supper. So payday is $12$ meals away. Fortunately you have enough food for exactly $12$ meals. You have enough eggs for $3$ meals, hamburgers for $2$ meals, pasta for $5$ meals, tacos for $1$ meal and cereal for $1$ meal.
+	
+	\begin{enumerate}[label = (\alph*)]
+		\item \label{e}How many different meal plans can you make?
+		
+		${12\choose3}*{9\choose2}*{7\choose5}*{2\choose1}*{1\choose1} = 332,640$ different meal plans.
+
+		\item \label{f} It turns out you will get a covid relief cheque  tomorrow morning. So you now have only $4$ meals to fill (you will eat breakfast before you get groceries) and the $12$ meals described above that you may use to fill them. How many distinct meal combinations are there now?
+		
+		Now only 4 meals to fill from the 12 meals,
+
+		${12\choose 4} = 495$ different meal plans for 4 meals.
+
+	\end{enumerate} 
+\end{question}
+\end{document} 

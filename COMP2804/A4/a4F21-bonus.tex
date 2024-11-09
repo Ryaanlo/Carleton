@@ -1,0 +1,200 @@
+\documentclass[12pt]{article}
+
+\usepackage{hyperref}
+\usepackage{fullpage}
+\usepackage{amssymb}
+\usepackage{fancybox}
+\usepackage{amsmath}
+\usepackage{paralist}
+\usepackage{xcolor}
+
+\usepackage{verbatim}
+
+\newcommand{\IE}{\mathbb{E}}
+\newcommand{\Mystery}{\textsf{\sc Mystery}}
+\newcommand{\EULER}{\textsf{\sc Euler}}
+\newcommand{\TOTAL}{\mathord{\it total}}
+\newcommand{\DEG}{\mathord{\it deg}}
+
+
+%%%%%%%%%%%%%% Capsule %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\capsule}[2]{\vspace{0.5em}
+  \shadowbox{%
+    \begin{minipage}{.90\linewidth}%
+      \textbf{#1:}~#2%
+    \end{minipage}}
+  \vspace{0.5em} }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcounter{ques}
+\newenvironment{question}{\stepcounter{ques}{\noindent\bf Question \arabic{ques}:}}{\vspace{5mm}}
+\newcommand{\solution}[1]{{\color{blue}\textbf{Solution: }#1}}
+
+
+\begin{document}
+
+\begin{center} \Large\bf
+COMP 2804 --- Assignment 4
+\end{center}
+
+\noindent {\bf Due:} Sunday December 5, 11:59 pm.
+
+\vspace{0.5em}
+
+\noindent {\bf Assignment Policy:}
+\begin{itemize}
+\item Your assignment must be submitted as one single PDF file through
+      cuLearn.
+\item {\bf Late assignments will not be accepted.}
+\item You are encouraged to collaborate on assignments, but at the level
+      of discussion only. When writing your solutions, you must do so
+      in your own words.
+\item Past experience has shown conclusively that those who do not put
+      adequate effort into the assignments do not learn the material and
+      have a probability near 1 of doing poorly on the exams.
+\item When writing your solutions, you must follow the guidelines below.
+      \begin{itemize}
+      \item You must justify your answers.
+      \item The answers should be concise, clear and neat.
+      \item When presenting proofs, every step should be justified.
+      \item Each part of each question is worth 2 marks, except for 4.1 (4 marks) and 4.2 (6 marks)
+      \end{itemize}
+\end{itemize}
+
+\begin{question}
+\begin{itemize}
+\item Write your name and student number.
+\end{itemize}
+\end{question}
+
+
+
+\begin{question}
+	\href{https://en.wikipedia.org/wiki/Craps}{Craps} is a game where you roll two dice and bet on the outcome. There are many ways to play, but we will focus on one specific scenario. On your "come-out" roll you roll a $9$ on two dice. Now the game is this: you must keep rolling 2 dice until you either roll $9$ again, in which case you win, or you roll a $7$, in which case the house wins (you lose).
+	\begin{enumerate}
+		\item \begin{enumerate}
+			\item \label{a} Find the probability that you win.
+			\item \label{b} Find the probability that the house wins.
+		\end{enumerate} 
+		 Show all your work for both parts. Observe that the probabilities from \ref{a} and \ref{b} added together should total $1$, but you may NOT use this fact to determine your answers.
+		
+		
+		
+		\item Assume you have bet $\$10$. You roll a $9$ on your "come-out" roll, same as above. If you win the casino pays you $\$10$. If you lose the casino takes your $\$10$ bet. What is your expected winnings or losings (i.e., the expected value) of this round of craps?
+		
+	
+	\end{enumerate}
+	  
+\end{question}
+\newpage
+\begin{question}
+	You are playing a board game about pirates that uses special six-sided fair dice. Three sides of each die has a zero on it, while the other three sides have the numbers $1$ through $3$ (this represents damage done by your ship's cannons). Your ship has five cannons, so to attack you roll $5$ of these six-sided dice.  Let 
+	\begin{eqnarray*} 
+		A & = & \mbox{The sum of the values of the $5$ dice.} \\ 
+		B & = & \mbox{The number of times a zero is showing.} \\ 
+	\end{eqnarray*} 
+	
+	\begin{enumerate}
+		\item What is $E(A)$ and E$(B)$?
+		
+	
+		\item Are $A$ and $B$ independent random variables?
+		
+	
+	\end{enumerate}
+\end{question}
+
+
+
+
+\begin{question}
+	When FX and his girlfriend XF have a child, this child is a boy with 
+	probability $1/2$ and a girl with probability $1/2$, independently of 
+	the sex of their other children. FX and XF stop having children as soon 
+	as they have three girls or two boys. 
+	
+	
+	Consider the random variables 
+	\begin{eqnarray*} 
+		C & = & \mbox{the number of children that FX and XF have,} \\ 
+		G & = & \mbox{the number of girls that FX and XF have.} \\ 
+		B & = & \mbox{the number of boys that FX and XF have.} \\ 
+	\end{eqnarray*} 
+
+\begin{enumerate}
+	\item Determine the expected values $E(C)$ and $E(G)$
+	
+	\item We are told that the last child FX and XF had was a boy. Determine the expected values $E(B)$ and $E(G)$ and $E(C)$.
+
+\end{enumerate}
+	
+	
+	 
+\end{question}
+
+
+
+\begin{question}
+	In the \href{https://dnd.wizards.com/}{Dungeons and Dragons} question from last assignment we talked about how to roll for stats (that is, we take the sum of $3$ six-sided dice). It was briefly mentioned that to get higher stats, we can roll $4$ six-sided dice and take the sum of the $3$ highest dice. In this question we will compare the expected outcome from both of these techniques.
+	\begin{enumerate}
+		\item\label{threedice} Determine the expected value of the sum of rolling $3$ fair six-sided dice.
+		\item What is the size of the sample space $S$ of all possible dice rolls with $4$ dice?
+	\end{enumerate}
+
+		Let $d_1,d_2,d_3,d_4$ be random variables corresponding to the values of $4$ six-sided dice after being rolled. Let $Y$ be the value of the three highest dice. That is, $Y =\left(\sum_{i=1}^4 d_i \right)- \min\{d_1,d_2,d_3,d_4\}$. Thus our goal is to find $E(Y)$ and compare it to the answer from \ref{threedice}.
+		
+		Let the random variable $X_i$ be the sum of the highest $3$ dice if the lowest die is equal to $i$, that is $\min\{d_1,d_2,d_3,d_4\}=i$.  Let $X_i =0$ if the lowest die is not equal to $i$.  Let $A_i$ be the event that the lowest die out of $d_1,d_2,d_3,$ and $d_4$ is equal to $i$. 
+	\begin{enumerate}\setcounter{enumi}{2}	
+		\item In a few sentences explain why $$\sum_{\omega \in S} Y(\omega)= \sum_{i=1}^6 \sum_{\omega \in S} X_i(\omega) = \sum_{i=1}^6 \sum_{\omega \in A_i} X_i(\omega)$$
+		
+		
+		\item Use the above expression and linearity of expectation to express $E(Y)$ in terms of $E(X_i(\omega))$ given that $\omega \in A_i$. 
+		
+	
+		
+		
+		\item Let $A_i'$ be the event that $d_1$ is the lowest die out of $\{d_1,d_2,d_3,d_4\}$ and that $d_1 = i$. Let  $X_i'(\omega)=d_2+d_3+d_4$ if $\omega \in A_i'$ and let $X_i'(\omega)=0$ if $\omega \notin A_i'$. Find  $E(X_i'(\omega))$ given that $\omega \in A_i'$. That is, assuming that $i$ is the lowest die roll and $d_1 = i$, find the expected value of $X_i'$. Recall that $\forall \omega \in A_i', X_i'(\omega) = d_2(\omega)+d_3(\omega)+d_4(\omega)$, where each of $d_2,d_3,$ and $d_4$ is at least $i$.
+	
+		
+	
+		
+		\item\label{given} Observe that the term $E(X_i(\omega))$ in $\sum_{\omega \in A_i} E(X_i(\omega))$ is a constant, since it is the weighted average of the values $\forall \omega \in A_i, X_i(\omega)$. Similarly the term $E(X_i'(\omega))$ in $\sum_{\omega \in A_i'} E(X_i'(\omega))$ is also a constant. We will not prove it at this time, but we will use the fact that for the expressions given above, $E(X_i'(\omega))<E(X_i(\omega))$ to show a lower bound on $E(Y)$. Given that $E(X_i'(\omega))<E(X_i(\omega))$, briefly explain why $\sum_{\omega \in A_i} E(X_i'(\omega))<\sum_{\omega \in A_i} E(X_i(\omega))$. 
+		
+		
+		\item Recall that $A_i$ is the event that $\min\{d_1,d_2,d_3,d_4\}=i$. Show that $|A_i|= (6-i+1)^4-(6-i)^4$. 
+		
+	
+		
+		\item Explain why $\sum_{\omega \in A_i} E(X_i'(\omega)) = \left((6-i+1)^4-(6-i)^4\right)\cdot E(X_i'(\omega))$.
+		
+		
+		
+		\item Now show that
+		
+		\begin{align*}
+			E(Y) & > \sum_{i=1}^6  \left(3\cdot\left(3+\frac{i}{2}\right)\right)\cdot\frac{(6-i+1)^4-(6-i)^4}{6^4}
+		\end{align*} 
+		which, if you plug into Wolfram alpha, is $>11.63$. 
+		
+	
+		
+		\item[Bonus:] In part \ref{given} we provide that $E(X_i)>E(X_i')$. That is, the average value of the highest $3$ dice of all the rolls in $A_i$ is higher than the average value of the highest $3$ dice of all the rolls in $A_i'$. Explain the idea behind why this is the case. You do not need to prove it, so you may use examples to help articulate it. Hint: $A_i'\subseteq A_i$. 
+		
+
+	\end{enumerate}
+
+\end{question}
+\newpage
+\begin{question}
+	\textbf{Bonus:} Michiel’s Craft Beer Company (MCBC) sells $n$ different brands of India
+	Pale Ale (IPA). When you place an order, MCBC sends you one bottle of
+	IPA, chosen uniformly at random from the $n$ different brands, independently
+	of previous orders.\\
+	\indent Simon places $m$ orders with MCBC. Define the random variable $X$ to
+	be the total number of distinct brands that Simon receives. Determine the
+	expected value $E(X)$ of $X$.\\
+\indent	Hint: Use indicator random variables. Note that your answer will have two variables, $n$ and $m$, and thus might not simplify very much. 
+\end{question}
+
+
+\end{document}
